@@ -14,9 +14,11 @@ public:
 
 	virtual void update(float deltaTime);
 	virtual void draw();
+	void Draw();
 
 protected:
 
-	aie::Renderer2D*	m_2dRenderer;
-	aie::Font*			m_font;
+	aie::Renderer2D* m_2dRenderer;
+	aie::Font* m_font;
+	aie::Texture* m_texture;
 };
