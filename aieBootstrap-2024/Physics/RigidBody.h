@@ -17,6 +17,7 @@ public:
 	float GetOrientation() { return m_orientation; }
 	glm::vec2 GetVelocity() { return m_velocity; }
 	float GetMass() { return m_mass; }
+	void SetMass(float _mass) { m_mass = _mass; }
 		
 	virtual void Draw(float _alpha) = 0;
 

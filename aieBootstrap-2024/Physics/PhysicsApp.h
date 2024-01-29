@@ -20,7 +20,6 @@ public:
 	void Draw();
 	void DrawText();
 
-
 protected:
 
 	PhysicsScene* m_physicsScene;
