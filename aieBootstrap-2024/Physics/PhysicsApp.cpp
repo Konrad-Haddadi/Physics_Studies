@@ -6,8 +6,8 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 #include "PhysicsScene.h"
-#include "Demos.h"
-#include "Circle.h"
+
+
 
 PhysicsApp::PhysicsApp() {
 
@@ -29,7 +29,7 @@ bool PhysicsApp::startup()
 	m_physicsScene = new PhysicsScene();
 	m_physicsScene->SetTimeStep(0.01f);
 
-	Circle* rocket1 = new Circle(glm::vec2(0, 0), glm::vec2(0), 10, 10, glm::vec4(1, 0, 0, 1));
+	Circle* rocket1 = new Circle(glm::vec2(50, 50), glm::vec2(0), 10, 10, glm::vec4(1, 0, 0, 1));
 	m_physicsScene->AddActor(rocket1);	
 	DemoStartUp(1);	
 
@@ -72,6 +72,7 @@ void PhysicsApp::draw() {
 
 	// output some text, uses the last used colour
 	m_2dRenderer->drawText(m_font, "Press ESC to quit", 0, 0);
+	aie::Gizmos::add2DCircle(glm::vec2(0), 10, 12, glm::vec4(1, 1, 1, 1));
 
 	// done drawing sprites
 	m_2dRenderer->end();
@@ -80,8 +81,9 @@ void PhysicsApp::draw() {
 void PhysicsApp::Draw()
 {
 	static float aspectRatio = 16.f / 9.f;
+
 	aie::Gizmos::draw2D(glm::ortho<float>(-100, 100, -100 / aspectRatio, 100 / aspectRatio, -1, 1));
-	
+
 	m_physicsScene->Draw();
 }
 
