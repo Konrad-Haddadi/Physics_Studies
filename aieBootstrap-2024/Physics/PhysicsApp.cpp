@@ -30,8 +30,7 @@ bool PhysicsApp::startup()
 	m_physicsScene->SetTimeStep(0.01f);
 
 	Circle* rocket1 = new Circle(glm::vec2(0, 0), glm::vec2(0), 10, 10, glm::vec4(1, 0, 0, 1));
-	m_physicsScene->AddActor(rocket1);
-	
+	m_physicsScene->AddActor(rocket1);	
 	DemoStartUp(1);	
 
 	return true;
