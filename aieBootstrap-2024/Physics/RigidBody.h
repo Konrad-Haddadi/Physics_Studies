@@ -12,6 +12,7 @@ public:
 	void FixedUpdate(glm::vec2 _gravity, float _timeStep) override;
 	void ApplyForce(glm::vec2 _force);
 	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force);
+	
 
 	glm::vec2 GetPosition() { return m_position; }
 	float GetOrientation() { return m_orientation; }

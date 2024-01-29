@@ -19,6 +19,7 @@ public:
 	virtual void draw();
 	void Draw();
 	void DrawText();
+	void Controls(aie::Input* _input, float _dt);
 
 protected:
 

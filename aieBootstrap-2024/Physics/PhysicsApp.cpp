@@ -9,6 +9,8 @@
 #include "PhysicsScene.h"
 #include "Circle.h"
 
+float timer;
+
 PhysicsApp::PhysicsApp() {
 
 }
@@ -19,6 +21,7 @@ PhysicsApp::~PhysicsApp() {
 
 bool PhysicsApp::startup() 
 {
+	timer = 0;
 	aie::Gizmos::create(255U, 255U, 65535U, 65535U);
 	m_2dRenderer = new aie::Renderer2D();
 
@@ -27,9 +30,11 @@ bool PhysicsApp::startup()
 
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 	m_physicsScene = new PhysicsScene();
+
+	m_physicsScene->SetGravity(glm::vec2(0, -15));
 	m_physicsScene->SetTimeStep(0.01f);
 	
-	rocket = new Circle(glm::vec2(5, 0), glm::vec2(0), 10, 5, glm::vec4(1, 0, 0, 1));
+	rocket = new Circle(glm::vec2(0, -50), glm::vec2(0), 10, 5, glm::vec4(1, 0, 0, 1));
 	m_physicsScene->AddActor(rocket);
 	DemoStartUp(1);	
 
@@ -45,19 +50,14 @@ void PhysicsApp::shutdown()
 
 void PhysicsApp::update(float deltaTime) 
 {
-
+	
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 
 	m_physicsScene->Update(deltaTime);
+	
 
-	if (rocket->GetMass() > 1)
-	{
-		Circle* fuel = new Circle(rocket->GetPosition() - glm::vec2(0,-1), glm::vec2(0, 10), 0, 1, glm::vec4(0, 1, 0, 1));
-		m_physicsScene->AddActor(fuel);
-
-		rocket->SetMass(rocket->GetMass() - deltaTime);
-	}
+	Controls(input, deltaTime);
 
 
 	// exit the application
@@ -70,6 +70,7 @@ void PhysicsApp::draw() {
 
 	// wipe the screen to the background colour
 	clearScreen();
+	aie::Gizmos::clear();
 
 	// begin drawing sprites
 	m_2dRenderer->begin();
@@ -110,6 +111,79 @@ void PhysicsApp::DemoStartUp(int _num)
 	int test = 0;
 
 #endif // NewtonsFirstLaw
+}
+
+void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
+{
+}
+
+void PhysicsApp::Controls(aie::Input* _input, float _dt)
+{
+	if (_input->isKeyDown(aie::INPUT_KEY_W))
+	{
+		timer += _dt;
+
+		if (timer >= .1f)
+		{
+			timer = 0;
+
+			Circle* fuel = new Circle(rocket->GetPosition() - glm::vec2(0, rocket->GetRadius()), glm::vec2(0, -20), 0, 1, glm::vec4(0, 1, 0, 1));
+			m_physicsScene->AddActor(fuel);
+			rocket->ApplyForce(-fuel->GetVelocity());
+
+			rocket->SetMass(rocket->GetMass() - _dt);
+		}
+	}
+
+	if (_input->isKeyDown(aie::INPUT_KEY_S))
+	{
+		timer += _dt;
+
+		if (timer >= .1f)
+		{
+			timer = 0;
+
+			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(0, rocket->GetRadius()), glm::vec2(0, 20), 0, 1, glm::vec4(0, 1, 0, 1));
+			m_physicsScene->AddActor(fuel);
+
+			rocket->ApplyForce(-fuel->GetVelocity());
+			rocket->SetMass(rocket->GetMass() - _dt);
+		}
+	}
+
+	if (_input->isKeyDown(aie::INPUT_KEY_D))
+	{
+		timer += _dt;
+
+		if (timer >= .1f)
+		{
+			timer = 0;
+
+			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(-rocket->GetRadius(), 0), glm::vec2(-20, 0), 0, 1, glm::vec4(0, 1, 0, 1));
+			m_physicsScene->AddActor(fuel);
+
+			rocket->ApplyForce(-fuel->GetVelocity());
+
+			rocket->SetMass(rocket->GetMass() - _dt);
+		}
+	}
+
+	if (_input->isKeyDown(aie::INPUT_KEY_A))
+	{
+		timer += _dt;
+
+		if (timer >= .1f)
+		{
+			timer = 0;
+
+			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(rocket->GetRadius(), 0), glm::vec2(20, 0), 0, 1, glm::vec4(0, 1, 0, 1));
+			m_physicsScene->AddActor(fuel);
+
+			rocket->ApplyForce(-fuel->GetVelocity());
+
+			rocket->SetMass(rocket->GetMass() - _dt);
+		}
+	}
 }
 
 
