@@ -112,9 +112,12 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 	if (circle1 != nullptr && circle2 != nullptr)
 	{
-		if (glm::distance(circle1->m_position, circle2->m_position) < circle1->GetRadius() + circle2->GetRadius())
+		glm::vec2 dist = circle1->GetPosition() - circle2->GetPosition();
+		if (glm::length(dist) < circle1->GetRadius() + circle2->GetRadius())
 		{
-			circle2->ApplyForceToActor(circle1, (circle2->GetMass() / circle1->GetMass()) * circle2->GetVelocity());
+			//circle2->ApplyForceToActor(circle1, (circle2->GetMass() / circle1->GetMass()) * circle2->GetVelocity());
+								
+			circle1->ResolveCollision(circle2);
 			return true;
 		}
 	}

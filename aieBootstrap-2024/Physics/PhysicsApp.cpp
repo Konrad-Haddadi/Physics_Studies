@@ -184,6 +184,17 @@ void PhysicsApp::DemoStartUp(int _num)
 
 
 #endif // ProjectilePhysicsPart
+
+#ifdef CollisionReslution
+
+	Circle* ball1 = new Circle(glm::vec2(-50, 5), glm::vec2(20, 0), 3, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball2 = new Circle(glm::vec2(0, 0), glm::vec2(0, 0), 1, 5, glm::vec4(1, 1, 0, 1));
+
+	m_physicsScene->AddActor(ball1);
+	m_physicsScene->AddActor(ball2);
+
+#endif // CollisionReslution
+
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)

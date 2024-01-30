@@ -20,7 +20,11 @@ public:
 	float GetMass() { return m_mass; }
 	void SetMass(float _mass) { m_mass = _mass; }
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
-		
+	
+	float GetKineticEnergy();
+
+	void ResolveCollision(RigidBody* _actor2);
+
 	virtual void Draw(float _alpha) = 0;
 
 public:
