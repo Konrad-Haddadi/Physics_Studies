@@ -19,10 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DEA49362-B428-4215-8D64-4EA0B4FF0858}</ProjectGuid>
+    <ProjectGuid>{5D236D5E-630A-44DD-89FF-D9DC5BC4B025}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Physics</RootNamespace>
+    <RootNamespace>PhysicsGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>PhysicsGameStates</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -164,22 +165,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Circle.cpp" />
-    <ClCompile Include="PhysicsApp.cpp" />
+    <ClCompile Include="GameStates.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="PlayState.cpp" />
+    <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="States.cpp" />
+    <ClCompile Include="PhysicsGameApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PhysicsObject.cpp" />
-    <ClCompile Include="PhysicsScene.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="RigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Circle.h" />
-    <ClInclude Include="Demos.h" />
-    <ClInclude Include="PhysicsApp.h" />
-    <ClInclude Include="PhysicsObject.h" />
-    <ClInclude Include="PhysicsScene.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="GameStates.h" />
+    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="PlayState.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="States.h" />
+    <ClInclude Include="PhysicsGameApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

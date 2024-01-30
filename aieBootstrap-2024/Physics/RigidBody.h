@@ -19,6 +19,7 @@ public:
 	glm::vec2 GetVelocity() { return m_velocity; }
 	float GetMass() { return m_mass; }
 	void SetMass(float _mass) { m_mass = _mass; }
+	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
 		
 	virtual void Draw(float _alpha) = 0;
 

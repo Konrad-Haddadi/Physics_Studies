@@ -1,6 +1,16 @@
 #include "PhysicsScene.h"
 #include "PhysicsObject.h"
 #include "Circle.h"
+#include "Plane.h"
+
+typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
+
+static fn collisionFunctionArray[] =
+{
+	PhysicsScene::Plane2Plane,  PhysicsScene::Plane2Circle,  PhysicsScene::Plane2Box,
+	PhysicsScene::Circle2Plane, PhysicsScene::Circle2Circle, PhysicsScene::Circle2Box,
+	PhysicsScene::Box2Plane,    PhysicsScene::Box2Circle,    PhysicsScene::Box2Box,
+};
 
 PhysicsScene::PhysicsScene()
 {
@@ -33,33 +43,31 @@ void PhysicsScene::RemoveActor(PhysicsObject* _actor)
 
 void PhysicsScene::Update(float _dt)
 {
-	static float acumulatedTime = 0.0f;
-	acumulatedTime += _dt;
+	int actorCount = m_actors.size();
 
-	while (acumulatedTime >= m_timeStep)
+	for (PhysicsObject* obj : m_actors)
+		obj->FixedUpdate(m_gravity, m_timeStep);
+
+	for (int outer = 0; outer < actorCount - 1; outer++)
 	{
-		for(auto obj : m_actors)
+		for (int inner = outer + 1; inner < actorCount; inner++)
 		{
-			obj->FixedUpdate(m_gravity, m_timeStep);
-		}
+			PhysicsObject* object1 = m_actors[outer];
+			PhysicsObject* object2 = m_actors[inner];
+			
+			int shapeId1 = object1->GetShapeID();
+			int shapeId2 = object2->GetShapeID();
 
-		acumulatedTime -= m_timeStep;
+			int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
 
-		int actorCount = m_actors.size();
+			fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
 
-		for (int outer = 0; outer < actorCount - 1; outer++)
-		{
-			for (int inner = outer + 1; inner < actorCount; inner++)
+			if (collisionFunctionPtr != nullptr)
 			{
-				PhysicsObject* object1 = m_actors[outer];
-				PhysicsObject* object2 = m_actors[inner];
-
-				Circle2Circle(object1, object2);
+				collisionFunctionPtr(object1, object2);
 			}
 		}
-	}
-
-	
+	}	
 }
 
 void PhysicsScene::Draw()
@@ -67,6 +75,26 @@ void PhysicsScene::Draw()
 	for (auto obj : m_actors)
 		obj->Draw(1);
 	
+}
+
+bool PhysicsScene::Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	return false;
+}
+
+
+bool PhysicsScene::Plane2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	Plane* plane = dynamic_cast<Plane*>(_lhs);
+	Circle* circle = dynamic_cast<Circle*>(_rhs);
+
+	return Circle2Plane(circle, plane);
+
+}
+
+bool PhysicsScene::Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	return false;
 }
 
 bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
@@ -78,21 +106,58 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 	{
 		if (glm::distance(circle1->m_position, circle2->m_position) < circle1->GetRadius() + circle2->GetRadius())
 		{
-			circle2->ApplyForceToActor(circle1, (circle2->GetMass() / circle1->GetMass()) * circle2->GetVelocity());
+			return true;
 		}
 	}
 
 	return false;
 }
 
-//glm::vec2 ElasticCollision(RigidBody* _obj1, RigidBody* _obj2)
-//{
-//	glm::vec2 force = glm::vec2(0);
-//
-//	float mass1 = _obj1->GetMass();
-//	float mass2 = _obj2->GetMass();
-//
-//	force.x = (mass1 - mass2) / ()
-//
-//	return force;
-//}
+
+bool PhysicsScene::Circle2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	Circle* circle = dynamic_cast<Circle*>(_lhs);
+	Plane* plane = dynamic_cast<Plane*>(_rhs);
+
+	if (circle != nullptr && plane != nullptr)
+	{
+		glm::vec2 collisionNormal = plane->GetNormal();
+		float sphereToPlane = glm::dot(circle->GetPosition(), plane->GetNormal()) - plane->GetDistance();
+
+		float intersection = circle->GetRadius() - sphereToPlane;
+		float velocityOutOfPlane = glm::dot(circle->GetVelocity(), plane->GetNormal());
+
+		if (intersection > 0 && velocityOutOfPlane < 0)
+		{
+			circle->ApplyForce(-circle->GetVelocity() * circle->GetMass());
+			return true;
+		}
+	}
+
+	return false;
+
+}
+
+bool PhysicsScene::Circle2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	return false;
+}
+
+
+bool PhysicsScene::Box2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	return false;
+
+}
+
+bool PhysicsScene::Box2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	return false;
+
+}
+
+bool PhysicsScene::Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
+{
+	return false;
+
+}

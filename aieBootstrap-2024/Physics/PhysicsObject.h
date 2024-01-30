@@ -3,9 +3,10 @@
 
 enum ShapeType
 {
-	plane = 0,
-	circle,
-	box
+	PLANE = 0,
+	CIRCLE,
+	BOX,
+	SHAPE_COUNT
 };
 
 class PhysicsObject
@@ -18,7 +19,7 @@ public:
 	virtual void Draw(float _alpha) = 0;
 	virtual void ResetPosition() {};
 
-	ShapeType* GetShapeID() { return &m_shapeID; }
+	ShapeType GetShapeID() { return m_shapeID; }
 
 protected:
 	ShapeType m_shapeID;

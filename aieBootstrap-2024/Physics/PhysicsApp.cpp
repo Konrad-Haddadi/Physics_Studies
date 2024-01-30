@@ -4,18 +4,21 @@
 #include "Input.h"
 #include "Gizmos.h"
 #include "glm/glm.hpp"
-
+#include "Demos.h"
 #include "glm/ext.hpp"
 #include "PhysicsScene.h"
 #include "Circle.h"
+#include "Plane.h"
 
 float timer;
 
-PhysicsApp::PhysicsApp() {
+PhysicsApp::PhysicsApp() 
+{
 
 }
 
-PhysicsApp::~PhysicsApp() {
+PhysicsApp::~PhysicsApp() 
+{
 
 }
 
@@ -31,11 +34,10 @@ bool PhysicsApp::startup()
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 	m_physicsScene = new PhysicsScene();
 
-	m_physicsScene->SetGravity(glm::vec2(0, -15));
 	m_physicsScene->SetTimeStep(0.01f);
 	
-	rocket = new Circle(glm::vec2(0, -50), glm::vec2(0), 10, 5, glm::vec4(1, 0, 0, 1));
-	m_physicsScene->AddActor(rocket);
+	
+
 	DemoStartUp(1);	
 
 	return true;
@@ -50,27 +52,27 @@ void PhysicsApp::shutdown()
 
 void PhysicsApp::update(float deltaTime) 
 {
-	
+	aie::Gizmos::clear();
+
+
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 
 	m_physicsScene->Update(deltaTime);
-	
+	m_physicsScene->Draw();
 
-	Controls(input, deltaTime);
-
-
-	// exit the application
+	DemoUpdate(input, deltaTime);
 
 	if (input->isKeyDown(aie::INPUT_KEY_ESCAPE))
 		quit();
+
+
 }
 
 void PhysicsApp::draw() {
 
 	// wipe the screen to the background colour
 	clearScreen();
-	aie::Gizmos::clear();
 
 	// begin drawing sprites
 	m_2dRenderer->begin();
@@ -88,8 +90,6 @@ void PhysicsApp::draw() {
 
 void PhysicsApp::Draw()
 {
-	m_physicsScene->Draw();
-
 	static float aspectRatio = 16.f / 9.f;
 
 	aie::Gizmos::draw2D(glm::ortho<float>(-100, 100, -100 / aspectRatio, 100 / aspectRatio, -1, 1));
@@ -107,18 +107,44 @@ void PhysicsApp::DrawText()
 
 void PhysicsApp::DemoStartUp(int _num)
 {
-#ifdef NewtonsFirstLaw
-	int test = 0;
+#ifdef NewtonsSecondLaw
 
-#endif // NewtonsFirstLaw
+	rocket = new Circle(glm::vec2(-20, 0), glm::vec2(0), 10, 5, glm::vec4(1, 0, 0, 1));
+	m_physicsScene->AddActor(rocket);
+
+	m_physicsScene->SetGravity(glm::vec2(0, -10));
+
+#endif //NewtonsSecondLaw
+
+
+#ifdef CollisionDetection
+
+	Circle* ball1 = new Circle(glm::vec2(-20, 0), glm::vec2(0), 10, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball2 = new Circle(glm::vec2(10, 0), glm::vec2(0), 10, 5, glm::vec4(0, 1, 0, 1));
+	Plane* plane = new Plane(glm::vec2(1, 1), -30);
+
+	m_physicsScene->SetGravity(glm::vec2(0, -10));
+
+
+	m_physicsScene->AddActor(ball1);
+	m_physicsScene->AddActor(ball2);
+	m_physicsScene->AddActor(plane);
+
+#endif // CollisionDetection
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
 {
+#ifdef NewtonsSecondLaw
+
+	Controls(_input, _dt);
+
+#endif //NewtonsSecondLaw
 }
 
 void PhysicsApp::Controls(aie::Input* _input, float _dt)
 {
+	
 	if (_input->isKeyDown(aie::INPUT_KEY_W))
 	{
 		timer += _dt;
@@ -127,11 +153,9 @@ void PhysicsApp::Controls(aie::Input* _input, float _dt)
 		{
 			timer = 0;
 
-			Circle* fuel = new Circle(rocket->GetPosition() - glm::vec2(0, rocket->GetRadius()), glm::vec2(0, -20), 0, 1, glm::vec4(0, 1, 0, 1));
+			Circle* fuel = new Circle(rocket->GetPosition() - glm::vec2(0, rocket->GetRadius()), glm::vec2(0, -20), 1, 1, glm::vec4(0, 1, 0, 1));
 			m_physicsScene->AddActor(fuel);
 			rocket->ApplyForce(-fuel->GetVelocity());
-
-			rocket->SetMass(rocket->GetMass() - _dt);
 		}
 	}
 
@@ -143,11 +167,10 @@ void PhysicsApp::Controls(aie::Input* _input, float _dt)
 		{
 			timer = 0;
 
-			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(0, rocket->GetRadius()), glm::vec2(0, 20), 0, 1, glm::vec4(0, 1, 0, 1));
+			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(0, rocket->GetRadius()), glm::vec2(0, 20), 1, 1, glm::vec4(0, 1, 0, 1));
 			m_physicsScene->AddActor(fuel);
 
 			rocket->ApplyForce(-fuel->GetVelocity());
-			rocket->SetMass(rocket->GetMass() - _dt);
 		}
 	}
 
@@ -159,12 +182,10 @@ void PhysicsApp::Controls(aie::Input* _input, float _dt)
 		{
 			timer = 0;
 
-			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(-rocket->GetRadius(), 0), glm::vec2(-20, 0), 0, 1, glm::vec4(0, 1, 0, 1));
+			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(-rocket->GetRadius(), 0), glm::vec2(-20, 0), 1, 1, glm::vec4(0, 1, 0, 1));
 			m_physicsScene->AddActor(fuel);
 
 			rocket->ApplyForce(-fuel->GetVelocity());
-
-			rocket->SetMass(rocket->GetMass() - _dt);
 		}
 	}
 
@@ -176,12 +197,10 @@ void PhysicsApp::Controls(aie::Input* _input, float _dt)
 		{
 			timer = 0;
 
-			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(rocket->GetRadius(), 0), glm::vec2(20, 0), 0, 1, glm::vec4(0, 1, 0, 1));
+			Circle* fuel = new Circle(rocket->GetPosition() + glm::vec2(rocket->GetRadius(), 0), glm::vec2(20, 0), 1, 1, glm::vec4(0, 1, 0, 1));
 			m_physicsScene->AddActor(fuel);
 
 			rocket->ApplyForce(-fuel->GetVelocity());
-
-			rocket->SetMass(rocket->GetMass() - _dt);
 		}
 	}
 }
