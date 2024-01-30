@@ -5,4 +5,5 @@
 //#define NewtonsSecondLaw
 //#define NewtonsThirdLaw
 //#define CollisionDetection
-#define ProjectilePhysicsPart1
+//#define ProjectilePhysics
+#define CollisionReslution

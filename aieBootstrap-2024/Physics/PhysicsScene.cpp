@@ -45,29 +45,37 @@ void PhysicsScene::Update(float _dt)
 {
 	int actorCount = m_actors.size();
 
-	for (PhysicsObject* obj : m_actors)
-		obj->FixedUpdate(m_gravity, m_timeStep);
+	static float accumulatedTime = 0.0f;
+	accumulatedTime += _dt;
 
-	for (int outer = 0; outer < actorCount - 1; outer++)
-	{
-		for (int inner = outer + 1; inner < actorCount; inner++)
+	
+	while (accumulatedTime >= m_timeStep) {
+		for (auto pActor : m_actors) {
+			pActor->FixedUpdate(m_gravity, m_timeStep);
+		}
+		accumulatedTime -= m_timeStep;
+
+		for (int outer = 0; outer < actorCount - 1; outer++)
 		{
-			PhysicsObject* object1 = m_actors[outer];
-			PhysicsObject* object2 = m_actors[inner];
-			
-			int shapeId1 = object1->GetShapeID();
-			int shapeId2 = object2->GetShapeID();
-
-			int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
-
-			fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
-
-			if (collisionFunctionPtr != nullptr)
+			for (int inner = outer + 1; inner < actorCount; inner++)
 			{
-				collisionFunctionPtr(object1, object2);
+				PhysicsObject* object1 = m_actors[outer];
+				PhysicsObject* object2 = m_actors[inner];
+
+				int shapeId1 = object1->GetShapeID();
+				int shapeId2 = object2->GetShapeID();
+
+				int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
+
+				fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
+
+				if (collisionFunctionPtr != nullptr)
+				{
+					collisionFunctionPtr(object1, object2);
+				}
 			}
 		}
-	}	
+	}
 }
 
 void PhysicsScene::Draw()

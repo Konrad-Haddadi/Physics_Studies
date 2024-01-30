@@ -33,9 +33,11 @@ bool PhysicsApp::startup()
 
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 	m_physicsScene = new PhysicsScene();
+	
+
 
 	m_physicsScene->SetTimeStep(0.01f);
-	SetupContinuousDemo(glm::vec2(0,0), 10, 10, 10);	
+	
 
 	DemoStartUp(1);	
 
@@ -51,11 +53,13 @@ void PhysicsApp::shutdown()
 
 void PhysicsApp::update(float deltaTime) 
 {
-#ifndef ProjectilePhysicsPart1
+#ifndef ProjectilePhysics
 
 	aie::Gizmos::clear();
 
 #endif 
+
+
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 
@@ -107,23 +111,27 @@ void PhysicsApp::DrawText()
 }
 
 void PhysicsApp::SetupContinuousDemo(glm::vec2 _startPos, float _inclination, float _speed, float _gravity)
-{
-#ifdef ProjectilePhysicsPart1
+{	
 	float t = 0;
 	float tStep = 0.5f;
 	float radius = 1.0f;
 	int segments = 12;
 	glm::vec4 color = glm::vec4(1, 1, 0, 1);
 
+	float xRot = glm::cos(glm::radians(_inclination));
+	float yRot = glm::sin(glm::radians(_inclination));
+
+	
 	while (t <= 5)
 	{
-		float x = 0;
-		float y = 0;
+		float x = xRot * _speed * t + _startPos.x;
+		float y = yRot * _speed * t + (-_gravity * (t * t)) * 0.5f + _startPos.y;
 
 		aie::Gizmos::add2DCircle(glm::vec2(x, y), radius, segments, color);
 		t += tStep;
 	}
-#endif
+
+
 }
 
 void PhysicsApp::DemoStartUp(int _num)
@@ -153,11 +161,29 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #endif // CollisionDetection
 
-#ifdef ProjectilePhysicsPart1
+#ifdef ProjectilePhysics
+
+	SetupContinuousDemo(glm::vec2(-40, 0), 45, 40, 10);
 
 
-	
-#endif // CollisionDetection
+	m_physicsScene->SetGravity(glm::vec2(0, -10));
+	m_physicsScene->SetTimeStep(0.5f);
+
+	float radius = 1.0f;
+	float speed = 40;
+	glm::vec2 startPos(-40, 0);
+	float inclination = glm::pi<float>() / 4.0f;
+
+	float xRot = glm::cos(inclination);
+	float yRot = glm::sin(inclination);
+
+	float x = xRot * speed;
+	float y = yRot * speed;
+
+	m_physicsScene->AddActor(new Circle(startPos, glm::vec2(x, y), 1, radius, glm::vec4(1, 0, 0, 1)));
+
+
+#endif // ProjectilePhysicsPart
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
@@ -168,11 +194,6 @@ void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
 
 #endif //NewtonsSecondLaw
 
-#ifdef ProjectilePhysicsPart1
-
-
-
-#endif // CollisionDetection
 }
 
 void PhysicsApp::Controls(aie::Input* _input, float _dt)

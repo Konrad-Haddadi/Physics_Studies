@@ -1,12 +1,14 @@
 #include "Circle.h"
 #include "RigidBody.h"
 #include "Gizmos.h"
+#include <glm/glm.hpp>
 
 Circle::Circle(glm::vec2 _pos, glm::vec2 _vel, float _mass, float _radius, glm::vec4 _color)
 	: RigidBody(ShapeType::CIRCLE, _pos, _vel, 0, _mass), m_radius(_radius), m_color(_color)
 {
 
 }
+
 
 Circle::~Circle()
 {
