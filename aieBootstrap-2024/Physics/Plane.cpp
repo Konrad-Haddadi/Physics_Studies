@@ -1,5 +1,7 @@
 #include "Plane.h"
 #include "Gizmos.h"
+#include "RigidBody.h"
+
 #include <glm/glm.hpp>
 
 using glm::vec2;
@@ -39,4 +41,15 @@ void Plane::Draw(float _alpha)
 
 void Plane::ResetPosition()
 {
+}
+
+void Plane::ResolveCollision(RigidBody* _actor2)
+{
+	glm::vec2 vRel = _actor2->GetVelocity();
+
+	float e = 1;
+	float j = glm::dot(-(1 + e) * (vRel), m_normal) / (1 / _actor2->GetMass());
+
+	glm::vec2 force = m_normal * j;
+	_actor2->ApplyForce(force);
 }

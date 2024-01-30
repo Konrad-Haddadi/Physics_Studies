@@ -3,6 +3,8 @@
 #include "PhysicsObject.h"
 #include <glm/glm.hpp>
 
+class RigidBody;
+
 class Plane : public PhysicsObject
 {
 public:
@@ -16,6 +18,7 @@ public:
 	glm::vec2 GetNormal() { return m_normal; }
 	float GetDistance() { return m_distanceToOrigin; }
 	glm::vec4 GetColor() { return m_color; }
+	void ResolveCollision(RigidBody* _actor2);
 
 protected:
 	glm::vec2 m_normal;

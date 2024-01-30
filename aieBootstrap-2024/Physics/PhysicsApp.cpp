@@ -187,13 +187,48 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #ifdef CollisionReslution
 
-	Circle* ball1 = new Circle(glm::vec2(-50, 5), glm::vec2(20, 0), 3, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball1 = new Circle(glm::vec2(-50, 5), glm::vec2(50, 0), 3, 5, glm::vec4(1, 0, 0, 1));
 	Circle* ball2 = new Circle(glm::vec2(0, 0), glm::vec2(0, 0), 1, 5, glm::vec4(1, 1, 0, 1));
+
+	Plane* topWall = new Plane(glm::vec2(0,-1), -50);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -50);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -95);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -95);
 
 	m_physicsScene->AddActor(ball1);
 	m_physicsScene->AddActor(ball2);
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
 
 #endif // CollisionReslution
+
+#ifdef Cradle
+
+	Circle* ball1 = new Circle(glm::vec2(-50, 0), glm::vec2(50, 0), 1, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball2 = new Circle(glm::vec2(-30, 0), glm::vec2(0, 0), 1, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball3 = new Circle(glm::vec2(-10, 0), glm::vec2(0, 0), 1, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball4 = new Circle(glm::vec2(10, 0), glm::vec2(0, 0), 1, 5, glm::vec4(1, 0, 0, 1));
+	Circle* ball5 = new Circle(glm::vec2(30, 0), glm::vec2(0, 0), 1, 5, glm::vec4(1, 1, 0, 1));
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -50);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -50);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -95);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -95);
+
+	m_physicsScene->AddActor(ball1);
+	m_physicsScene->AddActor(ball2);
+	m_physicsScene->AddActor(ball3);
+	m_physicsScene->AddActor(ball4);
+	m_physicsScene->AddActor(ball5);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // Cradle
 
 }
 
