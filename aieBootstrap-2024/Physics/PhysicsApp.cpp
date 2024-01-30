@@ -35,8 +35,7 @@ bool PhysicsApp::startup()
 	m_physicsScene = new PhysicsScene();
 
 	m_physicsScene->SetTimeStep(0.01f);
-	
-	
+	SetupContinuousDemo(glm::vec2(0,0), 10, 10, 10);	
 
 	DemoStartUp(1);	
 
@@ -52,9 +51,11 @@ void PhysicsApp::shutdown()
 
 void PhysicsApp::update(float deltaTime) 
 {
+#ifndef ProjectilePhysicsPart1
+
 	aie::Gizmos::clear();
 
-
+#endif 
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 
@@ -105,6 +106,26 @@ void PhysicsApp::DrawText()
 	m_2dRenderer->setUVRect(0, 0, 1, 1);
 }
 
+void PhysicsApp::SetupContinuousDemo(glm::vec2 _startPos, float _inclination, float _speed, float _gravity)
+{
+#ifdef ProjectilePhysicsPart1
+	float t = 0;
+	float tStep = 0.5f;
+	float radius = 1.0f;
+	int segments = 12;
+	glm::vec4 color = glm::vec4(1, 1, 0, 1);
+
+	while (t <= 5)
+	{
+		float x = 0;
+		float y = 0;
+
+		aie::Gizmos::add2DCircle(glm::vec2(x, y), radius, segments, color);
+		t += tStep;
+	}
+#endif
+}
+
 void PhysicsApp::DemoStartUp(int _num)
 {
 #ifdef NewtonsSecondLaw
@@ -131,6 +152,12 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(plane);
 
 #endif // CollisionDetection
+
+#ifdef ProjectilePhysicsPart1
+
+
+	
+#endif // CollisionDetection
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
@@ -140,6 +167,12 @@ void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
 	Controls(_input, _dt);
 
 #endif //NewtonsSecondLaw
+
+#ifdef ProjectilePhysicsPart1
+
+
+
+#endif // CollisionDetection
 }
 
 void PhysicsApp::Controls(aie::Input* _input, float _dt)

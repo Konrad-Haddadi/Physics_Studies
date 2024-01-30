@@ -19,6 +19,8 @@ public:
 	virtual void draw();
 	void Draw();
 	void DrawText();
+	void SetupContinuousDemo(glm::vec2 _startPos, float _inclination, float _speed, float _gravity);
+
 	void Controls(aie::Input* _input, float _dt);
 
 protected:
