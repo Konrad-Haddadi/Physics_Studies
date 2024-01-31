@@ -2,6 +2,8 @@
 #include "PhysicsObject.h"
 #include "Circle.h"
 #include "Plane.h"
+#include "Box.h"
+#include <glm/glm.hpp>
 
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 
@@ -85,6 +87,18 @@ void PhysicsScene::Draw()
 	
 }
 
+float PhysicsScene::GetTotalEnergy()
+{
+	float total = 0;
+	for (auto iter = m_actors.begin(); iter != m_actors.end(); iter++)
+	{
+		PhysicsObject* obj = *iter;
+		total += glm::abs(obj->GetPotentialEnergy(m_gravity));
+	}
+
+	return total;
+}
+
 bool PhysicsScene::Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
 	return false;
@@ -102,6 +116,49 @@ bool PhysicsScene::Plane2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 bool PhysicsScene::Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
+	Plane* plane = dynamic_cast<Plane*>(_lhs);
+	Box* box = dynamic_cast<Box*>(_rhs);
+
+	if (box != nullptr && plane != nullptr)
+	{
+		glm::vec2 collisionNormal = plane->GetNormal();
+		float sphereToPlane = glm::dot(box->GetPosition(), plane->GetNormal()) - plane->GetDistance();
+
+		float intersectionX = box->GetExtent().x - sphereToPlane;
+		float intersectionY = box->GetExtent().y - sphereToPlane;
+
+		float velocityOutOfPlane = glm::dot(box->GetVelocity(), plane->GetNormal());
+
+		if (intersectionX > 0 && velocityOutOfPlane < 0)
+		{
+			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtent().x);
+			plane->ResolveCollision(box, contact);
+
+			float r = (float)(rand() % 100) / 100;
+			float g = (float)(rand() % 100) / 100;
+			float b = (float)(rand() % 100) / 100;
+
+			box->SetColor(glm::vec4(r, g, b, 1));
+
+			return true;
+		}
+
+		if (intersectionY > 0 && velocityOutOfPlane < 0)
+		{
+			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtent().y);
+			plane->ResolveCollision(box, contact);
+
+
+			float r = (float)(rand() % 100) / 100;
+			float g = (float)(rand() % 100) / 100;
+			float b = (float)(rand() % 100) / 100;
+
+			box->SetColor(glm::vec4(r, g, b, 1));
+
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -115,9 +172,7 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		glm::vec2 dist = circle1->GetPosition() - circle2->GetPosition();
 		if (glm::length(dist) < circle1->GetRadius() + circle2->GetRadius())
 		{
-			//circle2->ApplyForceToActor(circle1, (circle2->GetMass() / circle1->GetMass()) * circle2->GetVelocity());
-								
-			circle1->ResolveCollision(circle2);
+			circle1->ResolveCollision(circle2, 0.5f * (circle1->GetPosition() + circle2->GetPosition()));
 			return true;
 		}
 	}
@@ -141,8 +196,8 @@ bool PhysicsScene::Circle2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 		if (intersection > 0 && velocityOutOfPlane < 0)
 		{
-			plane->ResolveCollision(circle);
-			//circle->ApplyForce(-circle->GetVelocity() * circle->GetMass());
+			glm::vec2 contact = circle->GetPosition() + (collisionNormal * -circle->GetRadius());
+			plane->ResolveCollision(circle, contact);
 			return true;
 		}
 	}
@@ -153,24 +208,70 @@ bool PhysicsScene::Circle2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 bool PhysicsScene::Circle2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
-	return false;
+	Circle* circle = dynamic_cast<Circle*>(_lhs);
+	Box* box = dynamic_cast<Box*>(_rhs);
+
+	return Box2Circle(_rhs, _lhs);
 }
 
 
 bool PhysicsScene::Box2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
-	return false;
+	Plane* plane = dynamic_cast<Plane*>(_rhs);
+	Box* box = dynamic_cast<Box*>(_lhs);
+
+	return Plane2Box(plane, box);
 
 }
 
 bool PhysicsScene::Box2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
-	return false;
+	Box* box = dynamic_cast<Box*>(_lhs);
+	Circle* circle = dynamic_cast<Circle*>(_rhs);
 
+	if (box != nullptr && circle != nullptr)
+	{
+		glm::vec2 pos1 = box->GetPosition();
+		glm::vec2 pos2 = circle->GetPosition();
+		glm::vec2 extent1 = box->GetExtent();
+		float radius = circle->GetRadius();
+
+		if (pos1.x + extent1.x >= pos2.x - radius &&
+			pos1.x - extent1.x <= pos2.x + radius &&
+			pos1.y + extent1.y >= pos2.y - radius &&
+			pos1.y - extent1.y <= pos2.y + radius)
+		{
+			box->ResolveCollision(circle);
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool PhysicsScene::Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
+	Box* box1 = dynamic_cast<Box*>(_lhs);
+	Box* box2 = dynamic_cast<Box*>(_rhs);
+
+	if (box1 != nullptr && box2 != nullptr)
+	{
+		glm::vec2 pos1 = box1->GetPosition();
+		glm::vec2 pos2 = box2->GetPosition();
+		glm::vec2 extent1 = box1->GetExtent();
+		glm::vec2 extent2 = box2->GetExtent();
+
+		if (pos1.x + extent1.x >= pos2.x - extent2.x &&
+			pos1.x - extent1.x <= pos2.x + extent2.x &&
+			pos1.y + extent1.y >= pos2.y - extent2.y &&
+			pos1.y - extent1.y <= pos2.y + extent2.y)
+		{
+			box1->ResolveCollision(box2);
+			return true;
+		}
+	}
+
 	return false;
 
 }

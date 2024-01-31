@@ -1,7 +1,7 @@
 #pragma once
 
-#include "PhysicsObject.h"
 #include <glm/glm.hpp>
+#include "PhysicsObject.h"
 
 class RigidBody;
 
@@ -19,10 +19,14 @@ public:
 	float GetDistance() { return m_distanceToOrigin; }
 	glm::vec4 GetColor() { return m_color; }
 	void ResolveCollision(RigidBody* _actor2);
+	void ResolveCollision(RigidBody* _actor2, glm::vec2 _contact);
 
 protected:
 	glm::vec2 m_normal;
 	float m_distanceToOrigin;
 	glm::vec4 m_color;
+
+	// Inherited via PhysicsObject
+	float GetPotentialEnergy(glm::vec2 _gravity) override;
 };
 

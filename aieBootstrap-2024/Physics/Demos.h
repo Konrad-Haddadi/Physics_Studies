@@ -7,4 +7,7 @@
 //#define CollisionDetection
 //#define ProjectilePhysics
 //#define CollisionReslution
-#define Cradle
+//#define Cradle
+//#define BoxDemo
+//#define BoxCircleDemo
+#define DVDLogo

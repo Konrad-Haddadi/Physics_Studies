@@ -53,3 +53,20 @@ void Plane::ResolveCollision(RigidBody* _actor2)
 	glm::vec2 force = m_normal * j;
 	_actor2->ApplyForce(force);
 }
+
+void Plane::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact)
+{
+	glm::vec2 vRel = _actor2->GetVelocity();
+
+	float e = 1;
+	float j = glm::dot(-(1 + e) * (vRel), m_normal) / (1 / _actor2->GetMass());
+
+	glm::vec2 force = m_normal * j;
+	_actor2->ApplyForce(force, _contact - _actor2->GetPosition());
+
+}
+
+float Plane::GetPotentialEnergy(glm::vec2 _gravity)
+{
+	return 0.0f;
+}

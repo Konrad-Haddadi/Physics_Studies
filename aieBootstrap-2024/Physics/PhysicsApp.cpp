@@ -9,6 +9,8 @@
 #include "PhysicsScene.h"
 #include "Circle.h"
 #include "Plane.h"
+#include "Renderer2D.h"
+#include "Box.h"
 
 float timer;
 
@@ -33,11 +35,10 @@ bool PhysicsApp::startup()
 
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 	m_physicsScene = new PhysicsScene();
-	
 
 
 	m_physicsScene->SetTimeStep(0.01f);
-	
+	//m_physicsScene->SetGravity(glm::vec2(0, -10));
 
 	DemoStartUp(1);	
 
@@ -58,7 +59,6 @@ void PhysicsApp::update(float deltaTime)
 	aie::Gizmos::clear();
 
 #endif 
-
 
 	// input example
 	aie::Input* input = aie::Input::getInstance();
@@ -81,6 +81,9 @@ void PhysicsApp::draw() {
 
 	// begin drawing sprites
 	m_2dRenderer->begin();
+	
+
+	//m_2dRenderer->drawSprite(image, 50, 50,50,50, timer);
 
 	// draw your stuff here!
 	Draw();
@@ -104,7 +107,14 @@ void PhysicsApp::DrawText()
 {	
 	char fps[32];
 	sprintf_s(fps, 32, "FPS: %i", getFPS());	
+	
+	char totalEnergy[32];
+	sprintf_s(totalEnergy, 32, "Total energy %i", (int)m_physicsScene->GetTotalEnergy());
+
 	int windowHeight = Application::getWindowHeight();
+
+	
+	m_2dRenderer->drawText(m_font, totalEnergy, 0, windowHeight - 64);
 
 	m_2dRenderer->drawText(m_font, fps, 0, windowHeight - 32);
 	m_2dRenderer->setUVRect(0, 0, 1, 1);
@@ -229,6 +239,51 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(rightWall);
 
 #endif // Cradle
+
+#ifdef BoxDemo
+
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-10, 0), 0, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+	Box* box2 = new Box(glm::vec2(0, 0), glm::vec2(0, 0), 0, 1, 10, 10, glm::vec4(1, 0, 0, 1));
+	Box* box3 = new Box(glm::vec2(10, 40), glm::vec2(0, -10), 0, 1, 10, 10, glm::vec4(1, 0, 0, 1));
+
+	m_physicsScene->AddActor(box1);
+	m_physicsScene->AddActor(box2);
+	m_physicsScene->AddActor(box3);
+
+#endif // BoxDemo
+
+#ifdef BoxCircleDemo
+
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(0, 0), 0, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+	Circle* ball1 = new Circle(glm::vec2(0, 20), glm::vec2(10, -5), 1, 5, glm::vec4(1, 0, 0, 1));
+
+	m_physicsScene->AddActor(box1);
+	m_physicsScene->AddActor(ball1);
+
+#endif // BoxCircleDemo
+
+#ifdef BoxPlaneDemo
+
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-50, 40), 0, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+
+	float height = Application::getWindowHeight() / 15;
+	float width = Application::getWindowWidth() / 15;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
+
+	m_physicsScene->AddActor(box1);
+
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // BoxPlaneDemo
+
 
 }
 
