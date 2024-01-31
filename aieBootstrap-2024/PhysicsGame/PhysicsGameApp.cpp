@@ -21,7 +21,7 @@ bool PhysicsGameStates::startup()
 	m_2dRenderer = new aie::Renderer2D();
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 
-	m_gameStateManager = new StateManager(new MenuState);
+	m_gameStateManager = new GameStateManager(new MenuState(m_gameStateManager));
 	m_gameStateManager->StartUp();
 
 	return true;

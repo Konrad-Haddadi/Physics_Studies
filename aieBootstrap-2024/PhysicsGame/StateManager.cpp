@@ -4,7 +4,7 @@
 void StateManager::StartUp()
 {
 	if (currentState != nullptr)
-		currentState->StateEnter(this);
+		currentState->StateEnter();
 
 	nextState = nullptr;
 }
@@ -12,31 +12,31 @@ void StateManager::StartUp()
 void StateManager::Update(float _dt)
 {
 	if (currentState != nullptr)
-		currentState->StateUpdate(this);
+		currentState->StateUpdate();
 
 	if (nextState != nullptr)
 	{
-		currentState->StateExit(this);
+		currentState->StateExit();
 
 		delete currentState;
 		currentState = nextState;
 
 		nextState = nullptr;
-		currentState->StateEnter(this);
+		currentState->StateEnter();
 	}
 }
 
 void StateManager::Draw()
 {
 	if (currentState != nullptr)
-		currentState->StateDraw(this);
+		currentState->StateDraw();
 }
 
 void StateManager::ShutDown()
 {
 	if (currentState != nullptr)
 	{
-		currentState->StateExit(this);
+		currentState->StateExit();
 		delete currentState;
 	}
 
