@@ -5,12 +5,18 @@
 class PlayState : public GameStates
 {
 public:
-	PlayState() {}
+	PlayState(StateManager* _stateMachine) : GameStates(_stateMachine) {}
 	~PlayState() {}
-	
-	void StateEnter(StateManager* _stateManager) override;
-	void StateUpdate(StateManager* _stateManager) override;
-	void StateDraw(StateManager* _stateManager) override;
-	void StateExit(StateManager* _stateManager) override;
+
+
+	// Inherited via GameStates
+	void StateEnter() override;
+
+	void StateUpdate() override;
+
+	void StateDraw() override;
+
+	void StateExit() override;
+
 };
 

@@ -1,17 +1,8 @@
 #include "GameStates.h"
+#include "GameStateManager.h"
 
-void GameStates::StateEnter(StateManager* _stateManager)
+GameStates::GameStates(StateManager* _stateManager)
+	: States(_stateManager), m_input(aie::Input::getInstance())
 {
-}
-
-void GameStates::StateUpdate(StateManager* _stateManager)
-{
-}
-
-void GameStates::StateDraw(StateManager* _stateManager)
-{
-}
-
-void GameStates::StateExit(StateManager* _stateManager)
-{
+	gameStateManager = dynamic_cast<GameStateManager*>(_stateManager);
 }

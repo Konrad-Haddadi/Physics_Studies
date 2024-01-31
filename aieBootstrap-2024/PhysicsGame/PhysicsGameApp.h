@@ -2,9 +2,9 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
-#include "../Physics/PhysicsScene.h"
+#include "PhysicsScene.h"
 
-class StateManager;
+class GameStateManager;
 
 class PhysicsGameStates : public aie::Application {
 public:
@@ -24,7 +24,8 @@ public:
 
 protected:
 
-	StateManager* m_gameStateManager;
+	GameStateManager* m_gameStateManager;
 	aie::Renderer2D* m_2dRenderer;
 	aie::Font* m_font;
+	PhysicsScene* m_physicsScene;
 };

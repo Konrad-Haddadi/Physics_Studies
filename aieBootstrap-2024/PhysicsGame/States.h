@@ -5,13 +5,13 @@ class StateManager;
 class States
 {
 public:
-	States() {};
+	States(StateManager* _stateManager) { };
 	~States() {};
 
-	virtual void StateEnter(StateManager* _stateManager) = 0;
-	virtual void StateUpdate(StateManager* _stateManager) = 0;
-	virtual void StateDraw(StateManager* _stateManager) = 0;
-	virtual void StateExit(StateManager* _stateManager) = 0;
+	virtual void StateEnter() = 0;
+	virtual void StateUpdate() = 0;
+	virtual void StateDraw() = 0;
+	virtual void StateExit() = 0;
 
 };
 

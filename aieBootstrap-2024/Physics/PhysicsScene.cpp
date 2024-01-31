@@ -124,14 +124,14 @@ bool PhysicsScene::Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		glm::vec2 collisionNormal = plane->GetNormal();
 		float sphereToPlane = glm::dot(box->GetPosition(), plane->GetNormal()) - plane->GetDistance();
 
-		float intersectionX = box->GetExtent().x - sphereToPlane;
-		float intersectionY = box->GetExtent().y - sphereToPlane;
+		float intersectionX = box->GetExtents().x - sphereToPlane;
+		float intersectionY = box->GetExtents().y - sphereToPlane;
 
 		float velocityOutOfPlane = glm::dot(box->GetVelocity(), plane->GetNormal());
 
 		if (intersectionX > 0 && velocityOutOfPlane < 0)
 		{
-			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtent().x);
+			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtents().x);
 			plane->ResolveCollision(box, contact);
 
 			float r = (float)(rand() % 100) / 100;
@@ -145,7 +145,7 @@ bool PhysicsScene::Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 		if (intersectionY > 0 && velocityOutOfPlane < 0)
 		{
-			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtent().y);
+			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtents().y);
 			plane->ResolveCollision(box, contact);
 
 
@@ -233,7 +233,7 @@ bool PhysicsScene::Box2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 	{
 		glm::vec2 pos1 = box->GetPosition();
 		glm::vec2 pos2 = circle->GetPosition();
-		glm::vec2 extent1 = box->GetExtent();
+		glm::vec2 extent1 = box->GetExtents();
 		float radius = circle->GetRadius();
 
 		if (pos1.x + extent1.x >= pos2.x - radius &&
@@ -255,23 +255,25 @@ bool PhysicsScene::Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 	Box* box1 = dynamic_cast<Box*>(_lhs);
 	Box* box2 = dynamic_cast<Box*>(_rhs);
 
-	if (box1 != nullptr && box2 != nullptr)
+	if (box1 != nullptr && box2 != nullptr) 
 	{
-		glm::vec2 pos1 = box1->GetPosition();
-		glm::vec2 pos2 = box2->GetPosition();
-		glm::vec2 extent1 = box1->GetExtent();
-		glm::vec2 extent2 = box2->GetExtent();
+		glm::vec2 boxPos = box2->GetPosition() - box1->GetPosition();
+		glm::vec2 norm(0, 0);
+		glm::vec2 contact(0, 0);
 
-		if (pos1.x + extent1.x >= pos2.x - extent2.x &&
-			pos1.x - extent1.x <= pos2.x + extent2.x &&
-			pos1.y + extent1.y >= pos2.y - extent2.y &&
-			pos1.y - extent1.y <= pos2.y + extent2.y)
-		{
-			box1->ResolveCollision(box2);
-			return true;
+		float pen = 0;
+		int numContacts = 0;
+
+		box1->CheckBoxCorners(*box2, contact, numContacts, pen, norm);
+		if (box2->CheckBoxCorners(*box1, contact, numContacts, pen, norm)) {
+			norm = -norm;
 		}
+		if (pen > 0) {
+			box1->ResolveCollision(box2, contact / float(numContacts), &norm);
+		} 
+		return true; 
 	}
-
 	return false;
+
 
 }

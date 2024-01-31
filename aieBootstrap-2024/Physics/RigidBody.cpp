@@ -80,7 +80,7 @@ void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::ve
 
 float RigidBody::GetKineticEnergy()
 {
-	float kineticEnergy = m_mass * (m_velocity.length() * m_velocity.length()) * 0.5f;
+	float kineticEnergy = 0.5f * (m_mass * glm::dot(m_velocity, m_velocity) + m_moment * m_angularVelocity * m_angularVelocity);
 
 	return kineticEnergy;
 }
@@ -120,10 +120,11 @@ void RigidBody::CalculateSmoothedPosition(float _alpha)
 {
 	m_smoothedPosition = _alpha * m_position + (1 - _alpha) * m_lastPosition;
 
-	float smootherOrientation = _alpha * m_orientation + (1 - _alpha) * m_lastOrientation;
+	float smoothedOrientation = _alpha * m_orientation + (1 - _alpha) * m_lastOrientation;
 
-	float sn = sinf(smootherOrientation);
-	float cs = cosf(smootherOrientation);
+	float sn = sinf(smoothedOrientation);
+	float cs = cosf(smoothedOrientation);
+
 	m_smoothedLocalX = glm::vec2(cs, sn);
 	m_smoothedLocalY = glm::vec2(-sn, cs);
 }

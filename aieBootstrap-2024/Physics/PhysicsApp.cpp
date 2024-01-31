@@ -262,7 +262,7 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #endif // BoxCircleDemo
 
-#ifdef BoxPlaneDemo
+#ifdef DVDLogo
 
 	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-50, 40), 0, 1, 10, 10, glm::vec4(1, 1, 0, 1));
 
@@ -284,7 +284,51 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #endif // BoxPlaneDemo
 
+#ifdef RotatedBoxCheck
 
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-50, 40), 45, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+	Box* box2 = new Box(glm::vec2(00, 0), glm::vec2(-10, -30), 20, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+
+	float height = Application::getWindowHeight() / 15;
+	float width = Application::getWindowWidth() / 15;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
+
+	m_physicsScene->AddActor(box1);
+	m_physicsScene->AddActor(box2);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // RotatedBoxCheck
+
+#ifdef RandomObjectCheck
+
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-50, 40), 45, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+	Circle* ball1 = new Circle(glm::vec2(0, 20), glm::vec2(10, -5), 1, 5, glm::vec4(1, 0, 0, 1));
+
+	m_physicsScene->AddActor(box1);
+	m_physicsScene->AddActor(ball1);
+
+	float height = Application::getWindowHeight() / 15;
+	float width = Application::getWindowWidth() / 15;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // RandomObjectCheck
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)

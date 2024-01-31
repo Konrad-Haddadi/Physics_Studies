@@ -24,14 +24,17 @@ public:
 
 
 	glm::vec2 GetPosition() { return m_position; }
+	glm::vec2 GetPosition() const { return m_position; }
+
 	glm::vec2 GetVelocity() { return m_velocity; }
 	
 
 	float GetOrientation() { return m_orientation; }
 	float GetMass() { return m_mass; }
 	float GetMoment() { return m_moment; }
-	float GetPotentialEnergy(glm::vec2  _gravity);
+	float GetAngularVelocity() { return m_angularVelocity; }
 
+	float GetPotentialEnergy(glm::vec2  _gravity);
 	void SetMass(float _mass) { m_mass = _mass; }
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
 	

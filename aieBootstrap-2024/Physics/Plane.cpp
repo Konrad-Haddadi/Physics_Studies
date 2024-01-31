@@ -1,7 +1,7 @@
 #include "Plane.h"
 #include "Gizmos.h"
 #include "RigidBody.h"
-
+#include <iostream>
 #include <glm/glm.hpp>
 
 using glm::vec2;
@@ -56,13 +56,44 @@ void Plane::ResolveCollision(RigidBody* _actor2)
 
 void Plane::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact)
 {
-	glm::vec2 vRel = _actor2->GetVelocity();
+	//glm::vec2 vRel = _actor2->GetVelocity();
 
+	//float e = 1;
+	//float j = glm::dot(-(1 + e) * (vRel), m_normal) / (1 / _actor2->GetMass());
+
+	//glm::vec2 force = m_normal * j;
+	//_actor2->ApplyForce(force, _contact - _actor2->GetPosition());
+
+	glm::vec2 localContact = _contact - _actor2->GetPosition();
+
+	// the plane isn't moving, so the relative velocity is just actor2's velocity at the contact point
+	glm::vec2 vRel = _actor2->GetVelocity() + _actor2->GetAngularVelocity() * glm::vec2(-localContact.y, localContact.x);
+	float velocityIntoPlane = glm::dot(vRel, m_normal);
+
+	// perfectly elasticity collisions for now
 	float e = 1;
-	float j = glm::dot(-(1 + e) * (vRel), m_normal) / (1 / _actor2->GetMass());
+
+	// this is the perpendicular distance we apply the force at relative to the COM, so Torque = F*r
+	float r = glm::dot(localContact, glm::vec2(m_normal.y, -m_normal.x));
+
+	// work out the "effective mass" - this is a combination of moment of
+	// inertia and mass, and tells us how much the contact point velocity 
+	// will change with the force we're applying
+	float mass0 = 1.0f / (1.0f / _actor2->GetMass() + (r * r) / _actor2->GetMoment());
+
+	float j = -(1 + e) * velocityIntoPlane * mass0;
 
 	glm::vec2 force = m_normal * j;
+
+	float kePre = _actor2->GetKineticEnergy();
+
 	_actor2->ApplyForce(force, _contact - _actor2->GetPosition());
+
+	float kePost = _actor2->GetKineticEnergy();
+
+	float deltaKE = kePost - kePre;
+	if (deltaKE > kePost * 0.01f)
+		std::cout << "Kinetic Energy discrepancy greater than 1% detected!!";
 
 }
 

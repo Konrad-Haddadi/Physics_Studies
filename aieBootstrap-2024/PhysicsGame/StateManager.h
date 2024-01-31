@@ -5,14 +5,14 @@ class States;
 class StateManager
 {
 public:
-	StateManager() {}
-	StateManager(States* _firstState) : currentState(_firstState) {}
+	StateManager() : currentState(nullptr), nextState(nullptr) {}
+	StateManager(States* _firstState) : currentState(_firstState), nextState(nullptr) {}
 	~StateManager() {}
 
 	void SetNextState(States* _newState) { nextState = _newState; }
 	
 	void StartUp();
-	void Update(float _dt);
+	void virtual Update(float _dt);
 	void Draw();
 	void ShutDown();
 

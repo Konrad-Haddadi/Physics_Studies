@@ -10,10 +10,17 @@ public:
 	~Box() {};
 
 	void Draw(float _alpha) override;
-	glm::vec2 GetExtent() { return glm::vec2(m_width, m_height); }
+	glm::vec2 GetExtents() const { return glm::vec2(m_width, m_height); }
 	void SetColor(glm::vec4 _color) { m_color = _color; }
+	void CalculateAxes();
+	bool CheckBoxCorners(const Box& box, glm::vec2& contact, int& numContacts, float& pen, glm::vec2& edgeNormal);	
+	
+protected:
 
-private:
+	glm::vec2 m_extents;
+
+	glm::vec2 m_localX;
+	glm::vec2 m_localY;
 
 	float m_width;
 	float m_height;

@@ -2,17 +2,26 @@
 
 #include "GameStates.h"
 
+class StateManager;
+
 class MenuState : public GameStates
 {
 public:
-	MenuState() {}
+	MenuState(StateManager* _stateMachine) : GameStates(_stateMachine) {}
 	~MenuState() {}
 
-	void StateEnter(StateManager* _stateManager) override;
-	void StateUpdate(StateManager* _stateManager) override;
-	void StateDraw(StateManager* _stateManager) override;
-	void StateExit(StateManager* _stateManager) override;
 
+
+
+
+	// Inherited via GameStates
+	void StateEnter() override;
+
+	void StateUpdate() override;
+
+	void StateDraw() override;
+
+	void StateExit() override;
 
 };
 

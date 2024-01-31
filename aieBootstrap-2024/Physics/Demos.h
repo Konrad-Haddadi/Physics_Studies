@@ -10,4 +10,6 @@
 //#define Cradle
 //#define BoxDemo
 //#define BoxCircleDemo
-#define DVDLogo
+//#define DVDLogo
+//#define RotatedBoxCheck
+#define RandomObjectCheck
