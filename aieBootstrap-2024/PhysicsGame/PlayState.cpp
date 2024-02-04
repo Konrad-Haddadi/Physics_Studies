@@ -6,6 +6,7 @@
 
 void PlayState::StateEnter()
 {
+
 }
 
 void PlayState::StateUpdate()
@@ -17,9 +18,11 @@ void PlayState::StateUpdate()
 void PlayState::StateDraw()
 {
 	aie::Gizmos::add2DCircle(glm::vec2(0), 5, 12, glm::vec4(1, 0, 0, 1));
+	
 
 }
 
 void PlayState::StateExit()
 {
+
 }

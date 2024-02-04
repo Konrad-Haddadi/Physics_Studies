@@ -3,7 +3,7 @@
 #include "Font.h"
 #include "Input.h"
 #include "Gizmos.h"
-#include "StateManager.h"
+#include "GameStateManager.h"
 #include "MenuState.h"
 #include "glm/ext.hpp"
 
@@ -19,9 +19,11 @@ bool PhysicsGameStates::startup()
 {	
 	aie::Gizmos::create(255U, 255U, 65535U, 65535U);
 	m_2dRenderer = new aie::Renderer2D();
+	m_physicsScene = new PhysicsScene();
+
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 
-	m_gameStateManager = new GameStateManager(new MenuState(m_gameStateManager));
+	m_gameStateManager = new GameStateManager(new MenuState(m_gameStateManager), m_physicsScene, m_2dRenderer);
 	m_gameStateManager->StartUp();
 
 	return true;

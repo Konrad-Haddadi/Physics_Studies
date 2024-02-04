@@ -20,6 +20,7 @@ public:
 	void ResolveCollision(RigidBody* _actor2);
 	void CalculateSmoothedPosition(float _alpha);
 	
+	void CalculateAxes();
 	float GetKineticEnergy();
 
 
@@ -38,6 +39,9 @@ public:
 	void SetMass(float _mass) { m_mass = _mass; }
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
 	
+	glm::vec2 GetLocalX() { return m_localX; }
+	glm::vec2 GetLocalY() { return m_localY; }
+
 public:
 	glm::vec2 m_position;
 	glm::vec2 m_velocity;
@@ -49,6 +53,9 @@ public:
 	float m_moment;
 
 	float m_lastOrientation;
+
+	glm::vec2 m_localX;
+	glm::vec2 m_localY;
 
 	glm::vec2 m_smoothedPosition;
 	glm::vec2 m_smoothedLocalX;

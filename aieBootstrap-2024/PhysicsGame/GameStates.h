@@ -19,5 +19,6 @@ public:
 
 protected:
 	aie::Input* m_input;
+	PhysicsScene* m_physicsScene;
 	GameStateManager* gameStateManager;
 };

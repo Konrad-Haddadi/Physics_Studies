@@ -121,40 +121,42 @@ bool PhysicsScene::Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 	if (box != nullptr && plane != nullptr)
 	{
-		glm::vec2 collisionNormal = plane->GetNormal();
-		float sphereToPlane = glm::dot(box->GetPosition(), plane->GetNormal()) - plane->GetDistance();
+		int numContacts = 0;
+		glm::vec2 contact(0, 0);
+		float contactV = 0;
 
-		float intersectionX = box->GetExtents().x - sphereToPlane;
-		float intersectionY = box->GetExtents().y - sphereToPlane;
+		// Get a representative point on the plane
+		glm::vec2 planeOrigin = plane->GetNormal() * plane->GetDistance();
 
-		float velocityOutOfPlane = glm::dot(box->GetVelocity(), plane->GetNormal());
-
-		if (intersectionX > 0 && velocityOutOfPlane < 0)
+		// check all four corners to see if we've hit the plane
+		for (float x = -box->GetExtents().x; x < box->GetWidth(); x += box->GetWidth())
 		{
-			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtents().x);
-			plane->ResolveCollision(box, contact);
+			for (float y = -box->GetExtents().y; y < box->GetHeight(); y += box->GetHeight())
+			{
+				// Get the position of the corner in world space
+				glm::vec2 p = box->GetPosition() + x * box->GetLocalX() + y * box->GetLocalY();
+				float distFromPlane = glm::dot(p - planeOrigin, plane->GetNormal());
 
-			float r = (float)(rand() % 100) / 100;
-			float g = (float)(rand() % 100) / 100;
-			float b = (float)(rand() % 100) / 100;
+				// this is the total velocity of the point in world space
+				glm::vec2 displacement = x * box->GetLocalX() + y * box->GetLocalY();
+				glm::vec2 pointVelocity = box->GetVelocity() + box->GetAngularVelocity() * glm::vec2(-displacement.y, displacement.x);
+				// and this is the component of the point velocity into the plane
+				float velocityIntoPlane = glm::dot(pointVelocity, plane->GetNormal());
 
-			box->SetColor(glm::vec4(r, g, b, 1));
-
-			return true;
+				// and moving further in, we need to resolve the collision
+				if (distFromPlane < 0 && velocityIntoPlane <= 0)
+				{
+					numContacts++;
+					contact += p;
+					contactV += velocityIntoPlane;
+				}
+			}
 		}
 
-		if (intersectionY > 0 && velocityOutOfPlane < 0)
+		// we've had a hit - typically only two corners can contact
+		if (numContacts > 0)
 		{
-			glm::vec2 contact = box->GetPosition() + (collisionNormal * -box->GetExtents().y);
-			plane->ResolveCollision(box, contact);
-
-
-			float r = (float)(rand() % 100) / 100;
-			float g = (float)(rand() % 100) / 100;
-			float b = (float)(rand() % 100) / 100;
-
-			box->SetColor(glm::vec4(r, g, b, 1));
-
+			plane->ResolveCollision(box, contact / (float)numContacts);
 			return true;
 		}
 	}
@@ -231,19 +233,33 @@ bool PhysicsScene::Box2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 
 	if (box != nullptr && circle != nullptr)
 	{
-		glm::vec2 pos1 = box->GetPosition();
-		glm::vec2 pos2 = circle->GetPosition();
-		glm::vec2 extent1 = box->GetExtents();
-		float radius = circle->GetRadius();
+		// transform the circle into the box's coordinate space
+		glm::vec2 circlePosWorld = circle->GetPosition() - box->GetPosition();
+		glm::vec2 circlePosBox = glm::vec2(glm::dot(circlePosWorld, box->GetLocalX()), glm::dot(circlePosWorld, box->GetLocalY()));
 
-		if (pos1.x + extent1.x >= pos2.x - radius &&
-			pos1.x - extent1.x <= pos2.x + radius &&
-			pos1.y + extent1.y >= pos2.y - radius &&
-			pos1.y - extent1.y <= pos2.y + radius)
+		// find the closest point to the circle centre on the box by clamping the coordinates in box-space to the box's extents
+		glm::vec2 closestPointOnBoxBox = circlePosBox;
+		glm::vec2 extents = box->GetExtents();
+
+		if (closestPointOnBoxBox.x < -extents.x) 
+			closestPointOnBoxBox.x = -extents.x;
+
+		if (closestPointOnBoxBox.x > extents.x) 
+			closestPointOnBoxBox.x = extents.x;
+
+		if (closestPointOnBoxBox.y < -extents.y)
+			closestPointOnBoxBox.y = -extents.y;
+
+		if (closestPointOnBoxBox.y > extents.y) 
+			closestPointOnBoxBox.y = extents.y;
+		// and convert back into world coordinates
+		glm::vec2 closestPointOnBoxWorld = box->GetPosition() + closestPointOnBoxBox.x * box->GetLocalX() + closestPointOnBoxBox.y * box->GetLocalY();
+		glm::vec2 circleToBox = circle->GetPosition() - closestPointOnBoxWorld;
+		if (glm::length(circleToBox) < circle->GetRadius())
 		{
-			box->ResolveCollision(circle);
-
-			return true;
+			glm::vec2 direction = glm::normalize(circleToBox);
+			glm::vec2 contact = closestPointOnBoxWorld;
+			box->ResolveCollision(circle, contact, &direction);
 		}
 	}
 
@@ -265,10 +281,12 @@ bool PhysicsScene::Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		int numContacts = 0;
 
 		box1->CheckBoxCorners(*box2, contact, numContacts, pen, norm);
-		if (box2->CheckBoxCorners(*box1, contact, numContacts, pen, norm)) {
+		if (box2->CheckBoxCorners(*box1, contact, numContacts, pen, norm)) 
+		{
 			norm = -norm;
 		}
-		if (pen > 0) {
+		if (pen > 0) 
+		{
 			box1->ResolveCollision(box2, contact / float(numContacts), &norm);
 		} 
 		return true; 

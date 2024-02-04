@@ -19,8 +19,8 @@ void RigidBody::FixedUpdate(glm::vec2 _gravity, float _timeStep)
 
 	m_position += m_velocity * _timeStep;
 	ApplyForce(_gravity * m_mass * _timeStep);
-
 	m_orientation += m_angularVelocity * _timeStep;
+	CalculateAxes();
 }
 
 void RigidBody::ApplyForce(glm::vec2 _force)
@@ -33,6 +33,15 @@ void RigidBody::ApplyForce(glm::vec2 _force, glm::vec2 _pos)
 {
 	m_velocity += _force / m_mass;
 	m_angularVelocity += (_force.y * _pos.x - _force.x * _pos.y) / GetMoment();
+}
+
+void RigidBody::CalculateAxes()
+{
+	float sn = sinf(m_orientation);
+	float cs = cosf(m_orientation);
+
+	m_localX = glm::vec2(cs, sn);
+	m_localY = glm::vec2(-sn, cs);
 }
 
 void RigidBody::ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force)
@@ -80,7 +89,8 @@ void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::ve
 
 float RigidBody::GetKineticEnergy()
 {
-	float kineticEnergy = 0.5f * (m_mass * glm::dot(m_velocity, m_velocity) + m_moment * m_angularVelocity * m_angularVelocity);
+	float kineticEnergy = 0.5f * (m_mass * glm::dot(m_velocity, m_velocity) +
+		m_moment * m_angularVelocity * m_angularVelocity);
 
 	return kineticEnergy;
 }

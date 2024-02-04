@@ -2,17 +2,13 @@
 
 #include "GameStates.h"
 
-class StateManager;
+class GameStateManager;
 
 class MenuState : public GameStates
 {
 public:
-	MenuState(StateManager* _stateMachine) : GameStates(_stateMachine) {}
+	MenuState(GameStateManager* _stateMachine) : GameStates(_stateMachine) {}
 	~MenuState() {}
-
-
-
-
 
 	// Inherited via GameStates
 	void StateEnter() override;

@@ -8,7 +8,7 @@ Box::Box(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, f
 {
 	m_moment = 1.0f / 12.0f * m_mass * (m_width * m_width) + (m_height * m_height);
 
-	m_extents = glm::vec2(m_width, m_height);
+	m_extents = glm::vec2(m_width /2, m_height /2);
 }
 
 void Box::Draw(float _alpha)
@@ -16,31 +16,25 @@ void Box::Draw(float _alpha)
 	CalculateSmoothedPosition(_alpha);
 
 	glm::vec2 p1 = m_smoothedPosition - m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents.y;
-
 	glm::vec2 p2 = m_smoothedPosition + m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents;
-
 	glm::vec2 p3 = m_smoothedPosition - m_smoothedLocalX * m_extents.x + m_smoothedLocalY * m_extents.y;
-
 	glm::vec2 p4 = m_smoothedPosition + m_smoothedLocalX * m_extents.x + m_smoothedLocalY * m_extents.y;
 
 	aie::Gizmos::add2DTri(p1, p2, p4, m_color);
 	aie::Gizmos::add2DTri(p1, p4, p3, m_color);
 }
 
-void Box::CalculateAxes()
-{
-	float sn = sinf(m_orientation);
-	float cs = cosf(m_orientation);
-
-	m_localX = glm::vec2(cs, sn);
-	m_localY = glm::vec2(-sn, cs);
-}
 
 bool Box::CheckBoxCorners(const Box& box, glm::vec2& contact, int& numContacts, float& pen, glm::vec2& edgeNormal)
 {
-	float minX, maxX, minY, maxY;
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
+
 	float boxW = box.GetExtents().x * 2;
 	float boxH = box.GetExtents().y * 2;
+
 	int numLocalContacts = 0;
 	glm::vec2 localContact(0, 0);
 	bool first = true;
@@ -89,25 +83,29 @@ bool Box::CheckBoxCorners(const Box& box, glm::vec2& contact, int& numContacts, 
 
 	// find the minimum penetration vector as a penetration amount and normal
 	float pen0 = m_extents.x - minX;
-	if (pen0 > 0 && (pen0 < pen || pen == 0)) {
+	if (pen0 > 0 && (pen0 < pen || pen == 0)) 
+	{
 		edgeNormal = m_localX;
 		pen = pen0;
 		res = true;
 	}
 	pen0 = maxX + m_extents.x;
-	if (pen0 > 0 && (pen0 < pen || pen == 0)) {
+	if (pen0 > 0 && (pen0 < pen || pen == 0))
+	{
 		edgeNormal = -m_localX;
 		pen = pen0;
 		res = true;
 	}
 	pen0 = m_extents.y - minY;
-	if (pen0 > 0 && (pen0 < pen || pen == 0)) {
+	if (pen0 > 0 && (pen0 < pen || pen == 0)) 
+	{
 		edgeNormal = m_localY;
 		pen = pen0;
 		res = true;
 	}
 	pen0 = maxY + m_extents.y;
-	if (pen0 > 0 && (pen0 < pen || pen == 0)) {
+	if (pen0 > 0 && (pen0 < pen || pen == 0)) 
+	{
 		edgeNormal = -m_localY;
 		pen = pen0;
 		res = true;
