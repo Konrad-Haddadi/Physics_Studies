@@ -152,6 +152,11 @@ float RigidBody::GetPotentialEnergy(glm::vec2 _gravity)
 	return potentialEnergy;
 }
 
+glm::vec2 RigidBody::ToWorld(glm::vec2 _contact, float _aplha)
+{
+	return m_position + m_localX * _contact.x + m_localY * _contact.y;
+}
+
 void RigidBody::ResolveCollision(RigidBody* _actor2)
 {
 	glm::vec2 normal = glm::normalize(_actor2->GetPosition() - GetPosition());

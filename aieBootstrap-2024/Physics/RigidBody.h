@@ -51,6 +51,8 @@ public:
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
 	void SetKinematic(bool _state) { m_isKinematic = _state; }
 
+	glm::vec2 ToWorld(glm::vec2 _contact, float _aplha);
+
 	bool IsKinematic() { return m_isKinematic; }
 public:
 	glm::vec2 m_position;
