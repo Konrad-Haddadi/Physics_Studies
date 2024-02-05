@@ -3,6 +3,9 @@
 #include "PhysicsObject.h"
 #include <glm/glm.hpp>
 
+const float MIN_ANGULAR_THRESHOLD = .01f;
+const float MIN_LINEAR_THRESHOLD = .1f;
+
 class RigidBody : public PhysicsObject
 {
 public:
@@ -23,24 +26,27 @@ public:
 	void CalculateAxes();
 	float GetKineticEnergy();
 
-
 	glm::vec2 GetPosition() { return m_position; }
 	glm::vec2 GetPosition() const { return m_position; }
 
 	glm::vec2 GetVelocity() { return m_velocity; }
 	
-
 	float GetOrientation() { return m_orientation; }
 	float GetMass() { return m_mass; }
 	float GetMoment() { return m_moment; }
 	float GetAngularVelocity() { return m_angularVelocity; }
 
+	glm::vec2 GetLocalX() { return m_localX; }
+	glm::vec2 GetLocalY() { return m_localY; }
+
+	float GetLinearDrag() { return m_linearDrag; }
+	float GetAngularDrag() { return m_angularDrag; }
+
 	float GetPotentialEnergy(glm::vec2  _gravity);
+	
 	void SetMass(float _mass) { m_mass = _mass; }
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
 	
-	glm::vec2 GetLocalX() { return m_localX; }
-	glm::vec2 GetLocalY() { return m_localY; }
 
 public:
 	glm::vec2 m_position;
@@ -61,5 +67,9 @@ public:
 	glm::vec2 m_smoothedLocalX;
 	glm::vec2 m_smoothedLocalY;
 
+	float m_linearDrag;
+	float m_angularDrag;
+
+	
 };
 

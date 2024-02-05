@@ -309,14 +309,13 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #ifdef RandomObjectCheck
 
+	m_physicsScene->SetGravity(glm::vec2(0, -9));
+
 	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(0), 45, 1, 10, 10, glm::vec4(1, 1, 0, 1));
 	Circle* ball1 = new Circle(glm::vec2(0, 20), glm::vec2(10, -5), 1, 5, glm::vec4(1, 0, 0, 1));
 
 	m_physicsScene->AddActor(box1);
 	m_physicsScene->AddActor(ball1);
-
-	m_physicsScene->SetGravity(glm::vec2(0, -10));
-
 
 	float height = Application::getWindowHeight() / 15;
 	float width = Application::getWindowWidth() / 15;
