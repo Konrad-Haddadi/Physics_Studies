@@ -3,12 +3,13 @@
 #include "Gizmos.h"
 #include <glm/glm.hpp>
 
-Box::Box(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, float _width, float _height, glm::vec4 _color)
-	: RigidBody(ShapeType::BOX, _pos, _velocity, _orientation, _mass), m_width(_width), m_height(_height), m_color(_color)
+Box::Box(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, glm::vec2 _extents, glm::vec4 _color)
+	: RigidBody(ShapeType::BOX, _pos, _velocity, _orientation, _mass), m_extents(_extents), m_color(_color)
 {
+	m_width = _extents.x * 2;
+	m_height = _extents.y * 2;
+	
 	m_moment = 1.0f / 12.0f * m_mass * (m_width * m_width) + (m_height * m_height);
-
-	m_extents = glm::vec2(m_width /2, m_height /2);
 }
 
 void Box::Draw(float _alpha)

@@ -309,9 +309,9 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #ifdef RandomObjectCheck
 
-	m_physicsScene->SetGravity(glm::vec2(0, -9));
+	m_physicsScene->SetGravity(glm::vec2(0, -20));
 
-	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(0), 45, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-10,0), 45, 1, 10, 10, glm::vec4(1, 1, 0, 1));
 	Circle* ball1 = new Circle(glm::vec2(0, 20), glm::vec2(10, -5), 1, 5, glm::vec4(1, 0, 0, 1));
 
 	m_physicsScene->AddActor(box1);
@@ -321,7 +321,7 @@ void PhysicsApp::DemoStartUp(int _num)
 	float width = Application::getWindowWidth() / 15;
 
 	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
-	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(.25, 1), -height /2);
 	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
 	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
 
@@ -331,6 +331,71 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(rightWall);
 
 #endif // RandomObjectCheck
+
+#ifdef Pool
+
+	Circle* ball1 = new Circle(glm::vec2(-20, 5), glm::vec2(200,00), 1, 5, glm::vec4(1, 1, 1, 1));
+	Circle* ball2 = new Circle(glm::vec2(30, 0), glm::vec2(0), 1, 5, glm::vec4(1, 0, 0, 1));
+	/*Circle* ball3 = new Circle(glm::vec2(35, 10), glm::vec2(0), 1, 5, glm::vec4(0, 1, 0, 1));
+	Circle* ball4 = new Circle(glm::vec2(35, -10), glm::vec2(0), 1, 5, glm::vec4(1, 1, 0, 1));
+	Circle* ball5 = new Circle(glm::vec2(40, -20), glm::vec2(0), 1, 5, glm::vec4(1, 0, 1, 1));
+	Circle* ball6 = new Circle(glm::vec2(40, 20), glm::vec2(0), 1, 5, glm::vec4(0, 0, 1, 1));*/
+
+
+	m_physicsScene->AddActor(ball1);
+	m_physicsScene->AddActor(ball2);
+	/*m_physicsScene->AddActor(ball3);
+	m_physicsScene->AddActor(ball4);
+	m_physicsScene->AddActor(ball5);
+	m_physicsScene->AddActor(ball6);*/
+
+	float height = Application::getWindowHeight() / 15;
+	float width = Application::getWindowWidth() / 15;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height * 0.9f);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height * 0.9f);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width * 0.9f);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width * 0.9f);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // Pool
+
+
+#ifdef Kinematic
+
+
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(0), 45, 1, glm::vec2(5,5), glm::vec4(1, 1, 0, 1));
+	Box* box2 = new Box(glm::vec2(30, 20), glm::vec2(0, -10), 45, 1, glm::vec2(5, 5), glm::vec4(1, 1, 0, 1));
+
+	box1->SetKinematic(true);
+
+	Circle* ball1 = new Circle(glm::vec2(-30, 0), glm::vec2(30, 0), 1, 5, glm::vec4(1, 0, 0, 1));
+	  
+	m_physicsScene->SetGravity(glm::vec2(0, -20));
+
+	m_physicsScene->AddActor(box1);
+	m_physicsScene->AddActor(box2);
+	m_physicsScene->AddActor(ball1);
+
+	float height = Application::getWindowHeight() / 15;
+	float width = Application::getWindowWidth() / 15;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(.25, 1), -height / 2);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // Kinematic
+
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)

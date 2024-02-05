@@ -1,5 +1,7 @@
 #include "PhysicsScene.h"
 #include "PhysicsObject.h"
+#include "RigidBody.h"
+
 #include "Circle.h"
 #include "Plane.h"
 #include "Box.h"
@@ -99,6 +101,7 @@ float PhysicsScene::GetTotalEnergy()
 	return total;
 }
 
+
 bool PhysicsScene::Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs)
 {
 	return false;
@@ -172,9 +175,18 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 	if (circle1 != nullptr && circle2 != nullptr)
 	{
 		glm::vec2 dist = circle1->GetPosition() - circle2->GetPosition();
+
 		if (glm::length(dist) < circle1->GetRadius() + circle2->GetRadius())
 		{
 			circle1->ResolveCollision(circle2, 0.5f * (circle1->GetPosition() + circle2->GetPosition()));
+			return true;
+		}
+
+		float penetration = circle1->GetRadius() + circle2->GetRadius() - glm::length(dist);
+
+		if (penetration > 0)
+		{
+			circle1->ResolveCollision(circle2, (circle1->GetPosition() + circle2->GetPosition()) * 0.5f, nullptr, penetration);
 			return true;
 		}
 	}
@@ -255,12 +267,25 @@ bool PhysicsScene::Box2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		// and convert back into world coordinates
 		glm::vec2 closestPointOnBoxWorld = box->GetPosition() + closestPointOnBoxBox.x * box->GetLocalX() + closestPointOnBoxBox.y * box->GetLocalY();
 		glm::vec2 circleToBox = circle->GetPosition() - closestPointOnBoxWorld;
+
+		float penetration = circle->GetRadius() - glm::length(circleToBox);
+
+		if (penetration > 0)
+		{
+			glm::vec2 direction = glm::normalize(circleToBox);
+			glm::vec2 contact = closestPointOnBoxWorld;
+			box->ResolveCollision(circle, contact, &direction, penetration);
+		}
+
 		if (glm::length(circleToBox) < circle->GetRadius())
 		{
 			glm::vec2 direction = glm::normalize(circleToBox);
 			glm::vec2 contact = closestPointOnBoxWorld;
 			box->ResolveCollision(circle, contact, &direction);
 		}
+
+		return true;
+
 	}
 
 	return false;
@@ -281,14 +306,16 @@ bool PhysicsScene::Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		int numContacts = 0;
 
 		box1->CheckBoxCorners(*box2, contact, numContacts, pen, norm);
+
 		if (box2->CheckBoxCorners(*box1, contact, numContacts, pen, norm)) 
 		{
 			norm = -norm;
-		}
-		if (pen > 0) 
+		}		
+
+		if (pen > 0)
 		{
-			box1->ResolveCollision(box2, contact / float(numContacts), &norm);
-		} 
+			box1->ResolveCollision(box2, contact / float(numContacts), &norm, pen);
+		}
 		return true; 
 	}
 	return false;

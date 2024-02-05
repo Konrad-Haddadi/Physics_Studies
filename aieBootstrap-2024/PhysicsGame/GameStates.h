@@ -5,12 +5,12 @@
 
 class StateManager;
 class GameStateManager;
+class PhysicsScene;
 
 class GameStates : public States
 {
 public:
 	GameStates(StateManager* _stateManager);
-	~GameStates() {}
 
 	virtual void StateEnter() = 0;
 	virtual void StateUpdate() = 0;

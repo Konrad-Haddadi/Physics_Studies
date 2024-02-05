@@ -5,6 +5,7 @@
 #include "Gizmos.h"
 #include "GameStateManager.h"
 #include "MenuState.h"
+#include "PhysicsScene.h"
 #include "glm/ext.hpp"
 
 PhysicsGameStates::PhysicsGameStates() {

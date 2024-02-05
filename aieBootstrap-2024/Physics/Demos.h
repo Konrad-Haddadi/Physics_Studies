@@ -12,4 +12,6 @@
 //#define BoxCircleDemo
 //#define DVDLogo
 //#define RotatedBoxCheck
-#define RandomObjectCheck
+//#define RandomObjectCheck
+//#define Pool
+#define Kinematic

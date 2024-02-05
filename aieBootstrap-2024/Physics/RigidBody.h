@@ -3,8 +3,8 @@
 #include "PhysicsObject.h"
 #include <glm/glm.hpp>
 
-const float MIN_ANGULAR_THRESHOLD = .01f;
-const float MIN_LINEAR_THRESHOLD = .1f;
+const float MIN_ANGULAR_THRESHOLD = .008f;
+const float MIN_LINEAR_THRESHOLD = .08f;
 
 class RigidBody : public PhysicsObject
 {
@@ -16,13 +16,15 @@ public:
 	void ApplyForce(glm::vec2 _force);
 	void ApplyForce(glm::vec2 _force, glm::vec2 _pos);
 	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force);
+	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force, glm::vec2 _collision);
 	
 	virtual void Draw(float _alpha) = 0;
 	
-	void ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::vec2* _collisionNomral = nullptr);
+	void ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::vec2* _collisionNomral = nullptr, float _pen = 0);
 	void ResolveCollision(RigidBody* _actor2);
 	void CalculateSmoothedPosition(float _alpha);
-	
+	void ApplyContactForces(RigidBody* _body2, glm::vec2 _norm, float _pen = 0);
+
 	void CalculateAxes();
 	float GetKineticEnergy();
 
@@ -32,9 +34,10 @@ public:
 	glm::vec2 GetVelocity() { return m_velocity; }
 	
 	float GetOrientation() { return m_orientation; }
-	float GetMass() { return m_mass; }
-	float GetMoment() { return m_moment; }
 	float GetAngularVelocity() { return m_angularVelocity; }
+
+	float GetMass() { return m_isKinematic ? INT_MAX : m_mass; }
+	float GetMoment() { return m_isKinematic ? INT_MAX : m_moment; }
 
 	glm::vec2 GetLocalX() { return m_localX; }
 	glm::vec2 GetLocalY() { return m_localY; }
@@ -46,8 +49,9 @@ public:
 	
 	void SetMass(float _mass) { m_mass = _mass; }
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
-	
+	void SetKinematic(bool _state) { m_isKinematic = _state; }
 
+	bool IsKinematic() { return m_isKinematic; }
 public:
 	glm::vec2 m_position;
 	glm::vec2 m_velocity;
@@ -67,6 +71,7 @@ public:
 	glm::vec2 m_smoothedLocalX;
 	glm::vec2 m_smoothedLocalY;
 
+	bool m_isKinematic;
 	float m_linearDrag;
 	float m_angularDrag;
 

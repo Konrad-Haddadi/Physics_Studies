@@ -1,12 +1,12 @@
 #pragma once
 #include "GameStates.h"
 
-class GameStateManager;
+class StateManager;
 
 class PlayState : public GameStates
 {
 public:
-	PlayState(GameStateManager* _stateMachine) : GameStates(_stateMachine) {}
+	PlayState(StateManager* _stateMachine) : GameStates(_stateMachine) {}
 	~PlayState() {}
 
 

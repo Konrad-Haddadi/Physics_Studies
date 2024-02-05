@@ -20,6 +20,7 @@ public:
 	glm::vec4 GetColor() { return m_color; }
 	void ResolveCollision(RigidBody* _actor2);
 	void ResolveCollision(RigidBody* _actor2, glm::vec2 _contact);
+	void ApplyContactForces(RigidBody* _body2, glm::vec2 _norm, float _pen = 0);
 
 protected:
 	glm::vec2 m_normal;

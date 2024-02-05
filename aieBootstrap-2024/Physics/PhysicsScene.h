@@ -5,6 +5,7 @@
 
 class Plane;
 class Circle;
+class RigidBody;
 
 class PhysicsScene
 {
@@ -23,8 +24,6 @@ public:
 	void SetTimeStep(const float _timeStep) { m_timeStep = _timeStep; }
 	float GetTimeStep() const { return m_timeStep; }
 	float GetTotalEnergy();
-
-
 
 	static bool Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs);
 	static bool Plane2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);
