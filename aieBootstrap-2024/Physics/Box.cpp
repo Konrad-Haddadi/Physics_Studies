@@ -17,7 +17,7 @@ void Box::Draw(float _alpha)
 	CalculateSmoothedPosition(_alpha);
 
 	glm::vec2 p1 = m_smoothedPosition - m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents.y;
-	glm::vec2 p2 = m_smoothedPosition + m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents;
+	glm::vec2 p2 = m_smoothedPosition + m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents.y;
 	glm::vec2 p3 = m_smoothedPosition - m_smoothedLocalX * m_extents.x + m_smoothedLocalY * m_extents.y;
 	glm::vec2 p4 = m_smoothedPosition + m_smoothedLocalX * m_extents.x + m_smoothedLocalY * m_extents.y;
 

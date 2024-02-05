@@ -14,4 +14,6 @@
 //#define RotatedBoxCheck
 //#define RandomObjectCheck
 //#define Pool
-#define Kinematic
+//#define Kinematic
+//#define Springs
+#define SoftBody

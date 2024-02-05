@@ -25,6 +25,8 @@ public:
 	float GetTimeStep() const { return m_timeStep; }
 	float GetTotalEnergy();
 
+	void CheckForCollision();
+
 	static bool Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs);
 	static bool Plane2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);
 	static bool Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);

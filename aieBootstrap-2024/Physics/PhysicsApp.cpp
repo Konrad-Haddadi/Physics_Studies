@@ -11,6 +11,8 @@
 #include "Plane.h"
 #include "Renderer2D.h"
 #include "Box.h"
+#include "Spring.h"
+#include "SoftBody.h"
 
 float timer;
 
@@ -311,7 +313,7 @@ void PhysicsApp::DemoStartUp(int _num)
 
 	m_physicsScene->SetGravity(glm::vec2(0, -20));
 
-	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-10,0), 45, 1, 10, 10, glm::vec4(1, 1, 0, 1));
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(-10,0), 45, 1, glm::vec2(10,5), glm::vec4(1, 1, 0, 1));
 	Circle* ball1 = new Circle(glm::vec2(0, 20), glm::vec2(10, -5), 1, 5, glm::vec4(1, 0, 0, 1));
 
 	m_physicsScene->AddActor(box1);
@@ -395,6 +397,50 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(rightWall);
 
 #endif // Kinematic
+
+#ifdef Springs
+
+	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
+
+	Circle* ball1 = new Circle(glm::vec2(-20, 20), glm::vec2(50, 00), 50, 5, glm::vec4(1, 1, 1, 1));
+	m_physicsScene->AddActor(ball1);
+
+	Circle* prev = nullptr;
+	for (int i = 0; i < 16; i++)
+	{
+		// spawn a circle to the right and below the previous one, so that the whole rope acts under gravity and swings
+		Circle* circle = new Circle(glm::vec2(i * 3, 30 - i * 5), glm::vec2(0), 10, 2, glm::vec4(1, 0, 0, 1));
+		if (i == 0)
+			circle->SetKinematic(true);
+		m_physicsScene->AddActor(circle);
+		if (prev)
+			m_physicsScene->AddActor(new Spring(circle, prev, 500, 10, 7));
+		prev = circle;
+	}
+
+	// add a kinematic box at an angle for the rope to drape over
+	Box* box = new Box(glm::vec2(0, -20), glm::vec2(0), 40, 20, glm::vec2(10, 5), glm::vec4(0, 0, 1, 1));
+	box->SetKinematic(true);
+	m_physicsScene->AddActor(box);
+
+
+#endif // Spring
+
+#ifdef SoftBodys
+
+	std::vector<std::string> sb;
+
+	sb.push_back("000000");
+	sb.push_back("000000");
+	sb.push_back("00....");
+	sb.push_back("00....");
+	sb.push_back("000000");
+	sb.push_back("000000");
+
+	SoftBody::Build(m_physicsScene, glm::vec2(-50, 0), 5.0f, 10.0f, 0.1f, sb);
+
+#endif // SoftBody
+
 
 }
 
