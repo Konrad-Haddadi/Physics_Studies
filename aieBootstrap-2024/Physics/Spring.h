@@ -9,7 +9,7 @@ class Spring : public PhysicsObject
 {
 public:
 	Spring(RigidBody* _body1, RigidBody* _body2,
-		float _springCoefficient, float _damping, float _restLength, 
+		float _springCoefficient, float _damping, float _restLength = 0, glm::vec4 _color = glm::vec4(1,1,1,1),
 		glm::vec2 _contact1 = glm::vec2(0), glm::vec2 _contact2 = glm::vec2(0));
 	~Spring();
 

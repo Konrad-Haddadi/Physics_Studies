@@ -46,11 +46,9 @@ void PhysicsScene::RemoveActor(PhysicsObject* _actor)
 
 void PhysicsScene::Update(float _dt)
 {
-
 	static float accumulatedTime = 0.0f;
 	accumulatedTime += _dt;
-
-	
+		
 	while (accumulatedTime >= m_timeStep) {
 		for (auto pActor : m_actors) {
 			pActor->FixedUpdate(m_gravity, m_timeStep);

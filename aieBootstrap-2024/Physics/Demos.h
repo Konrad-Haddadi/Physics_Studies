@@ -16,4 +16,4 @@
 //#define Pool
 //#define Kinematic
 //#define Springs
-#define SoftBody
+#define SoftBodys

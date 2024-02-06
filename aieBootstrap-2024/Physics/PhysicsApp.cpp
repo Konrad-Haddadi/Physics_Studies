@@ -406,7 +406,7 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(ball1);
 
 	Circle* prev = nullptr;
-	for (int i = 0; i < 16; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		// spawn a circle to the right and below the previous one, so that the whole rope acts under gravity and swings
 		Circle* circle = new Circle(glm::vec2(i * 3, 30 - i * 5), glm::vec2(0), 10, 2, glm::vec4(1, 0, 0, 1));
@@ -414,7 +414,7 @@ void PhysicsApp::DemoStartUp(int _num)
 			circle->SetKinematic(true);
 		m_physicsScene->AddActor(circle);
 		if (prev)
-			m_physicsScene->AddActor(new Spring(circle, prev, 500, 10, 7));
+			m_physicsScene->AddActor(new Spring(circle, prev, 500, 10, 7, glm::vec4(1,0,0,1)));
 		prev = circle;
 	}
 
@@ -428,6 +428,14 @@ void PhysicsApp::DemoStartUp(int _num)
 
 #ifdef SoftBodys
 
+	m_physicsScene->SetGravity(glm::vec2(0, -9.82f));
+
+	float height = Application::getWindowHeight() / 15;
+
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height / 2);
+
+	m_physicsScene->AddActor(bottomWall);
+
 	std::vector<std::string> sb;
 
 	sb.push_back("000000");
@@ -437,7 +445,18 @@ void PhysicsApp::DemoStartUp(int _num)
 	sb.push_back("000000");
 	sb.push_back("000000");
 
-	SoftBody::Build(m_physicsScene, glm::vec2(-50, 0), 5.0f, 10.0f, 0.1f, sb);
+	SoftBody::Build(m_physicsScene, glm::vec2(-75, 0), 5, 100, 5, sb);
+
+	sb.clear();
+
+	sb.push_back("..00..");
+	sb.push_back("..00..");
+	sb.push_back("000000");
+	sb.push_back("000000");
+	sb.push_back("..00..");
+	sb.push_back("..00..");
+
+	SoftBody::Build(m_physicsScene, glm::vec2(25, 0), 10, 100, 10.f, sb);
 
 #endif // SoftBody
 

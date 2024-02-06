@@ -4,8 +4,8 @@
 #include "PhysicsApp.h"
 #include <glm/glm.hpp>
 
-Spring::Spring(RigidBody* _body1, RigidBody* _body2, float _springCoefficient, float _damping, float _restLength, glm::vec2 _contact1, glm::vec2 _contact2)
-    : PhysicsObject(JOINT), m_body1(_body1), m_body2(_body2), m_springCoefficent(_springCoefficient), m_damping(_damping), m_restLength(_restLength), m_contact1(_contact1), m_contact2(_contact2), m_color(1,1,1,1)
+Spring::Spring(RigidBody* _body1, RigidBody* _body2, float _springCoefficient, float _damping, float _restLength, glm::vec4 _color, glm::vec2 _contact1, glm::vec2 _contact2)
+    : PhysicsObject(JOINT), m_body1(_body1), m_body2(_body2), m_springCoefficent(_springCoefficient), m_damping(_damping), m_restLength(_restLength), m_contact1(_contact1), m_contact2(_contact2), m_color(_color)
 {
     if (m_restLength == 0)
     {
@@ -43,10 +43,20 @@ void Spring::FixedUpdate(glm::vec2 _gravity, float _timeStep)
 
     glm::vec2 relativeVelocity = m_body2->GetVelocity() - m_body1->GetVelocity();
 
+    // F = -kX - bv
     glm::vec2 force = direction * m_springCoefficent * (m_restLength - length) - m_damping * relativeVelocity;
+
+    // cap the spring force to 1000 N to prevent numerical instability
+   /* const float threshold = 1000.0f;
+    float forceMag = glm::length(force);
+
+    if (forceMag > threshold)
+        force *= threshold / forceMag; */
 
     m_body1->ApplyForce(-force * _timeStep, p1 - m_body1->GetPosition());
     m_body2->ApplyForce(force * _timeStep, p2 - m_body2->GetPosition());
+
+
 }
 
 void Spring::Draw(float _alpha)
