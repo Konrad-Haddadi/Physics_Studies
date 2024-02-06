@@ -23,7 +23,6 @@ protected:
 
 	glm::vec2 m_contact1;
 	glm::vec2 m_contact2;
-
 	glm::vec4 m_color;
 
 	float m_damping;
@@ -31,8 +30,8 @@ protected:
 	float m_springCoefficent;
 
 	void FixedUpdate(glm::vec2 _gravity, float _timeStep) override;
-	void Draw(float _alpha) override;
 	float GetPotentialEnergy(glm::vec2 _gravity) override;
+	void Draw(float _alpha) override;
 
 };
 

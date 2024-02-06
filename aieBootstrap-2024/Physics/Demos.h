@@ -16,4 +16,6 @@
 //#define Pool
 //#define Kinematic
 //#define Springs
-#define SoftBodys
+//#define SoftBodys
+//#define MouseCheck
+#define AngryBirdsDemo

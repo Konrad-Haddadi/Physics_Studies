@@ -19,7 +19,14 @@ public:
 	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force, glm::vec2 _collision);
 	
 	virtual void Draw(float _alpha) = 0;
+
+	//virtual bool OnCollisionEnter(glm::vec2 _pos) {};
+	//virtual bool OnTriggerEnter(glm::vec2 _pos) {};
+	//
+	//virtual void IsInsideTrigger() = 0;
 	
+	virtual bool IsInside(glm::vec2 _pos) { return false; };
+
 	void ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::vec2* _collisionNomral = nullptr, float _pen = 0);
 	void ResolveCollision(RigidBody* _actor2);
 	void CalculateSmoothedPosition(float _alpha);
@@ -28,7 +35,7 @@ public:
 	void CalculateAxes();
 	float GetKineticEnergy();
 
-	glm::vec2 GetPosition() { return m_position; }
+	//glm::vec2 GetPosition() { return m_position; }
 	glm::vec2 GetPosition() const { return m_position; }
 
 	glm::vec2 GetVelocity() { return m_velocity; }
@@ -50,6 +57,9 @@ public:
 	void SetMass(float _mass) { m_mass = _mass; }
 	void SetPosition(glm::vec2 _pos) { m_position = _pos; }
 	void SetKinematic(bool _state) { m_isKinematic = _state; }
+
+	void SetLinearDrag(float _drag) { m_linearDrag = _drag; }
+	void SetAngularDrag(float _drag) { m_angularDrag = _drag; }
 
 	glm::vec2 ToWorld(glm::vec2 _contact, float _aplha);
 

@@ -15,6 +15,7 @@
 #include "SoftBody.h"
 
 float timer;
+bool pull;
 
 PhysicsApp::PhysicsApp() 
 {
@@ -65,6 +66,7 @@ void PhysicsApp::update(float deltaTime)
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 
+	Update(deltaTime);
 	m_physicsScene->Update(deltaTime);
 	m_physicsScene->Draw();
 
@@ -81,11 +83,14 @@ void PhysicsApp::draw() {
 	// wipe the screen to the background colour
 	clearScreen();
 
+
+	m_2dRenderer->setCameraPos(m_cameraX, m_cameraY);
+
 	// begin drawing sprites
 	m_2dRenderer->begin();
-	
 
-	//m_2dRenderer->drawSprite(image, 50, 50,50,50, timer);
+	static float aspectRatio = 16 / 9.f;
+	aie::Gizmos::draw2D(glm::ortho<float>(-100, 100, -100 / aspectRatio, 100 / aspectRatio, -1.0f, 1.0f));
 
 	// draw your stuff here!
 	Draw();
@@ -98,11 +103,17 @@ void PhysicsApp::draw() {
 	m_2dRenderer->end();
 }
 
+void PhysicsApp::Update(float _dt)
+{
+
+}
+
 void PhysicsApp::Draw()
 {
-	static float aspectRatio = 16.f / 9.f;
+	m_2dRenderer->setCameraPos(m_cameraX, m_cameraY);
 
-	aie::Gizmos::draw2D(glm::ortho<float>(-100, 100, -100 / aspectRatio, 100 / aspectRatio, -1, 1));
+	aie::Gizmos::draw2D(glm::ortho<float>(-m_extents, m_extents, -m_extents / m_aspectRatio, m_extents / m_aspectRatio, -1.0f, 1.0f));
+
 }
 
 void PhysicsApp::DrawText()
@@ -142,8 +153,32 @@ void PhysicsApp::SetupContinuousDemo(glm::vec2 _startPos, float _inclination, fl
 		aie::Gizmos::add2DCircle(glm::vec2(x, y), radius, segments, color);
 		t += tStep;
 	}
+}
 
+void PhysicsApp::AngryBirdShootLine(glm::vec2 _startPos, float _inclination, float _speed, float _gravity)
+{
+	float t = 0;
+	float tStep = 0.5f;
+	float radius = 1.0f;
+	int segments = 12;
+	glm::vec4 color = glm::vec4(1, 0, 0, 1);
 
+	float xRot = glm::cos(glm::radians(_inclination));
+	float yRot = glm::sin(glm::radians(_inclination));
+
+	glm::vec2 lastPos = glm::vec2(0);
+
+	while (t <= 8)
+	{
+		float x = xRot * _speed * t + _startPos.x;
+		float y = yRot * _speed * t + (-_gravity * (t * t)) * 0.5f + _startPos.y;
+		
+		if (lastPos != glm::vec2(0))
+			aie::Gizmos::add2DLine(lastPos, glm::vec2(x, y), color);
+		
+		lastPos = glm::vec2(x, y);
+		t += tStep;
+	}
 }
 
 void PhysicsApp::DemoStartUp(int _num)
@@ -432,9 +467,11 @@ void PhysicsApp::DemoStartUp(int _num)
 
 	float height = Application::getWindowHeight() / 15;
 
-	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height / 2);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* bottomWall1 = new Plane(glm::vec2(-1, 1), -height);
 
 	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(bottomWall1);
 
 	std::vector<std::string> sb;
 
@@ -445,7 +482,7 @@ void PhysicsApp::DemoStartUp(int _num)
 	sb.push_back("000000");
 	sb.push_back("000000");
 
-	SoftBody::Build(m_physicsScene, glm::vec2(-75, 0), 5, 100, 5, sb);
+	SoftBody::BuildCircle(m_physicsScene, glm::vec2(0, 200), 5, 100, 10, sb);
 
 	sb.clear();
 
@@ -456,10 +493,52 @@ void PhysicsApp::DemoStartUp(int _num)
 	sb.push_back("..00..");
 	sb.push_back("..00..");
 
-	SoftBody::Build(m_physicsScene, glm::vec2(25, 0), 10, 100, 10.f, sb);
+	SoftBody::BuildCircle(m_physicsScene, glm::vec2(10, 75), 10, 100, 10.f, sb);
+
+	sb.clear();
+
+	sb.push_back("..00..");
+	sb.push_back("..00..");
+	sb.push_back("000000");
+	sb.push_back("000000");
+	sb.push_back("..00..");
+	sb.push_back("..00..");
+
+	SoftBody::BuildSquare(m_physicsScene, glm::vec2(10, 0), 10, 100, 10.f, sb);
 
 #endif // SoftBody
 
+#ifdef AngryBirdsDemo
+
+	slingShot = new Box(glm::vec2(-50, -30), glm::vec2(0), 0, 1, glm::vec2(1.5f, 5.f), glm::vec4(0, 1, 0, 1));
+	slingShot->SetKinematic(true);
+	m_physicsScene->AddActor(slingShot);
+	m_physicsScene->SetTimeStep(0.0001f);
+	m_physicsScene->SetGravity(glm::vec2(0, -15));
+	pull = false;
+
+	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(0,-10), 0, 20, glm::vec2(5,35), glm::vec4(1, 1, 0, 1));
+	Box* box2 = new Box(glm::vec2(00, 0), glm::vec2(0,-10), 0, 100, glm::vec2(5,35), glm::vec4(1, 1, 0, 1));
+
+	float height = Application::getWindowHeight() / 15;
+	float width = Application::getWindowWidth() / 15;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
+
+	m_physicsScene->AddActor(box1);
+	m_physicsScene->AddActor(box2);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+	
+
+#endif // AngryBirdsDemo
 
 }
 
@@ -471,11 +550,78 @@ void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
 
 #endif //NewtonsSecondLaw
 
+#ifdef MouseCheck
+
+	if (_input->isMouseButtonDown(0))
+	{
+		int xScreen, yScreen;
+		_input->getMouseXY(&xScreen, &yScreen);
+		glm::vec2 worldPos = ScreenToWorld(glm::vec2(xScreen, yScreen));
+
+		aie::Gizmos::add2DCircle(worldPos, 5, 32, glm::vec4(0, 0, 1, 1));
+	}
+
+
+#endif // CamreaZoom
+
+
+
+#ifdef AngryBirdsDemo
+
+
+	AngryBirdsControls(_input, _dt);
+
+#endif // AngryBirdsDemo
+}
+
+void PhysicsApp::AngryBirdsControls(aie::Input* _input, float _dt)
+{
+	glm::vec2 mousePos = glm::vec2(_input->getMouseX(), _input->getMouseY());
+	
+	mousePos = ScreenToWorld(glm::vec2(mousePos.x, mousePos.y));
+
+	if (_input->isMouseButtonDown(0) && slingShot->IsInside(mousePos))
+		pull = true;
+
+	if (_input->isMouseButtonUp(0))
+	{
+		if (pull)
+		{
+			pull = false;
+
+			glm::vec2 pos = slingShot->GetPosition() + slingShot->GetExtents();
+			aie::Gizmos::add2DLine(pos, mousePos, glm::vec4(1, 1, 1, 1));
+
+			float radius = 1.0f;
+			float speed = 40;
+			glm::vec2 startPos(-40, 0);		
+
+			Circle* ball = new Circle(pos, glm::normalize(pos - mousePos) * (glm::distance(mousePos, pos)), 10, 1, glm::vec4(1, 1, 1, 1));
+			ball->SetLinearDrag(0);
+
+			m_physicsScene->AddActor(ball);
+		}
+	}
+
+	if (pull)
+	{
+		glm::vec2 pos = slingShot->GetPosition() + slingShot->GetExtents();
+		aie::Gizmos::add2DLine(pos, mousePos, glm::vec4(1, 1, 1, 1));
+
+		float radius = 1.0f;
+		float speed = 40;
+		glm::vec2 startPos(-40, 0);
+
+		float inclination = glm::atan((mousePos.x - pos.x) / (mousePos.y - pos.y) );
+
+		inclination = -glm::degrees(inclination);
+
+		AngryBirdShootLine(pos, inclination + 90, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);
+	}
 }
 
 void PhysicsApp::Controls(aie::Input* _input, float _dt)
-{
-	
+{	
 	if (_input->isKeyDown(aie::INPUT_KEY_W))
 	{
 		timer += _dt;
@@ -536,4 +682,17 @@ void PhysicsApp::Controls(aie::Input* _input, float _dt)
 	}
 }
 
+glm::vec2 PhysicsApp::ScreenToWorld(glm::vec2 screenPos)
+{
+	glm::vec2 worldPos = screenPos;
 
+	// move the centre of the screen to (0,0)
+	worldPos.x -= getWindowWidth() / 2;
+	worldPos.y -= getWindowHeight() / 2;
+
+	// scale according to our extents
+	worldPos.x *= 2.0f * m_extents / getWindowWidth();
+	worldPos.y *= 2.0f * m_extents / (m_aspectRatio * getWindowHeight());
+
+	return worldPos;
+}

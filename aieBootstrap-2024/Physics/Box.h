@@ -17,6 +17,8 @@ public:
 	float GetWidth() { return m_width; }
 	float GetHeight() { return m_height; }
 
+	bool IsInside(glm::vec2 _pos) override;
+
 protected:
 
 	glm::vec2 m_extents;

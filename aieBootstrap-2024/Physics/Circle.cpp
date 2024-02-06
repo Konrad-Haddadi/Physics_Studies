@@ -22,3 +22,8 @@ void Circle::Draw(float _alpha)
 	aie::Gizmos::add2DCircle(m_position, m_radius, 15, m_color);		
 	aie::Gizmos::add2DLine(m_smoothedPosition, m_smoothedPosition + m_smoothedLocalX * m_radius, glm::vec4(1, 1, 1, 1));
 }
+
+bool Circle::IsInside(glm::vec2 _pos)
+{
+	return glm::distance(_pos, m_position) <= m_radius;
+}
