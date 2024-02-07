@@ -18,5 +18,5 @@
 //#define Springs
 //#define SoftBodys
 //#define MouseCheck
-#define AngryBirdsDemo
-//#define QuadTreeDemo
+//#define AngryBirdsDemo
+#define QuadTreeDemo

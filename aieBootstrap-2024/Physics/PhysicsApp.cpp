@@ -542,9 +542,7 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(topWall);
 	m_physicsScene->AddActor(bottomWall);
 	m_physicsScene->AddActor(leftWall);
-	m_physicsScene->AddActor(rightWall);
-
-	
+	m_physicsScene->AddActor(rightWall);	
 
 #endif // AngryBirdsDemo
 
@@ -578,7 +576,6 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(rightWall);
 
 #endif // QuadTreeDemo
-
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)

@@ -9,7 +9,7 @@ QuadTree::QuadTree(glm::vec2 _size, glm::vec2 _pos, int _limit, QuadTree* _quadT
 
 void QuadTree::Update(float _dt)
 {
-	if (m_split)
+	/*if (m_split)
 	{
 		for (QuadTree* quad : quads)
 			quad->Update(_dt);		
@@ -21,17 +21,7 @@ void QuadTree::Update(float _dt)
 		contents.clear();
 	}
 
-
-	int contentLimit = 0;
-
-	for (int i = 0; i < quads.size(); i++)
-	{
-		contentLimit += quads[i]->contents.size();
-	}
-
-	contentLimit += contents.size();
-
-	if (contentLimit < m_limit)
+	if (GetBrachContentSize() <= m_limit)
 	{
 		for (int i = 0; i < quads.size(); i++)
 		{
@@ -42,7 +32,7 @@ void QuadTree::Update(float _dt)
 
 			RemoveQuad(quads[0]);
 		}
-	}
+	}*/
 
 
 	for (int j = 0; j < contents.size(); j++)
@@ -144,6 +134,13 @@ void QuadTree::RemoveQuad(QuadTree* _quad)
 int QuadTree::GetBrachContentSize()
 {
 
+	int contentLimit = 0;
 
-	return 0;
+	for (int i = 0; i < quads.size(); i++)
+	{
+		contentLimit += quads[i]->contents.size();
+		contentLimit += quads[i]->GetBrachContentSize();
+	}
+
+	return contentLimit;
 }
