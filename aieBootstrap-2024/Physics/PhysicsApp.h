@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "Circle.h"
 #include "Box.h"
+#include "QuadTree.h"
 
 static float m_aspectRatio = 16.f / 9.f;
 static float m_extents = 100;
@@ -34,13 +35,14 @@ public:
 
 protected:
 
+	aie::Texture* m_texture;
 	PhysicsScene* m_physicsScene;
 	Circle* rocket;
 	aie::Renderer2D* m_2dRenderer;
 	aie::Font* m_font;
 	float m_cameraX, m_cameraY;
 	Box* slingShot;
-
+	QuadTree* m_quadTree;
 
 // ==== For Demos Only ====
 public:

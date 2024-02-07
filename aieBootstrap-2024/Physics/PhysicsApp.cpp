@@ -13,6 +13,7 @@
 #include "Box.h"
 #include "Spring.h"
 #include "SoftBody.h"
+#include "QuadTree.h"
 
 float timer;
 bool pull;
@@ -39,9 +40,7 @@ bool PhysicsApp::startup()
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 	m_physicsScene = new PhysicsScene();
 
-
-	m_physicsScene->SetTimeStep(0.01f);
-	//m_physicsScene->SetGravity(glm::vec2(0, -10));
+	m_physicsScene->SetTimeStep(0.0000000000000000000005f);
 
 	DemoStartUp(1);	
 
@@ -83,11 +82,14 @@ void PhysicsApp::draw() {
 	// wipe the screen to the background colour
 	clearScreen();
 
-
-	m_2dRenderer->setCameraPos(m_cameraX, m_cameraY);
+	m_2dRenderer->setCameraPos(0, 0);
 
 	// begin drawing sprites
 	m_2dRenderer->begin();
+
+	char fps[32];
+	sprintf_s(fps, 32, "FPS: %i", getFPS());
+	m_2dRenderer->drawText(m_font, fps, 0, 50);
 
 	static float aspectRatio = 16 / 9.f;
 	aie::Gizmos::draw2D(glm::ortho<float>(-100, 100, -100 / aspectRatio, 100 / aspectRatio, -1.0f, 1.0f));
@@ -95,6 +97,8 @@ void PhysicsApp::draw() {
 	// draw your stuff here!
 	Draw();
 	DrawText();
+
+
 
 	// output some text, uses the last used colour
 	m_2dRenderer->drawText(m_font, "Press ESC to quit", 0, 0);
@@ -121,15 +125,15 @@ void PhysicsApp::DrawText()
 	char fps[32];
 	sprintf_s(fps, 32, "FPS: %i", getFPS());	
 	
-	char totalEnergy[32];
-	sprintf_s(totalEnergy, 32, "Total energy %i", (int)m_physicsScene->GetTotalEnergy());
+	/*char totalEnergy[32];
+	sprintf_s(totalEnergy, 32, "Total energy %i", (fl)m_physicsScene->GetTotalEnergy());*/
 
-	int windowHeight = Application::getWindowHeight();
+	int windowHeight = 0;
 
 	
-	m_2dRenderer->drawText(m_font, totalEnergy, 0, windowHeight - 64);
+	//m_2dRenderer->drawText(m_font, totalEnergy, 0, windowHeight);
 
-	m_2dRenderer->drawText(m_font, fps, 0, windowHeight - 32);
+	m_2dRenderer->drawText(m_font, fps, 0, 50);
 	m_2dRenderer->setUVRect(0, 0, 1, 1);
 }
 
@@ -513,12 +517,18 @@ void PhysicsApp::DemoStartUp(int _num)
 	slingShot = new Box(glm::vec2(-50, -30), glm::vec2(0), 0, 1, glm::vec2(1.5f, 5.f), glm::vec4(0, 1, 0, 1));
 	slingShot->SetKinematic(true);
 	m_physicsScene->AddActor(slingShot);
-	m_physicsScene->SetTimeStep(0.0001f);
+	m_physicsScene->SetTimeStep(0.0001);
 	m_physicsScene->SetGravity(glm::vec2(0, -15));
 	pull = false;
 
-	Box* box1 = new Box(glm::vec2(30, 0), glm::vec2(0,-10), 0, 20, glm::vec2(5,35), glm::vec4(1, 1, 0, 1));
-	Box* box2 = new Box(glm::vec2(00, 0), glm::vec2(0,-10), 0, 100, glm::vec2(5,35), glm::vec4(1, 1, 0, 1));
+	for (int i = 0; i < 5; i++)
+	{
+		Box* box1 = new Box(glm::vec2(10 * i, -20), glm::vec2(0,-10), 0, 20, glm::vec2(5,5), glm::vec4(1, 1, 0, 1));
+		m_physicsScene->AddActor(box1);
+	}
+
+	Box* box2 = new Box(glm::vec2(20, 20), glm::vec2(0,-10), 0, 100, glm::vec2(35,5), glm::vec4(1, 1, 0, 1));
+	m_physicsScene->AddActor(box2);
 
 	float height = Application::getWindowHeight() / 15;
 	float width = Application::getWindowWidth() / 15;
@@ -528,8 +538,6 @@ void PhysicsApp::DemoStartUp(int _num)
 	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
 	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
 
-	m_physicsScene->AddActor(box1);
-	m_physicsScene->AddActor(box2);
 
 	m_physicsScene->AddActor(topWall);
 	m_physicsScene->AddActor(bottomWall);
@@ -539,6 +547,37 @@ void PhysicsApp::DemoStartUp(int _num)
 	
 
 #endif // AngryBirdsDemo
+
+#ifdef QuadTreeDemo
+
+	m_quadTree = new QuadTree(glm::vec2(50,50), glm::vec2(0), 2, nullptr);
+	
+
+	Circle* ball1 = new Circle(glm::vec2(-10, -20), glm::vec2(0, 0), 1, 2, glm::vec4(1, 0, 0, 1));
+	Circle* ball2 = new Circle(glm::vec2(-15, -20), glm::vec2(0, 0), 1, 2, glm::vec4(1, 0, 0, 1));
+
+	m_physicsScene->AddActor(ball1);
+	m_physicsScene->AddActor(ball2);
+
+	m_quadTree->contents.push_back(ball1);
+	m_quadTree->contents.push_back(ball2);
+
+	//m_quadTree->Split();
+
+	float height = Application::getWindowHeight() / 13;
+	float width = Application::getWindowWidth() / 13;
+
+	Plane* topWall = new Plane(glm::vec2(0, -1), -height);
+	Plane* bottomWall = new Plane(glm::vec2(0, 1), -height);
+	Plane* leftWall = new Plane(glm::vec2(1, 0), -width);
+	Plane* rightWall = new Plane(glm::vec2(-1, 0), -width);
+
+	m_physicsScene->AddActor(topWall);
+	m_physicsScene->AddActor(bottomWall);
+	m_physicsScene->AddActor(leftWall);
+	m_physicsScene->AddActor(rightWall);
+
+#endif // QuadTreeDemo
 
 }
 
@@ -572,6 +611,14 @@ void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
 	AngryBirdsControls(_input, _dt);
 
 #endif // AngryBirdsDemo
+
+#ifdef QuadTreeDemo
+
+	m_quadTree->Update(_dt);
+	m_quadTree->Draw();
+
+#endif // QuadTreeDemo
+
 }
 
 void PhysicsApp::AngryBirdsControls(aie::Input* _input, float _dt)
