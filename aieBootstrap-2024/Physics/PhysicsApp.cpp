@@ -576,6 +576,7 @@ void PhysicsApp::DemoStartUp(int _num)
 	m_physicsScene->AddActor(rightWall);
 
 #endif // QuadTreeDemo
+
 }
 
 void PhysicsApp::DemoUpdate(aie::Input* _input, float _dt)
