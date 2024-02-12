@@ -31,7 +31,7 @@ protected:
 
 	void FixedUpdate(glm::vec2 _gravity, float _timeStep) override;
 	float GetPotentialEnergy(glm::vec2 _gravity) override;
-	void Draw(float _alpha) override;
+	void DrawGizmos(float _alpha) override;
 
 };
 

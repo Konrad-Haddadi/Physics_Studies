@@ -12,7 +12,7 @@ Box::Box(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, g
 	m_moment = 1.0f / 12.0f * m_mass * (m_width * m_width) + (m_height * m_height);
 }
 
-void Box::Draw(float _alpha)
+void Box::DrawGizmos(float _alpha)
 {
 	CalculateSmoothedPosition(_alpha);
 
@@ -123,6 +123,10 @@ bool Box::IsInside(glm::vec2 _pos)
 		return true;
 
 	return false;
+}
+
+void Box::Update(float _dt)
+{
 }
 
 

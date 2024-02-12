@@ -31,6 +31,7 @@ public:
 
 	void AngryBirdsControls(aie::Input* _input, float _dt);
 	void Controls(aie::Input* _input, float _dt);
+
 	glm::vec2 ScreenToWorld(glm::vec2 screenPos);
 
 protected:

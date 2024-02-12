@@ -22,7 +22,7 @@ void Plane::FixedUpdate(glm::vec2 _gravity, float _timeStep)
 {
 }
 
-void Plane::Draw(float _alpha)
+void Plane::DrawGizmos(float _alpha)
 {
 	float lineSegmentLength = 300;
 	vec2 centerPoint = m_normal * m_distanceToOrigin;

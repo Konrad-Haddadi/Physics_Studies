@@ -23,7 +23,7 @@ RigidBody::~RigidBody()
 }
 
 void RigidBody::FixedUpdate(glm::vec2 _gravity, float _timeStep)
-{
+{	
 	if (m_isKinematic)
 	{
 		m_velocity = glm::vec2(0);

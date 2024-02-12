@@ -6,6 +6,7 @@
 #include "Plane.h"
 #include "Box.h"
 #include <glm/glm.hpp>
+#include <vector>
 
 typedef bool(*fn)(PhysicsObject*, PhysicsObject*);
 
@@ -16,10 +17,12 @@ static fn collisionFunctionArray[] =
 	PhysicsScene::Box2Plane,    PhysicsScene::Box2Circle,    PhysicsScene::Box2Box,
 };
 
-PhysicsScene::PhysicsScene()
+PhysicsScene::PhysicsScene(aie::Renderer2D* _renderer)
+	:m_renderer(_renderer)
 {
 	SetTimeStep(0.01f);
 	SetGravity(glm::vec2(0,0));
+	m_actors = std::vector<PhysicsObject*>();
 }
 
 PhysicsScene::~PhysicsScene()
@@ -51,18 +54,24 @@ void PhysicsScene::Update(float _dt)
 		
 	while (accumulatedTime >= m_timeStep) {
 		for (auto pActor : m_actors) {
-			pActor->FixedUpdate(m_gravity, m_timeStep);
+			pActor->FixedUpdate(m_gravity, m_timeStep);			
 		}
 		accumulatedTime -= m_timeStep;
 
 		CheckForCollision();		
 	}
+
+	for(auto pActor : m_actors)
+		pActor->Update(_dt);
 }
 
 void PhysicsScene::Draw()
 {
 	for (auto obj : m_actors)
-		obj->Draw(1);
+	{
+		obj->Draw(m_renderer);
+		obj->DrawGizmos(1);
+	}
 	
 }
 

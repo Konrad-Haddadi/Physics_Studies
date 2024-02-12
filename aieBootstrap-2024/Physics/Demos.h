@@ -19,4 +19,4 @@
 //#define SoftBodys
 //#define MouseCheck
 //#define AngryBirdsDemo
-#define QuadTreeDemo
+//#define QuadTreeDemo

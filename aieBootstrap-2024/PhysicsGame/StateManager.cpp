@@ -1,18 +1,25 @@
 #include "StateManager.h"
 #include "States.h"
+#include "Gizmos.h"
 
 void StateManager::StartUp()
 {
+	if (nextState != nullptr)
+	{		
+		currentState = nextState;
+		nextState = nullptr;		
+	}
+
 	if (currentState != nullptr)
 		currentState->StateEnter();
 
-	nextState = nullptr;
+	
 }
 
 void StateManager::Update(float _dt)
 {
 	if (currentState != nullptr)
-		currentState->StateUpdate();
+		currentState->StateUpdate(_dt);
 
 	if (nextState != nullptr)
 	{
@@ -28,6 +35,8 @@ void StateManager::Update(float _dt)
 
 void StateManager::Draw()
 {
+	aie::Gizmos::clear();
+
 	if (currentState != nullptr)
 		currentState->StateDraw();
 }

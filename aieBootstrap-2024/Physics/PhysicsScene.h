@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "PhysicsObject.h"
+#include "Renderer2D.h"
 
 class Plane;
 class Circle;
@@ -10,7 +11,7 @@ class RigidBody;
 class PhysicsScene
 {
 public:
-	PhysicsScene();
+	PhysicsScene(aie::Renderer2D* _renderer);
 	~PhysicsScene();
 
 	void AddActor(PhysicsObject* _actor);
@@ -40,6 +41,7 @@ public:
 	static bool Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);
 
 protected:
+	aie::Renderer2D* m_renderer;
 	glm::vec2 m_gravity;
 	float m_timeStep;
 	std::vector<PhysicsObject*> m_actors;

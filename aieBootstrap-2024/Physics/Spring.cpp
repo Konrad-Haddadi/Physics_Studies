@@ -59,7 +59,7 @@ void Spring::FixedUpdate(glm::vec2 _gravity, float _timeStep)
 
 }
 
-void Spring::Draw(float _alpha)
+void Spring::DrawGizmos(float _alpha)
 {
     aie::Gizmos::add2DLine(GetContact1(_alpha), GetContact2(_alpha), m_color);
 }

@@ -38,7 +38,7 @@ bool PhysicsApp::startup()
 	// the following path would be used instead: "./font/consolas.ttf"
 
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
-	m_physicsScene = new PhysicsScene();
+	m_physicsScene = new PhysicsScene(m_2dRenderer);
 
 	m_physicsScene->SetTimeStep(0.0000000000000000000005f);
 

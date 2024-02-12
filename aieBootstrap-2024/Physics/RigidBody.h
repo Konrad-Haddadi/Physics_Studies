@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 const float MIN_ANGULAR_THRESHOLD = .01f;
-const float MIN_LINEAR_THRESHOLD = .1f;
+const float MIN_LINEAR_THRESHOLD = .08f;
 
 class RigidBody : public PhysicsObject
 {
@@ -12,13 +12,15 @@ public:
 	RigidBody(ShapeType _shapeID, glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass);
 	~RigidBody();
 
+	virtual void Update(float _dt) = 0;
 	void FixedUpdate(glm::vec2 _gravity, float _timeStep) override;
+
 	void ApplyForce(glm::vec2 _force);
 	void ApplyForce(glm::vec2 _force, glm::vec2 _pos);
 	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force);
 	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force, glm::vec2 _collision);
 	
-	virtual void Draw(float _alpha) = 0;
+	virtual void DrawGizmos(float _alpha) = 0;
 
 	//virtual bool OnCollisionEnter(glm::vec2 _pos) {};
 	//virtual bool OnTriggerEnter(glm::vec2 _pos) {};

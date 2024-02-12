@@ -9,7 +9,7 @@ public:
 	~States() {};
 
 	virtual void StateEnter() = 0;
-	virtual void StateUpdate() = 0;
+	virtual void StateUpdate(float _dt) = 0;
 	virtual void StateDraw() = 0;
 	virtual void StateExit() = 0;
 
