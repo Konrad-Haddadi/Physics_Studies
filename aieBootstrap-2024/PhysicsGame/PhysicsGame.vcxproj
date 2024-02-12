@@ -176,11 +176,13 @@
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="Pig.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="States.cpp" />
     <ClCompile Include="PhysicsGameApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WoodenBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bird.h" />
@@ -191,10 +193,12 @@
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="MenuState.h" />
+    <ClInclude Include="Pig.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="PhysicsGameApp.h" />
+    <ClInclude Include="WoodenBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
