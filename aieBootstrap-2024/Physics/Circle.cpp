@@ -12,6 +12,7 @@ Circle::Circle(glm::vec2 _pos, glm::vec2 _vel, float _mass, float _radius, glm::
 
 Circle::~Circle()
 {
+
 }
 
 

@@ -178,6 +178,7 @@
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Pig.cpp" />
     <ClCompile Include="PlayState.cpp" />
+    <ClCompile Include="SlingShot.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="States.cpp" />
     <ClCompile Include="PhysicsGameApp.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="Pig.h" />
     <ClInclude Include="PlayState.h" />
+    <ClInclude Include="SlingShot.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="States.h" />
     <ClInclude Include="PhysicsGameApp.h" />

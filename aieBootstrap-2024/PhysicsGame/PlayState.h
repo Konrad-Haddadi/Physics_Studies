@@ -1,10 +1,12 @@
 #pragma once
 #include "GameStates.h"
-#include "PhysicsScene.h"
 #include <vector>
 #include <string>
-class Box;
+#include <glm/glm.hpp>
+
+class SlingShot;
 class StateManager;
+class PhysicsScene;
 
 class PlayState : public GameStates
 {
@@ -24,7 +26,7 @@ public:
 	void LevelSelect(int _level);
 
 public:
-	Box* slingShot;
+	SlingShot* slingShot;
 	bool pull;
 };
 

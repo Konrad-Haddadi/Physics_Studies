@@ -2,10 +2,11 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
-#include "PhysicsScene.h"
 #include "Application.h"
+#include <glm/glm.hpp>
 
 class GameStateManager;
+class PhysicsScene;
 
 static float m_aspectRatio = 16.f / 9.f;
 static float m_extents = 100;

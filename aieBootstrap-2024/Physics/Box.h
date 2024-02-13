@@ -2,6 +2,7 @@
 
 #include "RigidBody.h"
 #include <glm/glm.hpp>
+
 class Box : public RigidBody
 {
 public:

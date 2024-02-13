@@ -6,7 +6,9 @@
 #include "GameStateManager.h"
 #include "PlayState.h"
 #include "glm/ext.hpp"
+#include "PhysicsScene.h"
 
+aie::Texture* background;
 
 PhysicsGameStates::PhysicsGameStates() 
 {
@@ -30,6 +32,8 @@ bool PhysicsGameStates::startup()
 	m_gameStateManager->SetNextState(new PlayState(m_gameStateManager, m_2dRenderer, m_physicsScene));
 
 	m_gameStateManager->StartUp();
+	background = new aie::Texture("../bin/textures/Background.png");
+
 
 	return true;
 }
@@ -63,7 +67,7 @@ void PhysicsGameStates::draw() {
 	static float aspectRatio = 16.f / 9.f;
 
 	aie::Gizmos::draw2D(glm::ortho<float>(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -1, 1));
-
+	m_2dRenderer->drawSprite(background, 0, Application::getWindowHeight());
 	m_2dRenderer->begin();
 
 	m_gameStateManager->Draw();

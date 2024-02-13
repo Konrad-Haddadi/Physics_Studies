@@ -70,7 +70,7 @@ void PhysicsScene::Draw()
 	for (auto obj : m_actors)
 	{
 		obj->Draw(m_renderer);
-		obj->DrawGizmos(1);
+		//obj->DrawGizmos(1);
 	}
 	
 }
@@ -331,8 +331,8 @@ bool PhysicsScene::Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		if (pen > 0)
 		{
 			box1->ResolveCollision(box2, contact / float(numContacts), &norm, pen);
+			return true; 
 		}
-		return true; 
 	}
 	return false;
 

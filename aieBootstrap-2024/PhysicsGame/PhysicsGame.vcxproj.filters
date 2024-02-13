@@ -57,6 +57,9 @@
     <ClCompile Include="Pig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SlingShot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PhysicsGameApp.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SlingShot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

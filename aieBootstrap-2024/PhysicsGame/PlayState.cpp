@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "WoodenBox.h"
 #include "Box.h"
+#include "SlingShot.h"
 
 #include <glm/glm.hpp>
 #include <vector>
@@ -40,6 +41,7 @@ void PlayState::StateExit()
 void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 {
 	glm::vec2 mousePos = glm::vec2(_input->getMouseX(), _input->getMouseY());
+	glm::vec2 pos = slingShot->GetPosition() + glm::vec2(slingShot->GetExtents().x * 0.5, slingShot->GetExtents().y * 0.75);
 
 	if (_input->isMouseButtonDown(0))
 		pull = true;
@@ -49,8 +51,6 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 		if (pull)
 		{
 			pull = false;
-
-			glm::vec2 pos = slingShot->GetPosition() + slingShot->GetExtents();
 			aie::Gizmos::add2DLine(pos, mousePos, glm::vec4(1, 1, 1, 1));
 
 			float radius = 1.0f;
@@ -69,7 +69,6 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 	if (pull)
 	{
-		glm::vec2 pos = slingShot->GetPosition() + slingShot->GetExtents();
 		aie::Gizmos::add2DLine(pos, mousePos, glm::vec4(1, 1, 1, 1));
 
 		float radius = 1.0f;
@@ -86,7 +85,7 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 void PlayState::BuildWorld()
 {
-	slingShot = new Box(glm::vec2(200, 50), glm::vec2(0), 0, 1, glm::vec2(10, 50), glm::vec4(0, 1, 0, 1));
+	slingShot = new SlingShot(glm::vec2(200, 100), glm::vec2(50,50), new aie::Texture("../bin/textures/SlingShot.png"));
 	slingShot->SetKinematic(true);
 	m_physicsScene->AddActor(slingShot);
 	m_physicsScene->SetGravity(glm::vec2(0, -100));
