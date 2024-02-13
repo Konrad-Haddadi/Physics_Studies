@@ -3,6 +3,8 @@
 Pig::Pig(glm::vec2 _pos, glm::vec2 _size, glm::vec2 _force, float _mass, aie::Texture* _texture, float _health)
 	: Circle(_pos, _force, _mass, _size.x, glm::vec4(1, 1, 1, 1)), health(_health), texture(_texture)
 {
+	SetLinearDrag(.5f);
+	SetAngularDrag(.5f);
 }
 
 Pig::~Pig()

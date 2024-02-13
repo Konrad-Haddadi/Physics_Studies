@@ -5,6 +5,8 @@
 WoodenBox::WoodenBox(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, glm::vec2 _extents, aie::Texture* _texture, int _health)
 	: Box(_pos, _velocity, _orientation, _mass, _extents, glm::vec4(1, 1, 1, 1)), texture(_texture), health(_health)
 {
+	SetLinearDrag(.5f);
+	SetAngularDrag(.5f);
 }
 
 WoodenBox::~WoodenBox()

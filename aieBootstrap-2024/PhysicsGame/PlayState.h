@@ -23,7 +23,7 @@ public:
 	void AngryBirdsControls(aie::Input* _input, float _dt);
 	void BuildWorld();
 	void LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacing, std::vector<std::string>& _strings);
-	void LevelSelect(int _level);
+	void LevelSelect(int _level, glm::vec2 _pos);
 
 public:
 	SlingShot* slingShot;
