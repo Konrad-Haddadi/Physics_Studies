@@ -89,6 +89,7 @@ void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::ve
 {
 	OnCollisionEnter(_actor2);
 	_actor2->OnCollisionEnter(this);
+
 	// find the vector between their centres, or use the provided direction
 	// of force, and make sure it's normalised
 	glm::vec2 normal = glm::normalize(_collisionNomral ? *_collisionNomral : _actor2->GetPosition() - GetPosition());

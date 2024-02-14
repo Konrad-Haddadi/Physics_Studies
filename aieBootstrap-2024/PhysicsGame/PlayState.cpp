@@ -68,7 +68,7 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 			glm::vec2 force = glm::normalize(pos - mousePos) * (float)(glm::distance(mousePos, pos));
 
-			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("../bin/textures/Red_Bird.png"), 5.f, 2);
+			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("textures/Red_Bird.png"), 5.f, 2);
 			ball->SetLinearDrag(0);
 
 			ball->physicsScene = m_physicsScene;
@@ -94,7 +94,7 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 void PlayState::BuildWorld()
 {
-	slingShot = new SlingShot(glm::vec2(200, 175), glm::vec2(50,50), new aie::Texture("../bin/textures/SlingShot.png"));
+	slingShot = new SlingShot(glm::vec2(200, 175), glm::vec2(50,50), new aie::Texture("textures/SlingShot.png"));
 	slingShot->SetKinematic(true);
 	m_physicsScene->AddActor(slingShot);
 	m_physicsScene->SetGravity(glm::vec2(0, -50));
@@ -134,7 +134,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 		{
 			if (_strings[j][i] == '0')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("../bin/textures/Pig_01.png"), 10);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("textures/Pig_01.png"), 10);
 				pig->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = pig;
@@ -142,7 +142,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			}
 			else if (_strings[j][i] == '1')
 			{
-				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("textures/WoodenBox.png"), 2);
 				box->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = box;
@@ -150,7 +150,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			}
 			else if (_strings[j][i] == '2')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("../bin/textures/Pig_01.png"), 10);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("textures/Pig_01.png"), 10);
 				pig->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = pig;
@@ -159,7 +159,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			}
 			else if (_strings[j][i] == '3')
 			{
-				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("textures/WoodenBox.png"), 2);
 				box->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = box;

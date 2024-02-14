@@ -2,10 +2,10 @@
 
 #include "Circle.h"
 #include "PhysicsScene.h"
-#include "GameObject.h"
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "Renderer2D.h"
+
 
 class Bird : public Circle
 {
