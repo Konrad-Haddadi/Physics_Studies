@@ -134,35 +134,50 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 		{
 			if (_strings[j][i] == '0')
 			{
-				rigidBodies[i * numColumns + j] = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15,15), glm::vec2(0), 50.0f, new aie::Texture("../bin/textures/Pig_01.png"), 10);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("../bin/textures/Pig_01.png"), 10);
+				pig->physicsScene = m_physicsScene;
+
+				rigidBodies[i * numColumns + j] = pig;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '1')
 			{
-				rigidBodies[i * numColumns + j] = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
+				box->physicsScene = m_physicsScene;
+
+				rigidBodies[i * numColumns + j] = box;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '2')
 			{
-				rigidBodies[i * numColumns + j] = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("../bin/textures/Pig_01.png"), 10);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("../bin/textures/Pig_01.png"), 10);
+				pig->physicsScene = m_physicsScene;
+
+				rigidBodies[i * numColumns + j] = pig;
 				rigidBodies[i * numColumns + j]->SetKinematic(true);
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '3')
 			{
-				rigidBodies[i * numColumns + j] = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
+				box->physicsScene = m_physicsScene;
+
+				rigidBodies[i * numColumns + j] = box;
 				rigidBodies[i * numColumns + j]->SetKinematic(true);
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '4')
 			{
-				rigidBodies[i * numColumns + j] = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 25.0f, glm::vec2(15 * numColumns, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 2);
-				_scene->AddActor(rigidBodies[i * numColumns + j]);
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 25.0f, glm::vec2(15 * numColumns, 15), new aie::Texture("../bin/textures/WoodenBox.png"), 5);
+				box->physicsScene = m_physicsScene;
 
-				break;
+				rigidBodies[i * numColumns + j] = box;
+				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else
 				rigidBodies[i * numColumns + j] = nullptr;
+
+			
 		}
 	}
 }

@@ -28,9 +28,12 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 	WoodenBox* box = dynamic_cast<WoodenBox*>(_other);
 	Pig* pig = dynamic_cast<Pig*>(_other);
 
+	float force = GetVelocity().x + GetVelocity().y;
+	force /= 100;
+
 	if (box != nullptr)
 	{
-		if (GetVelocity().length() > 5)
+		if (force > 2)
 		{
 			box->health -= damage;
 		}
@@ -38,7 +41,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 
 	if (pig != nullptr)
 	{
-		if (GetVelocity().length() > 5)
+		if (force > 2)
 		{
 			pig->health -= damage;
 		}

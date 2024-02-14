@@ -88,6 +88,7 @@ void RigidBody::ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force, glm:
 void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::vec2* _collisionNomral, float _pen )
 {
 	OnCollisionEnter(_actor2);
+	_actor2->OnCollisionEnter(this);
 	// find the vector between their centres, or use the provided direction
 	// of force, and make sure it's normalised
 	glm::vec2 normal = glm::normalize(_collisionNomral ? *_collisionNomral : _actor2->GetPosition() - GetPosition());
@@ -162,6 +163,9 @@ glm::vec2 RigidBody::ToWorld(glm::vec2 _contact, float _aplha)
 
 void RigidBody::ResolveCollision(RigidBody* _actor2)
 {
+	OnCollisionEnter(_actor2);
+	_actor2->OnCollisionEnter(this);
+
 	glm::vec2 normal = glm::normalize(_actor2->GetPosition() - GetPosition());
 	glm::vec2 relativeVelocity = _actor2->GetVelocity() - GetVelocity();
 
