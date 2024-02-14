@@ -18,4 +18,8 @@ void Pig::Draw(aie::Renderer2D* _renderer)
 
 void Pig::Update(float _dt)
 {
+	if (health <= 0)
+	{
+		physicsScene->RemoveActor(this);
+	}
 }

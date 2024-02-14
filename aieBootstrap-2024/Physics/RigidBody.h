@@ -21,12 +21,8 @@ public:
 	void ApplyForceToActor(RigidBody* _inputActor, glm::vec2 _force, glm::vec2 _collision);
 	
 	virtual void DrawGizmos(float _alpha) = 0;
+	virtual void OnCollisionEnter(RigidBody* _other) {};
 
-	//virtual bool OnCollisionEnter(glm::vec2 _pos) {};
-	//virtual bool OnTriggerEnter(glm::vec2 _pos) {};
-	//
-	//virtual void IsInsideTrigger() = 0;
-	
 	virtual bool IsInside(glm::vec2 _pos) { return false; };
 
 	void ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::vec2* _collisionNomral = nullptr, float _pen = 0);

@@ -18,3 +18,11 @@ void WoodenBox::Draw(aie::Renderer2D* _renderer)
 	_renderer->drawSprite(texture, m_position.x, m_position.y, m_extents.x * 2, m_extents.y * 2, m_orientation);
 
 }
+
+void WoodenBox::Update(float _dt)
+{
+	if (health <= 0)
+	{
+		physicsScene->RemoveActor(this);
+	}
+}

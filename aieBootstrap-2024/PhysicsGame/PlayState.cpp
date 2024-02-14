@@ -68,7 +68,7 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 			glm::vec2 force = glm::normalize(pos - mousePos) * (float)(glm::distance(mousePos, pos));
 
-			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("../bin/textures/Red_Bird.png"), 5.f);
+			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("../bin/textures/Red_Bird.png"), 5.f, 2);
 			ball->SetLinearDrag(0);
 
 			ball->physicsScene = m_physicsScene;

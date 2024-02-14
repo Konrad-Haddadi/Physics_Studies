@@ -1,7 +1,7 @@
 #pragma once
 #include "Box.h"
 #include "Texture.h"
-
+#include "PhysicsScene.h"
 
 class WoodenBox : public Box
 {
@@ -10,9 +10,11 @@ public:
 	~WoodenBox();
 
 	void Draw(aie::Renderer2D* _renderer) override;
+	void Update(float _dt) override;
 
 public:
 	aie::Texture* texture;
 	int health;
+	PhysicsScene* physicsScene;
 };
 
