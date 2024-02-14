@@ -23,7 +23,6 @@ public:
 	virtual void update(float deltaTime);
 	virtual void draw();
 
-	void Update(float _dt);
 	void Draw();
 	void DrawText();
 	void SetupContinuousDemo(glm::vec2 _startPos, float _inclination, float _speed, float _gravity);

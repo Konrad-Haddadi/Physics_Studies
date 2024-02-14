@@ -37,9 +37,7 @@ public:
 	void CalculateAxes();
 	float GetKineticEnergy();
 
-	//glm::vec2 GetPosition() { return m_position; }
 	glm::vec2 GetPosition() const { return m_position; }
-
 	glm::vec2 GetVelocity() { return m_velocity; }
 	
 	float GetOrientation() { return m_orientation; }
@@ -66,7 +64,8 @@ public:
 	glm::vec2 ToWorld(glm::vec2 _contact, float _aplha);
 
 	bool IsKinematic() { return m_isKinematic; }
-public:
+
+protected:
 	glm::vec2 m_position;
 	glm::vec2 m_velocity;
 	glm::vec2 m_lastPosition;

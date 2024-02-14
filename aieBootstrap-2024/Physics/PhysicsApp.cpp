@@ -65,7 +65,6 @@ void PhysicsApp::update(float deltaTime)
 	// input example
 	aie::Input* input = aie::Input::getInstance();
 
-	Update(deltaTime);
 	m_physicsScene->Update(deltaTime);
 	m_physicsScene->Draw();
 
@@ -107,10 +106,7 @@ void PhysicsApp::draw() {
 	m_2dRenderer->end();
 }
 
-void PhysicsApp::Update(float _dt)
-{
 
-}
 
 void PhysicsApp::Draw()
 {
