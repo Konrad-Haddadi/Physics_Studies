@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "Gizmos.h"
 #include "GameStateManager.h"
-#include "PlayState.h"
+#include "MenuState.h"
 #include "glm/ext.hpp"
 #include "PhysicsScene.h"
 
@@ -29,11 +29,10 @@ bool PhysicsGameStates::startup()
 	m_font = new aie::Font("./font/consolas.ttf", 32);
 
 	m_gameStateManager = new GameStateManager(this, nullptr, m_physicsScene, m_2dRenderer);
-	m_gameStateManager->SetNextState(new PlayState(m_gameStateManager, m_2dRenderer, m_physicsScene));
+	m_gameStateManager->SetNextState(new MenuState(m_gameStateManager, m_2dRenderer, m_physicsScene));
 
 	m_gameStateManager->StartUp();
 	background = new aie::Texture("./textures/Background.png");
-
 
 	return true;
 }

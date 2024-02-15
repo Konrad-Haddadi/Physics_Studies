@@ -71,7 +71,6 @@ void PlayState::StateDraw()
 		{
 			SpawnRandomLevel();
 			BuildWorld();
-
 		}
 	}
 }
