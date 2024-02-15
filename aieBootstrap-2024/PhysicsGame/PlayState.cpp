@@ -174,7 +174,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 		{
 			if (_strings[j][i] == '0')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 10);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 4);
 				pig->physicsScene = m_physicsScene;
 
 				pigs.push_back(pig);
@@ -192,7 +192,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			}
 			else if (_strings[j][i] == '2')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 10);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 4);
 				pig->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = pig;
@@ -201,7 +201,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			}
 			else if (_strings[j][i] == '3')
 			{
-				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/WoodenBox.png"), 2);
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/Stone.png"), 5);
 				box->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = box;
@@ -215,7 +215,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 
 				rigidBodies[i * numColumns + j] = box;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
-			}
+			}			
 			else
 				rigidBodies[i * numColumns + j] = nullptr;
 
@@ -234,7 +234,7 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 	{
 	case 0:
 
-		sb.push_back("11111");
+		sb.push_back("33333");
 		sb.push_back("10101");
 		sb.push_back("1.1.1");
 		sb.push_back("1.1.1");
@@ -245,23 +245,32 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 	case 1:
 
-		sb.push_back("111111");
-		sb.push_back("1.00.1");
-		sb.push_back("1....1");
-		sb.push_back("1.00.1");
+		sb.push_back("333333");
+		sb.push_back("..00..");
 		sb.push_back("......");
-		sb.push_back("......");
+		sb.push_back("..00..");		
 
 		break;
 
 	case 2:
 
-		sb.push_back("1.00.1");
+		sb.push_back("3.33.3");
 		sb.push_back("1.00.1");
 		sb.push_back("1....1");
-		sb.push_back("1.0..1");
+		sb.push_back("1....1");
 		sb.push_back("......");
 		sb.push_back("......");
+
+		break;
+
+	case 3:
+
+		sb.push_back("33333");
+		sb.push_back("11.1.");
+		sb.push_back("10.0.");
+		sb.push_back("1....");
+		sb.push_back("1....");
+
 
 		break;
 
@@ -277,9 +286,9 @@ void PlayState::SpawnRandomLevel()
 {
 	m_physicsScene->ClearActors();
 
-	int val = 1 + (rand() % 3);
+	int val = 1 + (rand() % 4);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(rand() % 3, glm::vec2(215 * i, 0));
+		LevelSelect(rand() % 4, glm::vec2(215 * i, rand() % 500));
 	}
 }

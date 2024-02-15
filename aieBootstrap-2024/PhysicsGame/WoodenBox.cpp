@@ -1,5 +1,6 @@
 #include "WoodenBox.h"
 #include "Box.h"
+#include "Pig.h"
 #include <glm/glm.hpp>
 
 WoodenBox::WoodenBox(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, glm::vec2 _extents, aie::Texture* _texture, int _health)
@@ -23,5 +24,22 @@ void WoodenBox::Update(float _dt)
 	if (health <= 0)
 	{
 		physicsScene->RemoveActor(this);
+	}
+}
+
+void WoodenBox::OnCollisionEnter(RigidBody* _other)
+{
+	Pig* pig = dynamic_cast<Pig*>(_other);
+
+	float force = GetVelocity().x + GetVelocity().y;
+	force /= 100;
+
+	if (pig != nullptr)
+	{
+		if (force > 1)
+		{
+			pig->health -= 1;
+			health -= 1;
+		}
 	}
 }
