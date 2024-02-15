@@ -5,6 +5,7 @@ Pig::Pig(glm::vec2 _pos, glm::vec2 _size, glm::vec2 _force, float _mass, aie::Te
 {
 	SetLinearDrag(.5f);
 	SetAngularDrag(.5f);
+	dead = false;
 }
 
 Pig::~Pig()
@@ -20,6 +21,7 @@ void Pig::Update(float _dt)
 {
 	if (health <= 0)
 	{
+		dead = true;
 		physicsScene->RemoveActor(this);
 	}
 }

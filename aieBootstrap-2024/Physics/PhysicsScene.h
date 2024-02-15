@@ -16,6 +16,8 @@ public:
 
 	void AddActor(PhysicsObject* _actor);
 	void RemoveActor(PhysicsObject* _actor);
+	void ClearActors();
+
 	void Update(float _dt);
 	void Draw();
 

@@ -23,5 +23,7 @@ public:
 	PhysicsScene* physicsScene;
 	aie::Texture* texture;
 	int damage;
+	bool countDown;
+	bool remove;
 };
 

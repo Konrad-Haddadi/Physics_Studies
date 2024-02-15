@@ -2,11 +2,11 @@
 #include "Circle.h"
 #include "WoodenBox.h"
 #include "Pig.h"
-
+#include "SlingShot.h"
 Bird::Bird(glm::vec2 _pos, glm::vec2 _size, glm::vec2 _force, float _mass, aie::Texture* _texture, float _lifeTimer, int _damage)
-	: Circle(_pos, _force, _mass, _size.x, glm::vec4(1, 1, 1, 1)) , lifeTimer(_lifeTimer), timer(0), texture(_texture), damage(_damage)
+	: Circle(_pos, _force, _mass, _size.x, glm::vec4(1, 1, 1, 1)) , lifeTimer(_lifeTimer), timer(0), texture(_texture), damage(_damage), countDown(false)
 {
-	
+	remove = false;
 }
 
 
@@ -17,19 +17,29 @@ Bird::~Bird()
 
 void Bird::Update(float _dt)
 {
+	if (!countDown)
+		return;
+
 	timer += _dt;
 
 	if (timer > lifeTimer)
+	{
+		remove = true;
 		physicsScene->RemoveActor(this);
+	}
 }
 
 void Bird::OnCollisionEnter(RigidBody* _other)
 {
 	WoodenBox* box = dynamic_cast<WoodenBox*>(_other);
 	Pig* pig = dynamic_cast<Pig*>(_other);
+	SlingShot* sling = dynamic_cast<SlingShot*>(_other);
 
 	float force = GetVelocity().x + GetVelocity().y;
 	force /= 100;
+
+	if(_other!= nullptr && sling == nullptr)
+		countDown = true;
 
 	if (box != nullptr)
 	{
@@ -44,7 +54,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 		if (force > 2)
 		{
 			pig->health -= damage;
-		}
+		}	
 	}
 }
 

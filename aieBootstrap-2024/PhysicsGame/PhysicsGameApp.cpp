@@ -26,13 +26,13 @@ bool PhysicsGameStates::startup()
 	m_2dRenderer = new aie::Renderer2D();
 	m_physicsScene = new PhysicsScene(m_2dRenderer);
 
-	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
+	m_font = new aie::Font("./font/consolas.ttf", 32);
 
 	m_gameStateManager = new GameStateManager(this, nullptr, m_physicsScene, m_2dRenderer);
 	m_gameStateManager->SetNextState(new PlayState(m_gameStateManager, m_2dRenderer, m_physicsScene));
 
 	m_gameStateManager->StartUp();
-	background = new aie::Texture("../bin/textures/Background.png");
+	background = new aie::Texture("./textures/Background.png");
 
 
 	return true;

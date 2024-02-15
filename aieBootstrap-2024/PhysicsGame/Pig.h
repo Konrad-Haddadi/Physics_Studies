@@ -20,5 +20,6 @@ public:
 	float health;
 	PhysicsScene* physicsScene;
 	aie::Texture* texture;
+	bool dead;
 };
 
