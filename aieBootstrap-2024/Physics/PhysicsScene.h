@@ -30,17 +30,17 @@ public:
 
 	void CheckForCollision();
 
-	static bool Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs);
-	static bool Plane2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);
-	static bool Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);
+	static bool Plane2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs);//
+	static bool Plane2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);//
+	static bool Plane2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);//
 
-	static bool Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);
+	static bool Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);//
 	static bool Circle2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs);
-	static bool Circle2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);
+	static bool Circle2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);//
 	
 	static bool Box2Plane(PhysicsObject* _lhs, PhysicsObject* _rhs);
 	static bool Box2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs);
-	static bool Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);
+	static bool Box2Box(PhysicsObject* _lhs, PhysicsObject* _rhs);//
 
 protected:
 	aie::Renderer2D* m_renderer;

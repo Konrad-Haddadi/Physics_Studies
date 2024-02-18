@@ -31,12 +31,12 @@ void WoodenBox::OnCollisionEnter(RigidBody* _other)
 {
 	Pig* pig = dynamic_cast<Pig*>(_other);
 
-	float force = GetVelocity().x + GetVelocity().y;
+	float force = glm::abs(GetVelocity().x) + glm::abs(GetVelocity().y);
 	force /= 100;
 
 	if (pig != nullptr)
 	{
-		if (force > 1)
+		if (force > .2f)
 		{
 			pig->health -= 1;
 			health -= 1;

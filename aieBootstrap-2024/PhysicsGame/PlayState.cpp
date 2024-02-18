@@ -17,7 +17,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>   
-
+#include <iostream>
 
 Bird* current;
 
@@ -124,9 +124,11 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 		float inclination = glm::atan((mousePos.x - pos.x) / (mousePos.y - pos.y));
 
-		inclination = -glm::degrees(inclination);
-
-		m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination + 90, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);
+		if (inclination > 0)
+		{
+			inclination = -glm::degrees(inclination) + 90;
+			m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);
+		}
 	}
 	
 }
@@ -173,7 +175,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 		{
 			if (_strings[j][i] == '0')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 4);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 1);
 				pig->physicsScene = m_physicsScene;
 
 				pigs.push_back(pig);
@@ -191,7 +193,7 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			}
 			else if (_strings[j][i] == '2')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 4);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 1);
 				pig->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = pig;

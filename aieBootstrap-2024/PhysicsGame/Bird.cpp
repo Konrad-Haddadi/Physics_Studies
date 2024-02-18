@@ -35,7 +35,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 	Pig* pig = dynamic_cast<Pig*>(_other);
 	SlingShot* sling = dynamic_cast<SlingShot*>(_other);
 
-	float force = GetVelocity().x + GetVelocity().y;
+	float force = glm::abs(GetVelocity().x) + glm::abs(GetVelocity().y);
 	force /= 100;
 
 	if(_other!= nullptr && sling == nullptr)
@@ -43,7 +43,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 
 	if (box != nullptr)
 	{
-		if (force > 2)
+		if (force > 1)
 		{
 			box->health -= damage;
 		}
@@ -51,7 +51,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 
 	if (pig != nullptr)
 	{
-		if (force > 2)
+		if (force > 1)
 		{
 			pig->health -= damage;
 		}	
