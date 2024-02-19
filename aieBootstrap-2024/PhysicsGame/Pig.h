@@ -15,6 +15,7 @@ public:
 
 	void Draw(aie::Renderer2D* _renderer) override;
 	void Update(float _dt) override;
+	void DrawGizmos(float _alpha) override;
 
 public:
 	float health;

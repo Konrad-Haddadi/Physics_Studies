@@ -2,6 +2,7 @@
 #include "Box.h"
 #include "Pig.h"
 #include <glm/glm.hpp>
+#include <Gizmos.h>
 
 WoodenBox::WoodenBox(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, glm::vec2 _extents, aie::Texture* _texture, int _health)
 	: Box(_pos, _velocity, _orientation, _mass, _extents, glm::vec4(1, 1, 1, 1)), texture(_texture), health(_health)
@@ -42,4 +43,17 @@ void WoodenBox::OnCollisionEnter(RigidBody* _other)
 			health -= 1;
 		}
 	}
+}
+
+void WoodenBox::DrawGizmos(float _alpha)
+{
+	CalculateSmoothedPosition(_alpha);
+
+	glm::vec2 p1 = m_smoothedPosition - m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents.y;
+	glm::vec2 p2 = m_smoothedPosition + m_smoothedLocalX * m_extents.x - m_smoothedLocalY * m_extents.y;
+	glm::vec2 p3 = m_smoothedPosition - m_smoothedLocalX * m_extents.x + m_smoothedLocalY * m_extents.y;
+	glm::vec2 p4 = m_smoothedPosition + m_smoothedLocalX * m_extents.x + m_smoothedLocalY * m_extents.y;
+
+	aie::Gizmos::add2DTri(p1, p2, p4, m_color);
+	aie::Gizmos::add2DTri(p1, p4, p3, m_color);
 }

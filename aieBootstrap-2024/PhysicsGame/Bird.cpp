@@ -3,6 +3,8 @@
 #include "WoodenBox.h"
 #include "Pig.h"
 #include "SlingShot.h"
+#include <Gizmos.h>
+
 Bird::Bird(glm::vec2 _pos, glm::vec2 _size, glm::vec2 _force, float _mass, aie::Texture* _texture, float _lifeTimer, int _damage)
 	: Circle(_pos, _force, _mass, _size.x, glm::vec4(1, 1, 1, 1)) , lifeTimer(_lifeTimer), timer(0), texture(_texture), damage(_damage), countDown(false)
 {
@@ -27,6 +29,13 @@ void Bird::Update(float _dt)
 		remove = true;
 		physicsScene->RemoveActor(this);
 	}
+}
+
+void Bird::DrawGizmos(float _alpha)
+{
+	CalculateSmoothedPosition(_alpha);
+
+	aie::Gizmos::add2DCircle(m_position, m_radius, 15, m_color);
 }
 
 void Bird::OnCollisionEnter(RigidBody* _other)

@@ -1,5 +1,5 @@
 #include "SlingShot.h"
-
+#include <Gizmos.h>
 SlingShot::SlingShot(glm::vec2 _pos, glm::vec2 _size, aie::Texture* _texture)
 	: Box(_pos, glm::vec2(0), 0, 0, _size, glm::vec4(0)), texture(_texture)
 {

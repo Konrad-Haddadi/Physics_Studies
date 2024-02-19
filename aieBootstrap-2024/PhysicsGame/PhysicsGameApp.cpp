@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "Gizmos.h"
 #include "GameStateManager.h"
-#include "MenuState.h"
+#include "PlayState.h"
 #include "glm/ext.hpp"
 #include "PhysicsScene.h"
 
@@ -29,7 +29,7 @@ bool PhysicsGameStates::startup()
 	m_font = new aie::Font("./font/consolas.ttf", 32);
 
 	m_gameStateManager = new GameStateManager(this, nullptr, m_physicsScene, m_2dRenderer);
-	m_gameStateManager->SetNextState(new MenuState(m_gameStateManager, m_2dRenderer, m_physicsScene));
+	m_gameStateManager->SetNextState(new PlayState(m_gameStateManager, m_2dRenderer, m_physicsScene));
 
 	m_gameStateManager->StartUp();
 	background = new aie::Texture("./textures/Background.png");
@@ -68,7 +68,12 @@ void PhysicsGameStates::draw() {
 	aie::Gizmos::draw2D(glm::ortho<float>(0, Application::getWindowWidth(), 0, Application::getWindowHeight(), -1, 1));
 	m_2dRenderer->begin();
 
-	m_2dRenderer->drawSprite(background, Application::getWindowWidth() *0.5f, Application::getWindowHeight() * 0.5f, Application::getWindowWidth(), Application::getWindowHeight());
+	
+
+	aie::Input* input = aie::Input::getInstance();
+
+	if(!input->isKeyDown(aie::INPUT_KEY_TAB))
+		m_2dRenderer->drawSprite(background, Application::getWindowWidth() *0.5f, Application::getWindowHeight() * 0.5f, Application::getWindowWidth(), Application::getWindowHeight());
 	m_gameStateManager->Draw();
 	
 	DrawFPS();

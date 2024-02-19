@@ -10,6 +10,9 @@ public:
 	~WoodenBox();
 
 	void Draw(aie::Renderer2D* _renderer) override;
+	void DrawGizmos(float _alpha) override;
+
+
 	void Update(float _dt) override;
 	void OnCollisionEnter(RigidBody* _other) override;
 

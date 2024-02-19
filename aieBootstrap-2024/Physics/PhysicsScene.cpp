@@ -1,7 +1,7 @@
 #include "PhysicsScene.h"
 #include "PhysicsObject.h"
 #include "RigidBody.h"
-
+#include <Input.h>
 #include "Circle.h"
 #include "Plane.h"
 #include "Box.h"
@@ -80,8 +80,13 @@ void PhysicsScene::Draw()
 {
 	for (auto obj : m_actors)
 	{
-		obj->Draw(m_renderer);
-		//obj->DrawGizmos(1);
+		aie::Input* input = aie::Input::getInstance();
+		
+
+		if(input->isKeyDown(aie::INPUT_KEY_TAB))
+			obj->DrawGizmos(1);
+		else
+			obj->Draw(m_renderer);
 	}
 	
 }
