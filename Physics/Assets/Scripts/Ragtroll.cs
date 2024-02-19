@@ -6,6 +6,9 @@ using UnityEngine;
 public class Ragtroll : MonoBehaviour
 {
     private Animator animator;
+    private Player player;
+
+    [SerializeField] private Rigidbody hips;
 
     public List<Rigidbody> rigidbodies = new List<Rigidbody>();
 
@@ -17,14 +20,30 @@ public class Ragtroll : MonoBehaviour
             animator.enabled = !value;
 
             foreach (Rigidbody r in rigidbodies)
-                r.isKinematic = !value;
+                r.isKinematic = !r.isKinematic;
         }
     }
 
     private void Start()
     {
+        player = GetComponent<Player>();
         animator = GetComponent<Animator>();
+
         foreach (Rigidbody r in rigidbodies)
+        {
             r.isKinematic = true;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RagtrollOn = !RagtrollOn;
+            
+        }
+
+        player.controller.enabled = !RagtrollOn;       
+
     }
 }

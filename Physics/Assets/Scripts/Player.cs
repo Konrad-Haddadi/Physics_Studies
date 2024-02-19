@@ -10,8 +10,8 @@ public class Player : MonoBehaviour
     public float rotationSpeed = 16f;
     public float pushPower = 2f;
 
-    private CharacterController controller = null;
-    private Animator animator = null;
+    public CharacterController controller = null;
+    [HideInInspector] public Animator animator = null;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
         transform.Rotate(transform.up, horizontal * rotationSpeed * Time.deltaTime);
         animator.SetFloat("Speed", vertical * forwardSpeed * Time.deltaTime);
 
+        
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
