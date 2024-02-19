@@ -33,24 +33,9 @@ public class Player : MonoBehaviour
         
         if(Input.GetKey(KeyCode.Space) && !isJumping)
             Jump();
-        
-        if(isJumping)
-        {
-            jumpTimer += Time.deltaTime;
 
-            transform.position = rb.transform.localPosition;
-
-            if (jumpTimer > 2)
-            {          
-                jumpTimer = 0;
-
-                controller.enabled = true;
-                animator.enabled = true;
-
-                isJumping = false;
-            }
-        }
-
+        if (isJumping)
+            JumpTimer();
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -71,6 +56,23 @@ public class Player : MonoBehaviour
 
         isJumping = true;
 
-        rb.AddForce(rb.transform.up * (jumpPower * 10), ForceMode.Impulse);
+        rb.AddForce( rb.transform.up * (jumpPower * 10), ForceMode.Impulse);
+    }
+
+    private void JumpTimer()
+    {
+        jumpTimer += Time.deltaTime;
+
+        transform.position = rb.transform.localPosition;
+
+        if (jumpTimer > 2)
+        {
+            jumpTimer = 0;
+
+            controller.enabled = true;
+            animator.enabled = true;
+
+            isJumping = false;
+        }
     }
 }
