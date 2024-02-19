@@ -61,8 +61,9 @@
     <Compile Include="Assets\Scripts\CannonBall.cs" />
     <Compile Include="Assets\Scripts\Ragtroll.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\PhysicsObject.cs" />
     <Compile Include="Assets\Scripts\Raycaster.cs" />
+    <Compile Include="Assets\Scripts\PhysicsObject.cs" />
+    <Compile Include="Assets\Scripts\Car.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
