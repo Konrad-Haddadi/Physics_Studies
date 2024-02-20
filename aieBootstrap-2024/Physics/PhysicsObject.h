@@ -32,5 +32,6 @@ public:
 protected:
 	ShapeType m_shapeID;
 	float m_elasticity;
+	bool awake;
 };
 

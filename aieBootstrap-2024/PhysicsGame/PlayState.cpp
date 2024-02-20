@@ -139,6 +139,7 @@ void PlayState::BuildWorld()
 	slingShot->SetKinematic(true);
 	m_physicsScene->AddActor(slingShot);
 	m_physicsScene->SetGravity(glm::vec2(0, -50));
+
 	m_physicsScene->SetTimeStep(0.005f);
 
 
@@ -285,11 +286,19 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 void PlayState::SpawnRandomLevel()
 {
+	/*m_physicsScene->ClearActors();
+
+	int val = 1 + (rand() % 4);
+	for (int i = 0; i < val; i++)
+	{
+		LevelSelect(rand() % 4, glm::vec2(215 * i, rand() % 250));
+	}*/
+
 	m_physicsScene->ClearActors();
 
 	int val = 1 + (rand() % 4);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(rand() % 4, glm::vec2(215 * i, rand() % 500));
+		LevelSelect( 0, glm::vec2(215 * i, rand() % 250));
 	}
 }

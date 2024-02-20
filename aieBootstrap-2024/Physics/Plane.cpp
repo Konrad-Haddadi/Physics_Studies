@@ -65,6 +65,8 @@ void Plane::ApplyContactForces(RigidBody* _body2, glm::vec2 _norm, float _pen)
 
 void Plane::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact)
 {
+	
+
 	glm::vec2 localContact = _contact - _actor2->GetPosition();
 
 	// the plane isn't moving, so the relative velocity is just actor2's velocity at the contact point

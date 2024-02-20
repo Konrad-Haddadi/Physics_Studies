@@ -48,9 +48,6 @@ void PhysicsGameStates::shutdown() {
 
 void PhysicsGameStates::update(float deltaTime) 
 {
-
-	//aie::Gizmos::clear();
-
 	m_gameStateManager->Update(deltaTime);
 
 	aie::Input* input = aie::Input::getInstance();
