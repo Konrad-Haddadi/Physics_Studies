@@ -25,15 +25,13 @@ public class Chain : MonoBehaviour
     }
 
     public void SwingChange(bool _val)
-    {
-        if(_val)
-        {
-            midChain.transform.position = endChain.transform.position - Vector3.up;
-            handChain.transform.position = midChain.transform.position - Vector3.up;
-            return;
-        }
+    {    
+        
+        midChain.transform.position = endChain.transform.position - Vector3.up;
+        handChain.transform.position = midChain.transform.position - Vector3.up;
+          
 
-        swing = !swing;  
+        swing = _val;  
 
         endChain.gameObject.SetActive(swing);
         midChain.gameObject.SetActive(swing);

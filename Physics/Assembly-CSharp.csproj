@@ -64,9 +64,11 @@
     <Compile Include="Assets\Scripts\Raycaster.cs" />
     <Compile Include="Assets\Scripts\Car.cs" />
     <Compile Include="Assets\Scripts\PhysicsObject.cs" />
-    <Compile Include="Assets\Scripts\Spawner.cs" />
     <Compile Include="Assets\Scripts\Chain.cs" />
     <Compile Include="Assets\Scripts\TransformCopy.cs" />
+    <Compile Include="Assets\Scripts\Spawner.cs" />
+    <Compile Include="Assets\Scripts\Bounds.cs" />
+    <Compile Include="Assets\Scripts\Hammer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -793,6 +795,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Hierarchy2.Runtime.csproj">
+      <Project>{E236060A-325D-C9D1-3538-9A0F0E3E5BA1}</Project>
+      <Name>Hierarchy2.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Hierarchy2.Editor.csproj">
+      <Project>{F4BD34CA-3E3E-AD33-09E4-B6A5C1DEE7F9}</Project>
+      <Name>Hierarchy2.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

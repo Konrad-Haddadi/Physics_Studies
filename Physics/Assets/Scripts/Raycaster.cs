@@ -33,15 +33,14 @@ public class Raycaster : MonoBehaviour
                 {
                     if (grapple.endChain.connectedBody == rb)
                     {
-                        grapple.endChain.connectedBody = rb;
-                        grapple.endChain.transform.position = rb.transform.position - Vector3.up;
-                        grapple.SwingChange(true);
+                        grapple.endChain.connectedBody = null;
+                        grapple.SwingChange(false);
                     }
                     else
                     {
                         grapple.endChain.connectedBody = rb;
                         grapple.endChain.transform.position = rb.transform.position - Vector3.up;
-                        grapple.SwingChange(false);
+                        grapple.SwingChange(true);
                     }
                                        
                 }

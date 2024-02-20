@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
     public float rotationSpeed = 16f;
     public float pushPower = 2f;
     public float jumpPower = 2f;
-    
+
+    Chain chain;
 
     [HideInInspector] public Animator animator = null;
     public Rigidbody rb;
@@ -35,21 +36,52 @@ public class Player : MonoBehaviour
         jumpPowerMax = jumpPower;
         up = false;
         canvas.enabled = false;
+        chain = GetComponent<Chain>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
+        Controls();
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (!body || body.isKinematic || hit.moveDirection.y < -0.3f)
+            return;
+
+        Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        body.AddForce(pushDirection * pushPower, ForceMode.Impulse);
+    }
+
+    public void RagDoll(Vector3 _force)
+    {
+        isJumping = true;
+        canvas.enabled = false;
+
+        capCollider.enabled = !isJumping;
+        rb.isKinematic = isJumping;
+
+        animator.enabled = false;
+        hips.velocity += _force * 10;
+           
         
+    }
+
+    private void Controls()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+
         animator.SetFloat("Speed", horizontal);
 
-        if(!isJumping)
+        if (!isJumping)
             transform.position += transform.forward * horizontal * forwardSpeed * Time.deltaTime;
 
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
-            if(up)
+            if (up)
             {
                 jumpPower += Time.deltaTime * 20;
 
@@ -64,13 +96,13 @@ public class Player : MonoBehaviour
                     up = true;
             }
 
-            if(!isJumping)            
+            if (!isJumping)
                 canvas.enabled = true;
 
             bar.fillAmount = jumpPower / jumpPowerMax;
         }
 
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             isJumping = !isJumping;
             canvas.enabled = false;
@@ -89,33 +121,23 @@ public class Player : MonoBehaviour
                 transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y, transform.position.z);
                 animator.enabled = true;
             }
-        }  
+        }
 
         animator.SetBool("Fall", isJumping);
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    public void ResetPos()
     {
-        Rigidbody body = hit.collider.attachedRigidbody;
+        isJumping = false;
+        canvas.enabled = false;
 
-        if (!body || body.isKinematic || hit.moveDirection.y < -0.3f)
-            return;
+        capCollider.enabled = !isJumping;
+        rb.isKinematic = isJumping;      
+        
+        transform.position = new Vector3(hips.transform.position.x, transform.position.y, transform.position.z);
+        animator.enabled = true;  
 
-        Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
-        body.AddForce(pushDirection * pushPower, ForceMode.Impulse);
-    }
-
-    private void JumpTimer()
-    {
-        jumpTimer += Time.deltaTime;
-
-        transform.position = rb.transform.localPosition;
-
-        if (jumpTimer > 2)
-        {
-
-            jumpTimer = 0;
-            isJumping = false;
-        }
+        animator.SetBool("Fall", isJumping);
+        chain.SwingChange(false);
     }
 }
