@@ -51,14 +51,14 @@ public class Player : MonoBehaviour
         {
             if(up)
             {
-                jumpPower += Time.deltaTime * 10;
+                jumpPower += Time.deltaTime * 20;
 
                 if (jumpPower >= jumpPowerMax)
                     up = false;
             }
             else
             {
-                jumpPower -= Time.deltaTime * 10;
+                jumpPower -= Time.deltaTime * 20;
 
                 if (jumpPower <= 0)
                     up = true;
@@ -80,13 +80,14 @@ public class Player : MonoBehaviour
 
             if (isJumping)
             {
-                animator.enabled = !isJumping;
-                hips.velocity += ((transform.up * (jumpPower * 5)) + (transform.forward * horizontal * jumpPowerMax));
+                animator.enabled = false;
+                hips.velocity += transform.up * (jumpPower * 5);
+                hips.velocity += transform.forward * horizontal * jumpPowerMax * 5;
             }
             else
             {
                 transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y, transform.position.z);
-                animator.enabled = !isJumping;
+                animator.enabled = true;
             }
         }  
 

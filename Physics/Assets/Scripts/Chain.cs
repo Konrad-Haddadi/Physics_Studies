@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class Chain : MonoBehaviour
 {
-    public GameObject endChain = null;
-    public GameObject midChain = null;
-    public GameObject handChain = null;
+    public HingeJoint endChain = null;
+    public HingeJoint midChain = null;
+    public HingeJoint handChain = null;
     public GameObject hand = null;
 
 
@@ -13,23 +13,32 @@ public class Chain : MonoBehaviour
     private void Start()
     {
         swing = false;
-        endChain.SetActive(false);
-        midChain.SetActive(false);
-        handChain.SetActive(false);
+        endChain.gameObject.SetActive(false);
+        midChain.gameObject.SetActive(false);
+        handChain.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        
+        if (swing && Input.GetKeyDown(KeyCode.Space))
+            SwingChange(false);
     }
 
-    private void OnMouseDown()
+    public void SwingChange(bool _val)
     {
-        swing = !swing;
+        if(_val)
+        {
+            midChain.transform.position = endChain.transform.position - Vector3.up;
+            handChain.transform.position = midChain.transform.position - Vector3.up;
+            return;
+        }
 
-        endChain.SetActive(swing);
-        midChain.SetActive(swing);
-        handChain.SetActive(swing);
+        swing = !swing;  
+
+        endChain.gameObject.SetActive(swing);
+        midChain.gameObject.SetActive(swing);
+        handChain.gameObject.SetActive(swing);
+
 
         if (swing)
         {
@@ -42,6 +51,15 @@ public class Chain : MonoBehaviour
             joint.autoConfigureConnectedAnchor = false;
 
             joint.connectedBody = handChain.GetComponent<Rigidbody>();
-        }  
+        }
+        else
+            endChain.connectedBody = null;
+
+    }   
+
+    public void ChangePoint()
+    {
+        midChain.transform.position = endChain.transform.position - Vector3.up;
+        handChain.transform.position = midChain.transform.position - Vector3.up;
     }
 }

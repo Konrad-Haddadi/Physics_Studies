@@ -8,16 +8,14 @@ using UnityEngine.UI;
 public class Raycaster : MonoBehaviour
 {
     Camera camera = null;
-    public float force = 10;
     public int layerMask;
-    public TMP_Text output;
+    public Chain grapple;
 
     private void Awake()
     {
-
         camera = GetComponent<Camera>();
-        /*string[] layers = { "Ragdoll" };
-        layerMask = LayerMask.GetMask(layers);*/
+        string[] layers = { "Grapple" };
+        layerMask = LayerMask.GetMask(layers);        
     }
 
     private void Update()
@@ -27,16 +25,26 @@ public class Raycaster : MonoBehaviour
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-            if(Physics.Raycast(ray, out hit, 1000/*, layerMask*/))
+            if(Physics.Raycast(ray, out hit, 1000, layerMask))
             {
-                output.text = hit.transform.gameObject.name;
-
-                /*Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
+                Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
 
                 if(rb)
                 {
-                    rb.AddForce(ray.direction * force);
-                }*/
+                    if (grapple.endChain.connectedBody == rb)
+                    {
+                        grapple.endChain.connectedBody = rb;
+                        grapple.endChain.transform.position = rb.transform.position - Vector3.up;
+                        grapple.SwingChange(true);
+                    }
+                    else
+                    {
+                        grapple.endChain.connectedBody = rb;
+                        grapple.endChain.transform.position = rb.transform.position - Vector3.up;
+                        grapple.SwingChange(false);
+                    }
+                                       
+                }
             }
         }
     }
