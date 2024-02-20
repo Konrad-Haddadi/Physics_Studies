@@ -39,11 +39,7 @@ public class Ragtroll : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            RagtrollOn = !RagtrollOn;
-            
+            RagtrollOn = !RagtrollOn;            
         }
-
-        player.controller.enabled = !RagtrollOn;       
-
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController), typeof(Animator))]
+[RequireComponent(typeof(Animator))]
 
 public class Player : MonoBehaviour
 {
@@ -9,9 +9,10 @@ public class Player : MonoBehaviour
     public float pushPower = 2f;
     public float jumpPower = 2f;
 
-    [HideInInspector] public CharacterController controller = null;
     [HideInInspector] public Animator animator = null;
     public Rigidbody rb;
+    public Rigidbody hips;
+    public CapsuleCollider capCollider = null;
 
     public bool isJumping = false;
     public float jumpTimer = 0;
@@ -19,8 +20,9 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        capCollider = GetComponent<CapsuleCollider>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -28,14 +30,33 @@ public class Player : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
 
-        controller.SimpleMove(transform.up * Time.deltaTime);
-        animator.SetFloat("Speed", horizontal * forwardSpeed * Time.deltaTime);      
-        
-        if(Input.GetKey(KeyCode.Space) && !isJumping)
-            Jump();
+        animator.SetFloat("Speed", horizontal);
 
-        if (isJumping)
-            JumpTimer();
+        if(!isJumping)
+            transform.position += transform.forward * horizontal * forwardSpeed * Time.deltaTime;
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isJumping = !isJumping;
+            
+            capCollider.enabled = !isJumping;
+            rb.isKinematic = isJumping;
+
+            if (isJumping)
+            {
+                animator.enabled = !isJumping;
+                hips.velocity += (Vector3.up + transform.forward * horizontal) * (jumpPower * 5);            
+            }
+            else
+            {
+                transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y, transform.position.z);
+                animator.enabled = !isJumping;
+            }            
+        }
+
+
+        animator.SetBool("Fall", isJumping);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -49,16 +70,6 @@ public class Player : MonoBehaviour
         body.AddForce(pushDirection * pushPower, ForceMode.Impulse);
     }
 
-    private void Jump()
-    {
-        controller.enabled = false;
-        animator.enabled = false;
-
-        isJumping = true;
-
-        rb.AddForce( rb.transform.up * (jumpPower * 10), ForceMode.Impulse);
-    }
-
     private void JumpTimer()
     {
         jumpTimer += Time.deltaTime;
@@ -67,11 +78,8 @@ public class Player : MonoBehaviour
 
         if (jumpTimer > 2)
         {
+
             jumpTimer = 0;
-
-            controller.enabled = true;
-            animator.enabled = true;
-
             isJumping = false;
         }
     }
