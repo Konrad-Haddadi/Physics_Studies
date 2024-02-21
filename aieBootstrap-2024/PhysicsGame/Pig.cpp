@@ -70,7 +70,7 @@ void Pig::OnCollisionEnter(RigidBody* _other)
 	float force = glm::abs(GetVelocity().x) + glm::abs(GetVelocity().y);
 	force /= 100;	
 
-	if (force > health)
+	if (force > .5f)
 	{
 		damaged = true;
 		health -= 1;

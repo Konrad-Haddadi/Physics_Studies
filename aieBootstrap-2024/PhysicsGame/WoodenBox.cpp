@@ -7,8 +7,9 @@
 WoodenBox::WoodenBox(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass, glm::vec2 _extents, aie::Texture* _texture, int _health)
 	: Box(_pos, _velocity, _orientation, _mass, _extents, glm::vec4(1, 1, 1, 1)), texture(_texture), health(_health)
 {
-	/*SetLinearDrag(2.0f);
-	SetAngularDrag(2.0f);*/
+	SetLinearDrag(1.0f);
+	SetAngularDrag(.5f);
+	m_friction = .8f;
 }
 
 WoodenBox::~WoodenBox()
@@ -41,7 +42,7 @@ void WoodenBox::OnCollisionEnter(RigidBody* _other)
 
 	if (pig != nullptr)
 	{
-		if (force > 1)
+		if (force > .75f)
 		{
 			pig->health -= 1;
 			pig->damaged = true;

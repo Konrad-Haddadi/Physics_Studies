@@ -4,7 +4,7 @@
 
 RigidBody::RigidBody(ShapeType _shapeID, glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass)
 	: PhysicsObject(_shapeID), m_position(_pos), m_velocity(_velocity), m_orientation(_orientation), m_mass(_mass), 
-	m_angularVelocity(0), m_linearDrag(0.3f), m_angularDrag(0.3f), m_isKinematic(false), m_lastOrientation(0), m_lastPosition(glm::vec2(0))
+	m_angularVelocity(0), m_linearDrag(0.3f), m_angularDrag(0.3f), m_isKinematic(false), m_lastOrientation(0), m_lastPosition(glm::vec2(0)), m_friction(1)
 {
 	m_localX = glm::vec2(0);
 	m_localY = glm::vec2(0);
@@ -136,9 +136,9 @@ void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::ve
 		
 		ApplyForce(-force, _contact - m_position);
 		_actor2->ApplyForce(force, _contact - _actor2->m_position);
+
+		m_velocity *= m_friction;
 	}
-
-
 }
 
 void RigidBody::ApplyContactForces(RigidBody* _body2, glm::vec2 _norm, float _pen)
