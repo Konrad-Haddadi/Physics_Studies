@@ -72,8 +72,11 @@ void PhysicsScene::Update(float _dt)
 		CheckForCollision();		
 	}
 
-	for(auto pActor : m_actors)
-		pActor->Update(_dt);
+	for (auto pActor : m_actors)
+	{
+		if(pActor)
+			pActor->Update(_dt);
+	}
 }
 
 void PhysicsScene::Draw()

@@ -23,6 +23,6 @@ public class TransformCopy : MonoBehaviour
         if(z)
             pos = new Vector3(pos.x, pos.y, other.position.z);
 
-        transform.position = pos;
+        transform.position = Vector3.Lerp(transform.position,pos, Time.deltaTime * 5);
     }
 }

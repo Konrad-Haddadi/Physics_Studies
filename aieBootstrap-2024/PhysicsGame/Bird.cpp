@@ -52,7 +52,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 
 	if (box != nullptr)
 	{
-		if (force > 1)
+		if (force > 1 )
 		{
 			box->health -= damage;
 		}
@@ -63,6 +63,7 @@ void Bird::OnCollisionEnter(RigidBody* _other)
 		if (force > 1)
 		{
 			pig->health -= damage;
+			pig->damaged = true;
 		}	
 	}
 }

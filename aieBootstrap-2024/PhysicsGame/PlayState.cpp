@@ -83,7 +83,12 @@ void PlayState::StateExit()
 void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 {
 	if (current != nullptr)
+	{
+		if (_input->isKeyDown(aie::INPUT_KEY_SPACE) && (current->timer / current->lifeTimer) > 0.5f)
+			current = nullptr;
+
 		return;
+	}
 
 	glm::vec2 mousePos = glm::vec2(_input->getMouseX(), _input->getMouseY());
 	glm::vec2 pos = slingShot->GetPosition() + glm::vec2(slingShot->GetExtents().x * 0.5, slingShot->GetExtents().y * 0.75);
@@ -104,7 +109,7 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 			glm::vec2 force = glm::normalize(pos - mousePos) * (float)(glm::distance(mousePos, pos));
 
-			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("./textures/Red_Bird.png"), 5.f, 2);
+			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("./textures/Red_Bird.png"), 5.f, 1);
 			current = ball;
 			ball->SetLinearDrag(0);
 
@@ -122,25 +127,33 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 		float speed = 40;
 		glm::vec2 startPos(-40, 0);
 
-		float inclination = glm::atan((mousePos.x - pos.x) / (mousePos.y - pos.y));
+		float inclination = 0;
 
-		if (inclination > 0)
+		if (mousePos.y <= pos.y)
 		{
-			inclination = -glm::degrees(inclination) + 90;
-			m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);
+			inclination = glm::atan((mousePos.x - pos.x) / (mousePos.y - pos.y));				
+			inclination = -glm::degrees(inclination);
+			inclination += 90;
 		}
-	}
-	
+		else
+		{
+			inclination = glm::tan((mousePos.y - pos.y)/(pos.x - mousePos.x));
+			inclination = -glm::degrees(inclination);
+			
+		}		
+			
+		m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);		
+	}	
 }
 
 void PlayState::BuildWorld()
 {
-	slingShot = new SlingShot(glm::vec2(200, 175), glm::vec2(50,50), new aie::Texture("./textures/SlingShot.png"));
+	slingShot = new SlingShot(glm::vec2(200, 200), glm::vec2(50,50), new aie::Texture("./textures/SlingShot.png"));
 	slingShot->SetKinematic(true);
 	m_physicsScene->AddActor(slingShot);
 	m_physicsScene->SetGravity(glm::vec2(0, -50));
 
-	m_physicsScene->SetTimeStep(0.005f);
+	m_physicsScene->SetTimeStep(0.01f);
 
 
 	Box* leftWall = new Box(glm::vec2(0, 400), glm::vec2(0), 0, 1, glm::vec2(25, 1300), glm::vec4(1, 1, 1, 1));
@@ -176,46 +189,46 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 		{
 			if (_strings[j][i] == '0')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 1);
-				pig->physicsScene = m_physicsScene;
-
-				pigs.push_back(pig);
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 3);
 
 				rigidBodies[i * numColumns + j] = pig;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
+				pig->physicsScene = m_physicsScene;
+				pigs.push_back(pig);
+
 			}
 			else if (_strings[j][i] == '1')
 			{
-				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/WoodenBox.png"), 2);
-				box->physicsScene = m_physicsScene;
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/WoodenBox.png"), 3);
 
 				rigidBodies[i * numColumns + j] = box;
+				box->physicsScene = m_physicsScene;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '2')
 			{
-				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 1);
-				pig->physicsScene = m_physicsScene;
+				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 3);
 
 				rigidBodies[i * numColumns + j] = pig;
 				rigidBodies[i * numColumns + j]->SetKinematic(true);
+				pig->physicsScene = m_physicsScene;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '3')
 			{
 				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/Stone.png"), 5);
-				box->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = box;
 				rigidBodies[i * numColumns + j]->SetKinematic(true);
+				box->physicsScene = m_physicsScene;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}
 			else if (_strings[j][i] == '4')
 			{
 				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 25.0f, glm::vec2(15 * numColumns, 15), new aie::Texture("./textures/WoodenBox.png"), 5);
-				box->physicsScene = m_physicsScene;
 
 				rigidBodies[i * numColumns + j] = box;
+				box->physicsScene = m_physicsScene;
 				_scene->AddActor(rigidBodies[i * numColumns + j]);
 			}			
 			else
@@ -230,7 +243,7 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 {
 	std::vector<std::string> sb;
 	float spacing = 0;
-	spacing = 30;
+	spacing = 30.1f;
 
 	switch (_level)
 	{
@@ -281,24 +294,27 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 	}
 
 	if(sb.size() > 0)
-		LevelBuilder(m_physicsScene, glm::vec2(500, 175) + _pos, spacing, sb);
+		LevelBuilder(m_physicsScene, glm::vec2(750, 175) + _pos, spacing, sb);
 }
 
 void PlayState::SpawnRandomLevel()
 {
+	m_physicsScene->ClearActors();
+	delete current;
+
+	current = nullptr;
+
+	int val = 1 + (rand() % 2);
+	for (int i = 0; i < val; i++)
+	{
+		LevelSelect(rand() % 4, glm::vec2(220 * i, rand() % 250));
+	}
+
 	/*m_physicsScene->ClearActors();
 
-	int val = 1 + (rand() % 4);
+	int val = 1 + (rand() % 2);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(rand() % 4, glm::vec2(215 * i, rand() % 250));
+		LevelSelect( 0, glm::vec2(220 * i,0));
 	}*/
-
-	m_physicsScene->ClearActors();
-
-	int val = 1 + (rand() % 4);
-	for (int i = 0; i < val; i++)
-	{
-		LevelSelect( 0, glm::vec2(215 * i, rand() % 250));
-	}
 }

@@ -27,7 +27,6 @@ public class Player : MonoBehaviour
     public Canvas canvas = null;
     public Image bar = null; 
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -39,10 +38,12 @@ public class Player : MonoBehaviour
         chain = GetComponent<Chain>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Controls();
+
+        if (chain.swing)
+            RagDoll(Vector3.zero);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -65,9 +66,7 @@ public class Player : MonoBehaviour
         rb.isKinematic = isJumping;
 
         animator.enabled = false;
-        hips.velocity += _force * 10;
-           
-        
+        hips.velocity += _force * 10;                
     }
 
     private void Controls()
@@ -138,6 +137,6 @@ public class Player : MonoBehaviour
         animator.enabled = true;  
 
         animator.SetBool("Fall", isJumping);
-        chain.SwingChange(false);
+        chain.SwingChange(null);
     }
 }

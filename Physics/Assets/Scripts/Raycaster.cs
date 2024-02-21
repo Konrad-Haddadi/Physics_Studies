@@ -30,19 +30,8 @@ public class Raycaster : MonoBehaviour
                 Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
 
                 if(rb)
-                {
-                    if (grapple.endChain.connectedBody == rb)
-                    {
-                        grapple.endChain.connectedBody = null;
-                        grapple.SwingChange(false);
-                    }
-                    else
-                    {
-                        grapple.endChain.connectedBody = rb;
-                        grapple.endChain.transform.position = rb.transform.position - Vector3.up;
-                        grapple.SwingChange(true);
-                    }
-                                       
+                {   
+                    grapple.SwingChange(rb); 
                 }
             }
         }

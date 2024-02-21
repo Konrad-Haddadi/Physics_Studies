@@ -3,8 +3,8 @@
 #include "PhysicsObject.h"
 #include <glm/glm.hpp>
 
-const float MIN_ANGULAR_THRESHOLD = .01f;
-const float MIN_LINEAR_THRESHOLD = .1f;
+const float MIN_ANGULAR_THRESHOLD = .1f;
+const float MIN_LINEAR_THRESHOLD = .5f;
 
 class RigidBody : public PhysicsObject
 {

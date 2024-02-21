@@ -7,6 +7,9 @@ Pig::Pig(glm::vec2 _pos, glm::vec2 _size, glm::vec2 _force, float _mass, aie::Te
 	SetLinearDrag(.5f);
 	SetAngularDrag(.5f);
 	dead = false;
+	damageCounter = 0;
+	damageTimer = 0;
+	damaged = false;
 }
 
 Pig::~Pig()
@@ -16,6 +19,12 @@ Pig::~Pig()
 void Pig::Draw(aie::Renderer2D* _renderer)
 {
 	_renderer->drawSprite(texture, m_position.x, m_position.y, m_radius * 2, m_radius * 2, m_orientation);
+
+	if (damaged)
+	{
+		if (damageTimer > .2f)
+			_renderer->drawCircle(m_position.x, m_position.y, m_radius);
+	}
 }
 
 
@@ -30,7 +39,40 @@ void Pig::Update(float _dt)
 {
 	if (health <= 0)
 	{
-		dead = true;
 		physicsScene->RemoveActor(this);
+		dead = true;	
+		return;
+	}
+
+
+	if (damaged)
+	{
+		if (damageCounter >= 3)
+		{
+			damageTimer = 0;
+			damageCounter = 0;
+			damaged = false;
+		}
+
+		damageTimer += _dt;
+
+		if (damageTimer > .4f)
+		{
+			damageCounter++;
+			damageTimer = 0;
+		}
+	}
+}
+
+
+void Pig::OnCollisionEnter(RigidBody* _other)
+{
+	float force = glm::abs(GetVelocity().x) + glm::abs(GetVelocity().y);
+	force /= 100;	
+
+	if (force > health)
+	{
+		damaged = true;
+		health -= 1;
 	}
 }

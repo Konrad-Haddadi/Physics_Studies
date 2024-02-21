@@ -1,45 +1,64 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Chain : MonoBehaviour
-{
-    public HingeJoint endChain = null;
-    public HingeJoint midChain = null;
-    public HingeJoint handChain = null;
-    public GameObject hand = null;
+{    
+    [SerializeField] private HingeJoint chainLink = null;    
+    [SerializeField] private GameObject hand = null;
 
+    public List<HingeJoint> joints = new();
 
-    bool swing;
+    public bool swing;
 
     private void Start()
     {
         swing = false;
-        endChain.gameObject.SetActive(false);
-        midChain.gameObject.SetActive(false);
-        handChain.gameObject.SetActive(false);
+        chainLink.gameObject.SetActive(false);
     }
 
     private void Update()
     {
         if (swing && Input.GetKeyDown(KeyCode.Space))
-            SwingChange(false);
+            SwingChange(null);
     }
 
-    public void SwingChange(bool _val)
-    {    
-        
-        midChain.transform.position = endChain.transform.position - Vector3.up;
-        handChain.transform.position = midChain.transform.position - Vector3.up;
-          
+    public void SwingChange(Rigidbody targetObj)
+    { 
+        swing = !swing;  
 
-        swing = _val;  
-
-        endChain.gameObject.SetActive(swing);
-        midChain.gameObject.SetActive(swing);
-        handChain.gameObject.SetActive(swing);
-
-
-        if (swing)
+        if(joints.Count > 0)
         {
+            for (int i = 0; i < joints.Count; i++)
+            {
+                Destroy(joints[i].gameObject);
+            }
+        }       
+
+        joints.Clear();       
+
+        if (swing && targetObj)
+        {
+            float dist = Vector3.Distance(targetObj.transform.position, hand.transform.position);
+
+            for (int i = 0; i < dist - 2; i++)
+            {
+                HingeJoint newJoint = Instantiate(chainLink);
+
+                if(i== 0)
+                {
+                    newJoint.connectedBody = targetObj;
+                    newJoint.transform.position = targetObj.transform.position - Vector3.up;
+                }
+                else
+                {
+                    newJoint.connectedBody = joints[i - 1].GetComponent<Rigidbody>();
+                    newJoint.transform.position = joints[i - 1].transform.position - (targetObj.transform.position - hand.transform.position) / dist;
+                }
+
+                newJoint.gameObject.SetActive(true);
+                joints.Add(newJoint);
+            }
+
             HingeJoint joint = hand.GetComponent<HingeJoint>();
 
             if (!joint)
@@ -48,16 +67,7 @@ public class Chain : MonoBehaviour
             joint.anchor = Vector3.up;
             joint.autoConfigureConnectedAnchor = false;
 
-            joint.connectedBody = handChain.GetComponent<Rigidbody>();
-        }
-        else
-            endChain.connectedBody = null;
-
+            joint.connectedBody = joints[joints.Count - 1].GetComponent<Rigidbody>();
+        }       
     }   
-
-    public void ChangePoint()
-    {
-        midChain.transform.position = endChain.transform.position - Vector3.up;
-        handChain.transform.position = midChain.transform.position - Vector3.up;
-    }
 }

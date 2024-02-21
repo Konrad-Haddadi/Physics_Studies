@@ -16,11 +16,16 @@ public:
 	void Draw(aie::Renderer2D* _renderer) override;
 	void Update(float _dt) override;
 	void DrawGizmos(float _alpha) override;
+	void OnCollisionEnter(RigidBody* _other) override;
 
 public:
 	float health;
 	PhysicsScene* physicsScene;
 	aie::Texture* texture;
 	bool dead;
+
+	bool damaged;
+	int damageCounter;
+	float damageTimer;
 };
 

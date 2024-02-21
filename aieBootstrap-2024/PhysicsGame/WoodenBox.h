@@ -20,5 +20,7 @@ public:
 	aie::Texture* texture;
 	int health;
 	PhysicsScene* physicsScene;
+
+	bool dead;
 };
 
