@@ -84,7 +84,7 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 {
 	if (current != nullptr)
 	{
-		if (_input->isKeyDown(aie::INPUT_KEY_SPACE) && (current->timer / current->lifeTimer) > 0.5f)
+		if (_input->isMouseButtonDown(0) && (current->timer / current->lifeTimer) > 0.5f)
 			current = nullptr;
 
 		return;
@@ -199,48 +199,50 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 			{
 				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 3);
 				rigidBodies[i * numColumns + j] = pig;
-				_scene->AddActor(rigidBodies[i * numColumns + j]);
-				pig->physicsScene = m_physicsScene;
+				
+				pig->physicsScene = m_physicsScene;				
 				pigs.push_back(pig);
+				_scene->AddActor(pig);
 
 			}
 			else if (_strings[j][i] == '1')
 			{
 				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/WoodenBox.png"), 3);
 				rigidBodies[i * numColumns + j] = box;
+
 				box->physicsScene = m_physicsScene;
-				_scene->AddActor(rigidBodies[i * numColumns + j]);
+				_scene->AddActor(box);
 			}
 			else if (_strings[j][i] == '2')
 			{
 				Pig* pig = new Pig(_pos + glm::vec2(i, j) * _spacing, glm::vec2(15, 15), glm::vec2(0), 50.0f, new aie::Texture("./textures/Pig_01.png"), 3);
-
 				rigidBodies[i * numColumns + j] = pig;
-				rigidBodies[i * numColumns + j]->SetKinematic(true);
+
 				pig->physicsScene = m_physicsScene;
-				_scene->AddActor(rigidBodies[i * numColumns + j]);
+				pig->SetKinematic(true);
+
+				pigs.push_back(pig);
+				_scene->AddActor(pig);
 			}
 			else if (_strings[j][i] == '3')
 			{
-				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/Stone.png"), 5);
-
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 50.0f, glm::vec2(15, 15), new aie::Texture("./textures/Stone.png"), 3);
 				rigidBodies[i * numColumns + j] = box;
-				rigidBodies[i * numColumns + j]->SetKinematic(true);
+
 				box->physicsScene = m_physicsScene;
-				_scene->AddActor(rigidBodies[i * numColumns + j]);
+				box->SetKinematic(true);
+				_scene->AddActor(box);
 			}
 			else if (_strings[j][i] == '4')
 			{
 				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 25.0f, glm::vec2(15 * numColumns, 15), new aie::Texture("./textures/WoodenBox.png"), 5);
-
 				rigidBodies[i * numColumns + j] = box;
+
 				box->physicsScene = m_physicsScene;
-				_scene->AddActor(rigidBodies[i * numColumns + j]);
-			}			
+				_scene->AddActor(box);
+			}
 			else
 				rigidBodies[i * numColumns + j] = nullptr;
-
-			
 		}
 	}
 }
@@ -249,16 +251,16 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 {
 	std::vector<std::string> sb;
 	float spacing = 0;
-	spacing = 30.1f;
+	spacing = 31.f;
 
 	switch (_level)
 	{
 	case 0:
 
 		sb.push_back("33333");
-		sb.push_back("10101");
-		sb.push_back("1.1.1");
-		sb.push_back("1.1.1");
+		sb.push_back("10.01");
+		sb.push_back("1...1");
+		sb.push_back("1...1");
 		sb.push_back("..4...");
 		
 
@@ -295,6 +297,17 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 		break;
 
+	case 4:
+
+		sb.push_back("1111");
+		sb.push_back("1111");
+		sb.push_back("1111");
+		sb.push_back("1111");
+		sb.push_back("1011");
+
+
+		break;
+
 	default:
 		break;
 	}
@@ -308,10 +321,10 @@ void PlayState::SpawnRandomLevel()
 	current = nullptr;
 	m_physicsScene->ClearActors();
 
-
 	int val = 1 + (rand() % 2);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(rand() % 4, glm::vec2(220 * i, rand() % 250));
+		LevelSelect(0, glm::vec2(220 * i, rand() % 250));
 	}
+
 }

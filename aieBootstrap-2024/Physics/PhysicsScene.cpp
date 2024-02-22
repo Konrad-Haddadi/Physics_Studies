@@ -50,9 +50,9 @@ void PhysicsScene::RemoveActor(PhysicsObject* _actor)
 
 void PhysicsScene::ClearActors()
 {
-	for (int i = 0; i < m_actors.size(); i++)
+	while (m_actors.size() > 0)
 	{
-		delete m_actors[i];		
+		m_actors.erase(m_actors.begin());
 	}
 
 	m_actors.clear();
@@ -64,11 +64,13 @@ void PhysicsScene::Update(float _dt)
 	accumulatedTime += _dt;
 		
 	while (accumulatedTime >= m_timeStep) {
-		for (auto pActor : m_actors) {
-			pActor->FixedUpdate(m_gravity, m_timeStep);			
+		for (auto pActor : m_actors)
+		{
+			if(pActor)
+				pActor->FixedUpdate(m_gravity, m_timeStep);			
 		}
-		accumulatedTime -= m_timeStep;
 
+		accumulatedTime -= m_timeStep;
 		CheckForCollision();		
 	}
 
@@ -83,8 +85,10 @@ void PhysicsScene::Draw()
 {
 	for (auto obj : m_actors)
 	{
-		aie::Input* input = aie::Input::getInstance();
-		
+		if (!obj)
+			return;
+
+		aie::Input* input = aie::Input::getInstance();		
 
 		if(input->isKeyDown(aie::INPUT_KEY_TAB))
 			obj->DrawGizmos(1);
@@ -116,7 +120,6 @@ void PhysicsScene::CheckForCollision()
 {
 	int actorCount = m_actors.size();
 
-
 	for (int outer = 0; outer < actorCount - 1; outer++)
 	{
 		for (int inner = outer + 1; inner < actorCount; inner++)
@@ -124,20 +127,23 @@ void PhysicsScene::CheckForCollision()
 			PhysicsObject* object1 = m_actors[outer];
 			PhysicsObject* object2 = m_actors[inner];
 
-			int shapeId1 = object1->GetShapeID();
-			int shapeId2 = object2->GetShapeID();
-
-			int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
-
-			if (shapeId1 < 0 || shapeId2 < 0)
-				continue;
-
-			fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
-
-			if (collisionFunctionPtr != nullptr)
+			if (object1 && object2)
 			{
-				collisionFunctionPtr(object1, object2);
-			}
+				int shapeId1 = object1->GetShapeID();
+				int shapeId2 = object2->GetShapeID();
+
+				int functionIdx = (shapeId1 * SHAPE_COUNT) + shapeId2;
+
+				if (shapeId1 < 0 || shapeId2 < 0)
+					continue;
+
+				fn collisionFunctionPtr = collisionFunctionArray[functionIdx];
+
+				if (collisionFunctionPtr != nullptr)
+				{
+					collisionFunctionPtr(object1, object2);
+				}
+			}			
 		}
 	}
 }

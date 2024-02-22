@@ -46,14 +46,12 @@ void RigidBody::FixedUpdate(glm::vec2 _gravity, float _timeStep)
 	m_orientation += m_angularVelocity * _timeStep;
 	
 	if (length(m_velocity) < MIN_LINEAR_THRESHOLD)
-	{
 		m_velocity = glm::vec2(0);	
-	}
+	
 
 	if (abs(m_angularVelocity) < MIN_ANGULAR_THRESHOLD)
-	{
 		m_angularVelocity = 0;
-	}
+	
 
 }
 
@@ -70,6 +68,8 @@ void RigidBody::ApplyForce(glm::vec2 _force, glm::vec2 _pos)
 		awake = true;
 
 	m_angularVelocity += (_force.y * _pos.x - _force.x * _pos.y) / GetMoment();
+
+	m_velocity *= m_friction;
 }
 
 void RigidBody::CalculateAxes()
@@ -135,9 +135,7 @@ void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::ve
 			ApplyContactForces(_actor2, normal, _pen);
 		
 		ApplyForce(-force, _contact - m_position);
-		_actor2->ApplyForce(force, _contact - _actor2->m_position);
-
-		m_velocity *= m_friction;
+		_actor2->ApplyForce(force, _contact - _actor2->m_position);		
 	}
 }
 

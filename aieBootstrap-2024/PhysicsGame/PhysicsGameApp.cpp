@@ -71,6 +71,7 @@ void PhysicsGameStates::draw() {
 
 	if(!input->isKeyDown(aie::INPUT_KEY_TAB))
 		m_2dRenderer->drawSprite(background, Application::getWindowWidth() *0.5f, Application::getWindowHeight() * 0.5f, Application::getWindowWidth(), Application::getWindowHeight());
+	
 	m_gameStateManager->Draw();
 	
 	DrawFPS();
