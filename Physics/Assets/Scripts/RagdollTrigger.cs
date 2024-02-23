@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RagdollTrigger : MonoBehaviour
+public class BHitTrigger : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
