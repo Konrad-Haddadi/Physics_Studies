@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 [RequireComponent(typeof(Animator))]
 
@@ -21,7 +22,7 @@ public class Player : MonoBehaviour
     public Rigidbody hips;
     public CapsuleCollider capCollider = null;
 
-    public bool isJumping = false;
+    public bool ragdolled = false;
     public float jumpTimer = 0;
 
     public Canvas canvas = null;
@@ -44,6 +45,15 @@ public class Player : MonoBehaviour
 
         if (chain.swing)
             RagDoll(Vector3.zero);
+
+        if (ragdolled)
+        {
+            if (Input.GetKey(KeyCode.A))
+                rb.AddForce(Vector3.right * -5, ForceMode.Acceleration);
+
+            if (Input.GetKey(KeyCode.D))
+                rb.AddForce(Vector3.right * 5, ForceMode.Acceleration);
+        }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -59,11 +69,11 @@ public class Player : MonoBehaviour
 
     public void RagDoll(Vector3 _force)
     {
-        isJumping = true;
+        ragdolled = true;
         canvas.enabled = false;
 
-        capCollider.enabled = !isJumping;
-        rb.isKinematic = isJumping;
+        capCollider.enabled = !ragdolled;
+        rb.isKinematic = ragdolled;
 
         animator.enabled = false;
         hips.velocity += _force * 10;                
@@ -75,7 +85,7 @@ public class Player : MonoBehaviour
 
         animator.SetFloat("Speed", horizontal);
 
-        if (!isJumping)
+        if (!ragdolled)
             transform.position += transform.forward * horizontal * forwardSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.Space))
@@ -95,7 +105,7 @@ public class Player : MonoBehaviour
                     up = true;
             }
 
-            if (!isJumping)
+            if (!ragdolled)
                 canvas.enabled = true;
 
             bar.fillAmount = jumpPower / jumpPowerMax;
@@ -103,13 +113,13 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            isJumping = !isJumping;
+            ragdolled = !ragdolled;
             canvas.enabled = false;
 
-            capCollider.enabled = !isJumping;
-            rb.isKinematic = isJumping;
+            capCollider.enabled = !ragdolled;
+            rb.isKinematic = ragdolled;
 
-            if (isJumping)
+            if (ragdolled)
             {
                 animator.enabled = false;
                 hips.velocity += transform.up * (jumpPower * 5);
@@ -122,21 +132,21 @@ public class Player : MonoBehaviour
             }
         }
 
-        animator.SetBool("Fall", isJumping);
+        animator.SetBool("Fall", ragdolled);
     }
 
     public void ResetPos()
     {
-        isJumping = false;
+        ragdolled = false;
         canvas.enabled = false;
 
-        capCollider.enabled = !isJumping;
-        rb.isKinematic = isJumping;      
+        capCollider.enabled = !ragdolled;
+        rb.isKinematic = ragdolled;      
         
         transform.position = new Vector3(hips.transform.position.x, transform.position.y, transform.position.z);
         animator.enabled = true;  
 
-        animator.SetBool("Fall", isJumping);
+        animator.SetBool("Fall", ragdolled);
         chain.SwingChange(null);
     }
 }

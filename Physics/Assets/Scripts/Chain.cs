@@ -19,7 +19,7 @@ public class Chain : MonoBehaviour
     private void Update()
     {
         if (swing && Input.GetKeyDown(KeyCode.Space))
-            SwingChange(null);
+            SwingChange(null);     
     }
 
     public void SwingChange(Rigidbody targetObj)
