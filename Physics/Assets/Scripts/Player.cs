@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     public Rigidbody hips;
     public CapsuleCollider capCollider = null;
+    public Camera cam = null;
 
     public bool ragdolled = false;
     public float jumpTimer = 0;
@@ -46,14 +47,18 @@ public class Player : MonoBehaviour
         if (chain.swing)
             RagDoll(Vector3.zero);
 
-        if (ragdolled)
-        {
-            if (Input.GetKey(KeyCode.A))
-                rb.AddForce(Vector3.right * -5, ForceMode.Acceleration);
+        /*    if (ragdolled)
+            {
+                if (Input.GetKey(KeyCode.A))
+                    rb.AddForce(Vector3.right * -5, ForceMode.Acceleration);
 
-            if (Input.GetKey(KeyCode.D))
-                rb.AddForce(Vector3.right * 5, ForceMode.Acceleration);
-        }
+                if (Input.GetKey(KeyCode.D))
+                    rb.AddForce(Vector3.right * 5, ForceMode.Acceleration);
+            }*/
+
+
+       
+
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -76,7 +81,7 @@ public class Player : MonoBehaviour
         rb.isKinematic = ragdolled;
 
         animator.enabled = false;
-        hips.velocity += _force * 10;                
+        hips.velocity += _force * 5;                
     }
 
     private void Controls()
@@ -84,6 +89,16 @@ public class Player : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
 
         animator.SetFloat("Speed", horizontal);
+
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position + Vector3.up, Vector3.down);
+
+        Debug.DrawRay(transform.position + Vector3.up, Vector3.down * 3);
+
+        if (!ragdolled && !Physics.Raycast(ray, out hit, 3))
+        {
+            RagDoll(transform.forward * 10 * horizontal);
+        }
 
         if (!ragdolled)
             transform.position += transform.forward * horizontal * forwardSpeed * Time.deltaTime;
