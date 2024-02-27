@@ -6,6 +6,8 @@ public class TransformCopy : MonoBehaviour
 {
     [SerializeField] private Transform other;
 
+    [SerializeField] private Vector3 offset = new Vector3();
+
     [SerializeField] private bool x = false;
     [SerializeField] private bool y = false;
     [SerializeField] private bool z = false;
@@ -23,6 +25,6 @@ public class TransformCopy : MonoBehaviour
         if(z)
             pos = new Vector3(pos.x, pos.y, other.position.z);
 
-        transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * 5);
+        transform.position = Vector3.Lerp(transform.position, pos + offset, Time.deltaTime * 5);
     }
 }

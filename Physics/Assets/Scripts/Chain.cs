@@ -42,7 +42,7 @@ public class Chain : MonoBehaviour
 
             for (int i = 0; i < dist - 2; i++)
             {
-                HingeJoint newJoint = Instantiate(chainLink);
+                HingeJoint newJoint = Instantiate(chainLink, chainLink.transform.position, chainLink.transform.rotation);
 
                 if(i== 0)
                 {

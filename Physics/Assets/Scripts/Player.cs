@@ -1,7 +1,5 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 [RequireComponent(typeof(Animator))]
 
@@ -15,6 +13,7 @@ public class Player : MonoBehaviour
     public float pushPower = 2f;
     public float jumpPower = 2f;
 
+    public CheckPoint lastCheckPoint;
     Chain chain;
 
     [HideInInspector] public Animator animator = null;
@@ -46,19 +45,6 @@ public class Player : MonoBehaviour
 
         if (chain.swing)
             RagDoll(Vector3.zero);
-
-        /*    if (ragdolled)
-            {
-                if (Input.GetKey(KeyCode.A))
-                    rb.AddForce(Vector3.right * -5, ForceMode.Acceleration);
-
-                if (Input.GetKey(KeyCode.D))
-                    rb.AddForce(Vector3.right * 5, ForceMode.Acceleration);
-            }*/
-
-
-       
-
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -81,7 +67,7 @@ public class Player : MonoBehaviour
         rb.isKinematic = ragdolled;
 
         animator.enabled = false;
-        hips.velocity += _force * 5;                
+        hips.velocity += _force;                
     }
 
     private void Controls()
@@ -97,7 +83,7 @@ public class Player : MonoBehaviour
 
         if (!ragdolled && !Physics.Raycast(ray, out hit, 3))
         {
-            RagDoll(transform.forward * 10 * horizontal);
+            RagDoll(transform.forward * 50 * horizontal);
         }
 
         if (!ragdolled)
@@ -142,6 +128,7 @@ public class Player : MonoBehaviour
             }
             else
             {
+                rb.velocity = new();
                 transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y, transform.position.z);
                 animator.enabled = true;
             }
@@ -155,13 +142,33 @@ public class Player : MonoBehaviour
         ragdolled = false;
         canvas.enabled = false;
 
+
         capCollider.enabled = !ragdolled;
         rb.isKinematic = ragdolled;      
         
-        transform.position = new Vector3(hips.transform.position.x, transform.position.y, transform.position.z);
         animator.enabled = true;  
 
         animator.SetBool("Fall", ragdolled);
         chain.SwingChange(null);
+
+        hips.transform.position = lastCheckPoint.transform.position;
+        transform.position = lastCheckPoint.transform.position;
+
+        Debug.Log("Hip Position: " + hips.transform.position);
+        Debug.Log("Transform Position: " + transform.position);
+    }
+
+    public void SetNewCheckPoint(CheckPoint _new)
+    {
+        if(lastCheckPoint)
+        {
+            if (lastCheckPoint.name == _new.name)
+                return;
+
+            Destroy(lastCheckPoint.gameObject);
+            lastCheckPoint = null;
+        }
+
+        lastCheckPoint = _new;
     }
 }
