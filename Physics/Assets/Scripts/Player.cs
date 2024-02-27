@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     public float jumpPower = 2f;
 
     public CheckPoint lastCheckPoint;
-    Chain chain;
+    //Chain chain;
 
     [HideInInspector] public Animator animator = null;
     public Rigidbody rb;
@@ -36,15 +36,15 @@ public class Player : MonoBehaviour
         jumpPowerMax = jumpPower;
         up = false;
         canvas.enabled = false;
-        chain = GetComponent<Chain>();
+        //chain = GetComponent<Chain>();
     }
 
     void Update()
     {
         Controls();
 
-        if (chain.swing)
-            RagDoll(Vector3.zero);
+      /*  if (chain.swing)
+            RagDoll(Vector3.zero);*/
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
         animator.enabled = true;  
 
         animator.SetBool("Fall", ragdolled);
-        chain.SwingChange(null);
+       // chain.SwingChange(null);
 
         hips.transform.position = lastCheckPoint.transform.position;
         transform.position = lastCheckPoint.transform.position;
@@ -159,16 +159,7 @@ public class Player : MonoBehaviour
     }
 
     public void SetNewCheckPoint(CheckPoint _new)
-    {
-        if(lastCheckPoint)
-        {
-            if (lastCheckPoint.name == _new.name)
-                return;
-
-            Destroy(lastCheckPoint.gameObject);
-            lastCheckPoint = null;
-        }
-
+    {   
         lastCheckPoint = _new;
     }
 }

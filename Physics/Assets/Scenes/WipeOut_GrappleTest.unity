@@ -884,6 +884,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 909287171}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &938364477 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7319825609087680209, guid: ef92132d6aeb73e40bc98842499585be, type: 3}
+  m_PrefabInstance: {fileID: 3830549180277704758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1026752178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,6 +1048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   other: {fileID: 4341065987512944354}
+  offset: {x: 0, y: 0, z: 0}
   x: 1
   y: 0
   z: 0
@@ -1578,6 +1584,10 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 1943821670}
+    - target: {fileID: 3830549181014670711, guid: ef92132d6aeb73e40bc98842499585be, type: 3}
+      propertyPath: hand
+      value: 
+      objectReference: {fileID: 938364477}
     - target: {fileID: 5046623377776092071, guid: ef92132d6aeb73e40bc98842499585be, type: 3}
       propertyPath: m_Name
       value: Beta
