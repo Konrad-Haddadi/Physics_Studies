@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,12 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private ParticleSystem fireworks;
 
+    [Header("Time Starter")]
+    [SerializeField] private TMP_Text textTimer;
+    [SerializeField] private GameObject countDownSound;
+    [SerializeField] private Image loopTimer;
+    [SerializeField] private GameObject timerGroup;
+    
     private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     private CheckPointManager checkPointManager;
 
@@ -32,6 +39,8 @@ public class MainMenu : MonoBehaviour
         play.onClick.AddListener(PlayGame);
 
         checkPointManager = FindObjectOfType<CheckPointManager>();
+        timerGroup.gameObject.SetActive(false);
+        
     }
 
 
@@ -42,13 +51,11 @@ public class MainMenu : MonoBehaviour
         play.gameObject.SetActive(false);
         quit.gameObject.SetActive(false);
 
-        Instantiate(fireworks);
-
-        player.animator.SetBool("Play", true);
         player.rb.isKinematic = false;
 
         player.transform.position = spawnPoint.transform.position;
 
+        timerGroup.gameObject.SetActive(true);
         StartCoroutine(CameraMove_CR(gameLocation));
 
     }
@@ -58,7 +65,6 @@ public class MainMenu : MonoBehaviour
         play.gameObject.SetActive(true);
         quit.gameObject.SetActive(true);
 
-        player.animator.SetBool("Play", false);
         player.rb.isKinematic = true;       
 
         StartCoroutine(CameraMove_CR(menuLocation));
@@ -67,10 +73,10 @@ public class MainMenu : MonoBehaviour
     public IEnumerator CameraMove_CR(GameObject _targetPos)
     {
         float timer = 0;
-        float timeMax = 1;
+        float timeMax = 3;
 
         while (timer < timeMax)
-        {
+        {            
             Vector3 startCamPos = gameCamera.transform.position;
             Quaternion startCamRot = gameCamera.transform.rotation;
 
@@ -80,6 +86,17 @@ public class MainMenu : MonoBehaviour
 
             while (timer < timeMax)
             {
+                int text = (int)(timeMax + .9f - timer);
+
+                if (timer <= 1)
+                    loopTimer.fillAmount = timer / (timeMax - 2);
+                else if (timer <= 2)
+                    loopTimer.fillAmount = timer - 1/ (timeMax - 2);
+                else if (timer <= 3)
+                    loopTimer.fillAmount = timer - 2 / (timeMax - 2);
+
+                textTimer.text = text.ToString();
+
                 float factor = Mathf.Clamp01(timer / timeMax);
                 float t = tweenCurve.Evaluate(factor);
 
@@ -91,6 +108,13 @@ public class MainMenu : MonoBehaviour
                 timer += Time.deltaTime;
             }
 
+
+            player.animator.SetBool("Play", !player.animator.GetBool("Play"));
+
+            if(player.animator.GetBool("Play"))
+                Instantiate(fireworks);
+
+            timerGroup.gameObject.SetActive(false);
             gameCamera.GetComponent<TransformCopy>().enabled = !gameCamera.GetComponent<TransformCopy>().enabled;
             yield return null;
         }
