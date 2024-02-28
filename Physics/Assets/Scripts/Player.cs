@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public int layerMask;
+
     private float jumpPowerMax;
     private bool up;
 
@@ -36,15 +38,20 @@ public class Player : MonoBehaviour
         jumpPowerMax = jumpPower;
         up = false;
         canvas.enabled = false;
-        //chain = GetComponent<Chain>();
+
+        string[] layers = { "Floor" };
+        layerMask = LayerMask.GetMask(layers);
     }
 
     void Update()
     {
-        Controls();
+        if(!animator.GetBool("Play"))
+        {
+            rb.isKinematic = true;
+            return;
+        }        
 
-      /*  if (chain.swing)
-            RagDoll(Vector3.zero);*/
+        Controls();
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -77,7 +84,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("Speed", horizontal);
 
         RaycastHit hit;
-        Ray ray = new Ray(transform.position + Vector3.up, Vector3.down);
+        Ray ray = new Ray(hips.position + Vector3.up, Vector3.down);
 
         Debug.DrawRay(transform.position + Vector3.up, Vector3.down * 3);
 
@@ -114,6 +121,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            
+            if (!Physics.Raycast(ray, out hit, 3, layerMask))
+                return;
+            
+
             ragdolled = !ragdolled;
             canvas.enabled = false;
 
@@ -149,7 +161,6 @@ public class Player : MonoBehaviour
         animator.enabled = true;  
 
         animator.SetBool("Fall", ragdolled);
-       // chain.SwingChange(null);
 
         hips.transform.position = lastCheckPoint.transform.position;
         transform.position = lastCheckPoint.transform.position;

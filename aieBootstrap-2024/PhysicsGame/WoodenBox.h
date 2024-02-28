@@ -6,7 +6,7 @@
 class WoodenBox : public Box
 {
 public:
-	WoodenBox(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass,	glm::vec2 _extents, aie::Texture* _texture, int _health);
+	WoodenBox(glm::vec2 _pos, glm::vec2 _velocity, float _orientation, float _mass,	glm::vec2 _extents, aie::Texture* _texture, int _health, bool _invincible = false);
 	~WoodenBox();
 
 	void Draw(aie::Renderer2D* _renderer) override;
@@ -20,7 +20,7 @@ public:
 	aie::Texture* texture;
 	int health;
 	PhysicsScene* physicsScene;
-
+	bool invincible;
 	bool dead;
 };
 

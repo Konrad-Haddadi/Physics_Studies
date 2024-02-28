@@ -111,7 +111,14 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 			float speed = 40;
 			glm::vec2 startPos(-40, 0);
 
-			glm::vec2 force = glm::normalize(pos - mousePos) * (float)(glm::distance(mousePos, pos));
+			float dist = glm::distance(mousePos, pos);
+
+			if (dist > 1000)
+				dist = 1000;
+
+			std::cout << dist << std::endl;
+
+			glm::vec2 force = glm::normalize(pos - mousePos) * dist;
 
 			Bird* ball = new Bird(pos, glm::vec2(5, 5), force, 10, new aie::Texture("./textures/Red_Bird.png"), 5.f, 1);
 			current = ball;
@@ -241,6 +248,15 @@ void PlayState::LevelBuilder(PhysicsScene* _scene, glm::vec2 _pos, float _spacin
 				box->physicsScene = m_physicsScene;
 				_scene->AddActor(box);
 			}
+			else if (_strings[j][i] == '5')
+			{
+				WoodenBox* box = new WoodenBox(_pos + glm::vec2(i, j) * _spacing, glm::vec2(0), 0, 25.0f, glm::vec2(15 * numColumns, 15), new aie::Texture("./textures/Stone.png"), 1, true);
+				rigidBodies[i * numColumns + j] = box;
+
+				box->physicsScene = m_physicsScene;
+				box->SetKinematic(true);
+				_scene->AddActor(box);
+			}
 			else
 				rigidBodies[i * numColumns + j] = nullptr;
 		}
@@ -268,7 +284,7 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 	case 1:
 
-		sb.push_back("333333");
+		sb.push_back("...5..");
 		sb.push_back("..00..");
 		sb.push_back("......");
 		sb.push_back("..00..");		
@@ -308,6 +324,17 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 		break;
 
+	case 5:
+
+		sb.push_back("..5...");
+		sb.push_back("..00..");
+		sb.push_back("......");
+		sb.push_back("..00..");
+
+
+
+		break;
+
 	default:
 		break;
 	}
@@ -324,7 +351,7 @@ void PlayState::SpawnRandomLevel()
 	int val = 1 + (rand() % 2);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(0, glm::vec2(220 * i, rand() % 250));
+		LevelSelect(rand() % 6, glm::vec2(220 * i, rand() % 250));
 	}
 
 }
