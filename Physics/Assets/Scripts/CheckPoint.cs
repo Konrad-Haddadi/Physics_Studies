@@ -15,6 +15,13 @@ public class CheckPoint : MonoBehaviour
     private void Start()
     {
         rope.capsuleColliders[0] = FindObjectOfType<Player>().capCollider;
+        FindObjectOfType<CheckPointManager>().CheckPoints.Add(this);
+    }
+
+    public void Restart()
+    {
+        triggered = false;
+        rope.gameObject.SetActive(true);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,13 +35,13 @@ public class CheckPoint : MonoBehaviour
 
             triggered = true;
             player.SetNewCheckPoint(this);
-            Destroy(rope.gameObject);
+            rope.gameObject.SetActive(false);
 
             Instantiate(particles, rightStand.transform.position, particles.transform.rotation);
             Instantiate(particles, leftStand.transform.position, particles.transform.rotation);
 
             if (win)
-                Application.Quit();
+                FindAnyObjectByType<MainMenu>().ReturnToMenu();
         }
     }
 }

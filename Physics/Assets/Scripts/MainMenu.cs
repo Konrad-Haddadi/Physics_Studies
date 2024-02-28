@@ -4,14 +4,24 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("Menu Buttons")]
     [SerializeField] private Button play;
     [SerializeField] private Button quit;
+
+    [Header("Camera Position")]
     [SerializeField] private Camera gameCamera;
-    [SerializeField] private GameObject targetLocation;
+    [SerializeField] private GameObject gameLocation;
+    [SerializeField] private GameObject menuLocation;
+
+    [Header("Player Reset Point")]
+    [SerializeField] private GameObject spawnPoint;
+    [SerializeField] private Player player;
+
     [SerializeField] private ParticleSystem fireworks;
 
-    [SerializeField] private Player player;
-    [SerializeField] private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    private CheckPointManager checkPointManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,21 +30,41 @@ public class MainMenu : MonoBehaviour
 
         quit.onClick.AddListener(Application.Quit);
         play.onClick.AddListener(PlayGame);
+
+        checkPointManager = FindObjectOfType<CheckPointManager>();
     }
 
 
     private void PlayGame()
     {
-        Instantiate(fireworks);
+        checkPointManager.ResetGame();
+
         play.gameObject.SetActive(false);
         quit.gameObject.SetActive(false);
 
+        Instantiate(fireworks);
+
         player.animator.SetBool("Play", true);
         player.rb.isKinematic = false;
-        StartCoroutine(CameraMove_CR());
+
+        player.transform.position = spawnPoint.transform.position;
+
+        StartCoroutine(CameraMove_CR(gameLocation));
+
     }
 
-    public IEnumerator CameraMove_CR()
+    public void ReturnToMenu()
+    {
+        play.gameObject.SetActive(true);
+        quit.gameObject.SetActive(true);
+
+        player.animator.SetBool("Play", false);
+        player.rb.isKinematic = true;       
+
+        StartCoroutine(CameraMove_CR(menuLocation));
+    }
+
+    public IEnumerator CameraMove_CR(GameObject _targetPos)
     {
         float timer = 0;
         float timeMax = 1;
@@ -44,8 +74,8 @@ public class MainMenu : MonoBehaviour
             Vector3 startCamPos = gameCamera.transform.position;
             Quaternion startCamRot = gameCamera.transform.rotation;
 
-            Vector3 endCamPos = targetLocation.transform.position;
-            Quaternion endCamRot = targetLocation.transform.rotation;
+            Vector3 endCamPos = _targetPos.transform.position;
+            Quaternion endCamRot = _targetPos.transform.rotation;
 
 
             while (timer < timeMax)
@@ -61,8 +91,7 @@ public class MainMenu : MonoBehaviour
                 timer += Time.deltaTime;
             }
 
-            gameCamera.GetComponent<TransformCopy>().enabled = true;
-
+            gameCamera.GetComponent<TransformCopy>().enabled = !gameCamera.GetComponent<TransformCopy>().enabled;
             yield return null;
         }
     }
