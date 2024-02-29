@@ -23,12 +23,15 @@ public class MainMenu : MonoBehaviour
     [Header("Time Starter")]
     [SerializeField] private TMP_Text textTimer;
     [SerializeField] private GameObject countDownSound;
+    [SerializeField] private GameObject countDownSoundEnd;
     [SerializeField] private Image loopTimer;
     [SerializeField] private GameObject timerGroup;
     
     private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     private CheckPointManager checkPointManager;
 
+    bool startingGame = false;
+    int spawnCounterVal = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -56,21 +59,25 @@ public class MainMenu : MonoBehaviour
         player.transform.position = spawnPoint.transform.position;
 
         timerGroup.gameObject.SetActive(true);
-        StartCoroutine(CameraMove_CR(gameLocation));
+        startingGame = true;
+        StartCoroutine(CameraMove_CR(gameLocation, true));
 
     }
 
     public void ReturnToMenu()
     {
+        player.animator.SetBool("Play", !player.animator.GetBool("Play"));
+
+
         play.gameObject.SetActive(true);
         quit.gameObject.SetActive(true);
 
         player.rb.isKinematic = true;       
 
-        StartCoroutine(CameraMove_CR(menuLocation));
+        StartCoroutine(CameraMove_CR(menuLocation, false));
     }
 
-    public IEnumerator CameraMove_CR(GameObject _targetPos)
+    public IEnumerator CameraMove_CR(GameObject _targetPos, bool _reset)
     {
         float timer = 0;
         float timeMax = 3;
@@ -86,16 +93,26 @@ public class MainMenu : MonoBehaviour
 
             while (timer < timeMax)
             {
-                int text = (int)(timeMax + .9f - timer);
+                if(startingGame)
+                {
+                    int text = (int)(timeMax + .9f - timer);
 
-                if (timer <= 1)
-                    loopTimer.fillAmount = timer / (timeMax - 2);
-                else if (timer <= 2)
-                    loopTimer.fillAmount = timer - 1/ (timeMax - 2);
-                else if (timer <= 3)
-                    loopTimer.fillAmount = timer - 2 / (timeMax - 2);
+                    if(timer > spawnCounterVal)
+                    {
+                        spawnCounterVal++;
+                        Instantiate(countDownSound);
+                    }
 
-                textTimer.text = text.ToString();
+                    if (timer <= 1)
+                        loopTimer.fillAmount = timer / (timeMax - 2);
+                    else if (timer <= 2)
+                        loopTimer.fillAmount = timer - 1 / (timeMax - 2);
+                    else if (timer <= 3)
+                        loopTimer.fillAmount = timer - 2 / (timeMax - 2);
+
+                    textTimer.text = text.ToString();
+                }
+               
 
                 float factor = Mathf.Clamp01(timer / timeMax);
                 float t = tweenCurve.Evaluate(factor);
@@ -109,11 +126,21 @@ public class MainMenu : MonoBehaviour
             }
 
 
-            player.animator.SetBool("Play", !player.animator.GetBool("Play"));
+            if(_reset)
+            {
+                player.animator.SetBool("Play", !player.animator.GetBool("Play"));
 
-            if(player.animator.GetBool("Play"))
-                Instantiate(fireworks);
+                if (player.animator.GetBool("Play"))
+                {
+                    Instantiate(countDownSoundEnd);
+                    Instantiate(fireworks);
+                    startingGame = false;
+                }
+            }
 
+            spawnCounterVal= 0;
+                      
+            
             timerGroup.gameObject.SetActive(false);
             gameCamera.GetComponent<TransformCopy>().enabled = !gameCamera.GetComponent<TransformCopy>().enabled;
             yield return null;

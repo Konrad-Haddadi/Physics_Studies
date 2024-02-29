@@ -15,7 +15,7 @@ public class RagdollHitTrigger : MonoBehaviour
 
         if (player)
         {
-            player.RagDoll(rb.velocity);
+            player.RagDoll(rb.angularVelocity);
         }
     }
 }

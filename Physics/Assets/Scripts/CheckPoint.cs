@@ -41,7 +41,9 @@ public class CheckPoint : MonoBehaviour
             Instantiate(particles, leftStand.transform.position, particles.transform.rotation);
 
             if (win)
+            {
                 FindAnyObjectByType<MainMenu>().ReturnToMenu();
+            }
         }
     }
 }
