@@ -26,7 +26,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject countDownSoundEnd;
     [SerializeField] private Image loopTimer;
     [SerializeField] private GameObject timerGroup;
-    
+
+    [Header("Cheering")]
+    [SerializeField] private GameObject cheering;
+
     private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     private CheckPointManager checkPointManager;
 
@@ -60,6 +63,8 @@ public class MainMenu : MonoBehaviour
 
         timerGroup.gameObject.SetActive(true);
         startingGame = true;
+
+        Instantiate(cheering);
         StartCoroutine(CameraMove_CR(gameLocation, true));
 
     }

@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\RagdollHitTrigger.cs" />
     <Compile Include="Assets\Scripts\CannonBall.cs" />
     <Compile Include="Assets\Scripts\Ragtroll.cs" />
+    <Compile Include="Assets\Scripts\SoundDestroy.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Raycaster.cs" />
     <Compile Include="Assets\Scripts\AwakeRandomTime.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Assets\Scripts\TransformCopy.cs" />
     <Compile Include="Assets\Scripts\CheckPoint.cs" />
     <Compile Include="Assets\Scripts\Spawner.cs" />
-    <Compile Include="Assets\Scripts\SoundDestroy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
