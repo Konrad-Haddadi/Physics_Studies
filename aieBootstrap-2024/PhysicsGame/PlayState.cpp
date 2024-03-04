@@ -96,6 +96,12 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 	if (_input->isMouseButtonDown(0))
 		pull = true;
 
+
+	float dist = glm::distance(mousePos, pos);
+
+	if (dist > 500)
+		dist = 500;
+
 	if(_input->isMouseButtonUp(0))
 	{
 		if (pull)
@@ -111,10 +117,6 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 			float speed = 40;
 			glm::vec2 startPos(-40, 0);
 
-			float dist = glm::distance(mousePos, pos);
-
-			if (dist > 1000)
-				dist = 1000;
 
 			std::cout << dist << std::endl;
 
@@ -148,14 +150,14 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 			inclination = glm::atan((mousePos.x - pos.x) / (mousePos.y - pos.y));				
 			inclination = -glm::degrees(inclination);
 			inclination += 90;
-			m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);
+			m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, dist, -m_physicsScene->GetGravity().y);
 
 		}
 		else
 		{
 			inclination = glm::tan((mousePos.y - pos.y)/(pos.x - mousePos.x));
 			inclination = -glm::degrees(inclination);
-			m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, glm::distance(mousePos, pos), -m_physicsScene->GetGravity().y);
+			m_gameStateManager->physicsApp->AngryBirdShootLine(pos, inclination, dist, -m_physicsScene->GetGravity().y);
 		}		
 			
 	}	
@@ -280,18 +282,9 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 		sb.push_back("..4...");
 		
 
-		break;
+		break;	
 
 	case 1:
-
-		sb.push_back("...5..");
-		sb.push_back("..00..");
-		sb.push_back("......");
-		sb.push_back("..00..");		
-
-		break;
-
-	case 2:
 
 		sb.push_back("3.33.3");
 		sb.push_back("1.00.1");
@@ -302,7 +295,7 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 		break;
 
-	case 3:
+	case 2:
 
 		sb.push_back("33333");
 		sb.push_back("11.1.");
@@ -311,24 +304,12 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 		sb.push_back("1....");
 
 
-		break;
+		break;	
 
-	case 4:
-
-		sb.push_back("1111");
-		sb.push_back("1111");
-		sb.push_back("1111");
-		sb.push_back("1111");
-		sb.push_back("1011");
-
-
-		break;
-
-	case 5:
+	case 3:
 
 		sb.push_back("..5...");
 		sb.push_back("..00..");
-		sb.push_back("......");
 		sb.push_back("..00..");
 
 
@@ -348,10 +329,12 @@ void PlayState::SpawnRandomLevel()
 	current = nullptr;
 	m_physicsScene->ClearActors();
 
-	int val = 1 + (rand() % 2);
+	/*int val = 1 + (rand() % 2);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(rand() % 6, glm::vec2(220 * i, rand() % 250));
-	}
+		LevelSelect(rand() % 4, glm::vec2(220 * i, rand() % 250));
+	}*/
 
+	LevelSelect(3, glm::vec2(220, rand() % 250));
+	LevelSelect(2, glm::vec2(220 * 2, rand() % 250));
 }
