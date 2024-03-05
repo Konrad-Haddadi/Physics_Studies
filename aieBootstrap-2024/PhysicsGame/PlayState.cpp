@@ -113,8 +113,8 @@ void PlayState::AngryBirdsControls(aie::Input* _input, float _dt)
 
 			float dist = glm::distance(mousePos, pos);
 
-			if (dist > 1000)
-				dist = 1000;
+			if (dist > 500)
+				dist = 500;
 
 			std::cout << dist << std::endl;
 
@@ -293,10 +293,10 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 
 	case 2:
 
-		sb.push_back("3.33.3");
-		sb.push_back("1.00.1");
-		sb.push_back("1....1");
-		sb.push_back("1....1");
+		sb.push_back("..33.3");
+		sb.push_back("..00.1");
+		sb.push_back(".....1");
+		sb.push_back(".....1");
 		sb.push_back("......");
 		sb.push_back("......");
 
@@ -311,20 +311,9 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 		sb.push_back("1....");
 
 
-		break;
+		break;	
 
 	case 4:
-
-		sb.push_back("1111");
-		sb.push_back("1111");
-		sb.push_back("1111");
-		sb.push_back("1111");
-		sb.push_back("1011");
-
-
-		break;
-
-	case 5:
 
 		sb.push_back("..5...");
 		sb.push_back("..00..");
@@ -351,7 +340,7 @@ void PlayState::SpawnRandomLevel()
 	int val = 1 + (rand() % 2);
 	for (int i = 0; i < val; i++)
 	{
-		LevelSelect(rand() % 6, glm::vec2(220 * i, rand() % 250));
+		LevelSelect(rand() % 5, glm::vec2(220 * i, rand() % 250));
 	}
 
 }
