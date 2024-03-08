@@ -41,7 +41,8 @@ public class MainMenu : MonoBehaviour
     {
         gameCamera.GetComponent<TransformCopy>().enabled = false;
 
-        quit.onClick.AddListener(Application.Quit);
+        if(quit)
+            quit.onClick.AddListener(Application.Quit);
         play.onClick.AddListener(PlayGame);
 
         checkPointManager = FindObjectOfType<CheckPointManager>();
@@ -55,7 +56,8 @@ public class MainMenu : MonoBehaviour
         checkPointManager.ResetGame();
 
         play.gameObject.SetActive(false);
-        quit.gameObject.SetActive(false);
+        if(quit)
+            quit.gameObject.SetActive(false);
 
         player.rb.isKinematic = false;
 
@@ -75,7 +77,9 @@ public class MainMenu : MonoBehaviour
 
 
         play.gameObject.SetActive(true);
-        quit.gameObject.SetActive(true);
+
+        if(quit)
+            quit.gameObject.SetActive(true);
 
         player.rb.isKinematic = true;       
 

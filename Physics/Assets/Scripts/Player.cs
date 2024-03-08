@@ -8,12 +8,11 @@ public class Player : MonoBehaviour
     public int layerMask;
 
     private float jumpPowerMax;
-    private bool up;
 
     public float forwardSpeed = 160f;
     public float rotationSpeed = 16f;
     public float pushPower = 2f;
-    public float jumpPower = 2f;
+    public float jumpPower = 0;
 
     public CheckPoint lastCheckPoint;
     //Chain chain;
@@ -36,11 +35,12 @@ public class Player : MonoBehaviour
         capCollider = GetComponent<CapsuleCollider>();
         rb = GetComponent<Rigidbody>();
         jumpPowerMax = jumpPower;
-        up = false;
         canvas.enabled = false;
 
         string[] layers = { "Floor" };
         layerMask = LayerMask.GetMask(layers);
+
+        bar.fillAmount = 0;
     }
 
     void Update()
@@ -97,21 +97,11 @@ public class Player : MonoBehaviour
             transform.position += transform.forward * horizontal * forwardSpeed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.Space))
-        {
-            if (up)
-            {
-                jumpPower += Time.deltaTime * 20;
+        {            
+            jumpPower += Time.deltaTime * 20;
 
-                if (jumpPower >= jumpPowerMax)
-                    up = false;
-            }
-            else
-            {
-                jumpPower -= Time.deltaTime * 20;
-
-                if (jumpPower <= 0)
-                    up = true;
-            }
+            if (jumpPower >= jumpPowerMax)
+                jumpPower = jumpPowerMax;                     
 
             if (!ragdolled)
                 canvas.enabled = true;
@@ -120,12 +110,10 @@ public class Player : MonoBehaviour
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
-        {
-            
+        {            
             if (!Physics.Raycast(ray, out hit, 3, layerMask))
                 return;
             
-
             ragdolled = !ragdolled;
             canvas.enabled = false;
 
@@ -144,6 +132,9 @@ public class Player : MonoBehaviour
                 transform.position = new Vector3(hips.transform.position.x, hips.transform.position.y, transform.position.z);
                 animator.enabled = true;
             }
+
+            jumpPower = 0;
+
         }
 
         animator.SetBool("Fall", ragdolled);
