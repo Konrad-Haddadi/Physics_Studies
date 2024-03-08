@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,17 @@ public class MainMenu : MonoBehaviour
     [Header("Cheering")]
     [SerializeField] private GameObject cheering;
 
+    [Header("Timer")]
+    [SerializeField] private TMP_Text counter = null;
+    [SerializeField] private Image counterBar = null;
+    [SerializeField] private Image counterBarBack = null;
+
+    [SerializeField] private int timeMax = 120;
+    [SerializeField] private int scoreMultiplier = 250;
+
+    [SerializeField] private bool startTimer;
+    [SerializeField] private float timer = 0;
+
     private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     private CheckPointManager checkPointManager;
 
@@ -50,19 +62,37 @@ public class MainMenu : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if(startTimer)
+        {
+            timer += Time.deltaTime;
+
+            counter.text = "";
+
+            counter.text = ((timeMax - (int)timer) * scoreMultiplier).ToString(); 
+
+            counterBar.fillAmount = (timeMax - timer) / timeMax;
+        }
+
+        counter.gameObject.SetActive(startTimer);
+        counterBar.gameObject.SetActive(counter.gameObject.activeSelf);
+        counterBarBack.gameObject.SetActive(counter.gameObject.activeSelf);
+
+    }
 
     private void PlayGame()
     {
         checkPointManager.ResetGame();
+        timer = 0;
 
         play.gameObject.SetActive(false);
+
         if(quit)
             quit.gameObject.SetActive(false);
 
         player.rb.isKinematic = false;
-
         player.transform.position = spawnPoint.transform.position;
-
         timerGroup.gameObject.SetActive(true);
         startingGame = true;
 
@@ -74,6 +104,7 @@ public class MainMenu : MonoBehaviour
     public void ReturnToMenu()
     {
         player.animator.SetBool("Play", !player.animator.GetBool("Play"));
+        startTimer = false;
 
 
         play.gameObject.SetActive(true);
@@ -138,6 +169,8 @@ public class MainMenu : MonoBehaviour
             if(_reset)
             {
                 player.animator.SetBool("Play", !player.animator.GetBool("Play"));
+                startTimer = true;
+
 
                 if (player.animator.GetBool("Play"))
                 {
@@ -148,8 +181,7 @@ public class MainMenu : MonoBehaviour
             }
 
             spawnCounterVal= 0;
-                      
-            
+
             timerGroup.gameObject.SetActive(false);
             gameCamera.GetComponent<TransformCopy>().enabled = !gameCamera.GetComponent<TransformCopy>().enabled;
             yield return null;

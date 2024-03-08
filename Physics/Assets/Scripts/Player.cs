@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
         string[] layers = { "Floor" };
         layerMask = LayerMask.GetMask(layers);
 
+        jumpPower = 0;
         bar.fillAmount = 0;
     }
 
