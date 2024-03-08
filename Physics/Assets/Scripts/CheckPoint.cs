@@ -42,7 +42,7 @@ public class CheckPoint : MonoBehaviour
 
             if (win)
             {
-                FindAnyObjectByType<MainMenu>().ReturnToMenu();
+                FindObjectOfType<MainMenu>().ReturnToMenu();
             }
         }
     }

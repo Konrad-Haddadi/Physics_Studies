@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/WipeOut_WebGL_2.unity
+    guid: 47c734c36bcac914ba4afaeef9846147
   m_configObjects: {}
