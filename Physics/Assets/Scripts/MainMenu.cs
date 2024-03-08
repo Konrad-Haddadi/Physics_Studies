@@ -68,11 +68,13 @@ public class MainMenu : MonoBehaviour
         {
             timer += Time.deltaTime;
 
+            if (timer >= timeMax)
+                timer = timeMax;
+
             counter.text = "";
-
             counter.text = ((timeMax - (int)timer) * scoreMultiplier).ToString(); 
-
             counterBar.fillAmount = (timeMax - timer) / timeMax;
+
         }
 
         counter.gameObject.SetActive(startTimer);

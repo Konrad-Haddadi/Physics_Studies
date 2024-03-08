@@ -25,6 +25,9 @@ public class TransformCopy : MonoBehaviour
         if(z)
             pos = new Vector3(pos.x, pos.y, other.position.z);
 
-        transform.position = Vector3.Lerp(transform.position, pos + offset, Time.deltaTime * 5);
+        float dist = Vector3.Distance(transform.position, pos + offset);
+
+        if(dist > 1)
+            transform.position = Vector3.Lerp(transform.position, pos + offset, Time.deltaTime * 5);
     }
 }
