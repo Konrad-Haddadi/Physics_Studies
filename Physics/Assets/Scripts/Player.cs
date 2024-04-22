@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
     public float jumpTimer = 0;
 
     public Canvas canvas = null;
-    public Image bar = null; 
-
+    public Image bar = null;
+    float horizontal;
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
 
         jumpPower = 0;
         bar.fillAmount = 0;
+        horizontal = 0;
     }
 
     void Update()
@@ -87,7 +88,10 @@ public class Player : MonoBehaviour
 
     private void Controls()
     {
-        float horizontal = Input.GetAxis("Horizontal");
+        animator.SetBool("Pushing", Input.GetKey(KeyCode.Mouse0));
+
+
+        horizontal = Input.GetAxis("Horizontal");
 
         animator.SetFloat("Speed", horizontal);
         
@@ -116,6 +120,7 @@ public class Player : MonoBehaviour
                 canvas.enabled = true;
 
             bar.fillAmount = jumpPower / jumpPowerMax;
+
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
@@ -128,6 +133,8 @@ public class Player : MonoBehaviour
 
             capCollider.enabled = !ragdolled;
             rb.isKinematic = ragdolled;
+
+            animator.SetBool("Fall", ragdolled);
 
             if (ragdolled)
             {
@@ -143,10 +150,9 @@ public class Player : MonoBehaviour
             }
 
             jumpPower = 0;
+            bar.fillAmount = 0;
+        }        
 
-        }
-
-        animator.SetBool("Fall", ragdolled);
     }
 
     public void ResetPos()

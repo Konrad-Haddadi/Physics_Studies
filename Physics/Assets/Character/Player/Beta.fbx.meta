@@ -11,12 +11,20 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Beta_Body_MAT
+<<<<<<< HEAD
     second: {fileID: 2100000, guid: 4d959605b9e85124dbfb1d25c1c420f7, type: 2}
+=======
+    second: {fileID: 2100000, guid: 10aff0357ede963449565e71161b8ce4, type: 2}
+>>>>>>> 7726e32f91bfed2c85b69563c80e66bc1977bb7f
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Beta_Joints_MAT
+<<<<<<< HEAD
     second: {fileID: 2100000, guid: fb716a9510f837044a9b70dae6c7964a, type: 2}
+=======
+    second: {fileID: 2100000, guid: 8348c58026a39104fb8227799532578b, type: 2}
+>>>>>>> 7726e32f91bfed2c85b69563c80e66bc1977bb7f
   materials:
     materialImportMode: 1
     materialName: 0
