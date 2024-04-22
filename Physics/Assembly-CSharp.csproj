@@ -64,12 +64,9 @@
     <Compile Include="Assets\Scripts\Ragtroll.cs" />
     <Compile Include="Assets\Scripts\SoundDestroy.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\New\LayerWeight.cs" />
-    <Compile Include="Assets\Scripts\New\HeadAccessory.cs" />
     <Compile Include="Assets\Scripts\Raycaster.cs" />
     <Compile Include="Assets\Scripts\AwakeRandomTime.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
-    <Compile Include="Assets\Scripts\New\ArmRun.cs" />
     <Compile Include="Assets\Scripts\Bounds.cs" />
     <Compile Include="Assets\Scripts\Car.cs" />
     <Compile Include="Assets\Scripts\WebGLFix.cs" />

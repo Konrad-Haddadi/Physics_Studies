@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,12 +5,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    [Header("Accessories")]
-    public GameObject headPos;
-    public List<GameObject> accessories;
-    public GameObject currentAccessory;
-
-    [Header("Player stats")]
     public int layerMask;
 
     private float jumpPowerMax;
@@ -94,7 +87,6 @@ public class Player : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
 
         animator.SetFloat("Speed", horizontal);
-        
 
         RaycastHit hit;
         Ray ray = new Ray(hips.position + Vector3.up, Vector3.down);

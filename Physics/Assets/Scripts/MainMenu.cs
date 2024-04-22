@@ -47,7 +47,6 @@ public class MainMenu : MonoBehaviour
 
     bool startingGame = false;
     int spawnCounterVal = 0;
-    HeadAccessory headAccessoryMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +59,7 @@ public class MainMenu : MonoBehaviour
 
         checkPointManager = FindObjectOfType<CheckPointManager>();
         timerGroup.gameObject.SetActive(false);
-        headAccessoryMenu = GetComponent<HeadAccessory>();
+        
     }
 
     private void Update()
@@ -72,22 +71,15 @@ public class MainMenu : MonoBehaviour
             if (timer >= timeMax)
                 timer = timeMax;
 
-            if(counter)
-            {
-                counter.text = "";
-                counter.text = ((timeMax - (int)timer) * scoreMultiplier).ToString(); 
-                counterBar.fillAmount = (timeMax - timer) / timeMax;
-            }
+            counter.text = "";
+            counter.text = ((timeMax - (int)timer) * scoreMultiplier).ToString(); 
+            counterBar.fillAmount = (timeMax - timer) / timeMax;
 
         }
 
-        if(counter)
-        {
-            counter.gameObject.SetActive(startTimer);
-            counterBar.gameObject.SetActive(counter.gameObject.activeSelf);
-            counterBarBack.gameObject.SetActive(counter.gameObject.activeSelf);
-        }    
-        
+        counter.gameObject.SetActive(startTimer);
+        counterBar.gameObject.SetActive(counter.gameObject.activeSelf);
+        counterBarBack.gameObject.SetActive(counter.gameObject.activeSelf);
 
     }
 
@@ -101,9 +93,6 @@ public class MainMenu : MonoBehaviour
         if(quit)
             quit.gameObject.SetActive(false);
 
-        headAccessoryMenu.next.gameObject.SetActive(false);
-        headAccessoryMenu.nextMesh.gameObject.SetActive(false);
-
         player.rb.isKinematic = false;
         player.transform.position = spawnPoint.transform.position;
         timerGroup.gameObject.SetActive(true);
@@ -111,6 +100,7 @@ public class MainMenu : MonoBehaviour
 
         Instantiate(cheering);
         StartCoroutine(CameraMove_CR(gameLocation, true));
+
     }
 
     public void ReturnToMenu()
@@ -118,13 +108,11 @@ public class MainMenu : MonoBehaviour
         player.animator.SetBool("Play", !player.animator.GetBool("Play"));
         startTimer = false;
 
+
         play.gameObject.SetActive(true);
 
         if(quit)
             quit.gameObject.SetActive(true);
-
-        headAccessoryMenu.next.gameObject.SetActive(true);
-        headAccessoryMenu.nextMesh.gameObject.SetActive(true);
 
         player.rb.isKinematic = true;       
 
