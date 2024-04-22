@@ -321,7 +321,7 @@ void PlayState::LevelSelect(int _level, glm::vec2 _pos)
 	}
 
 	if(sb.size() > 0)
-		LevelBuilder(m_physicsScene, glm::vec2(750, 175) + _pos, spacing, sb);
+		LevelBuilder(m_physicsScene, glm::vec2(400, 175) + _pos, spacing, sb);
 }
 
 void PlayState::SpawnRandomLevel()
@@ -329,12 +329,11 @@ void PlayState::SpawnRandomLevel()
 	current = nullptr;
 	m_physicsScene->ClearActors();
 
-	/*int val = 1 + (rand() % 2);
+	int val = 1 + (rand() % 2);
 	for (int i = 0; i < val; i++)
 	{
 		LevelSelect(rand() % 4, glm::vec2(220 * i, rand() % 250));
-	}*/
+	}
 
-	LevelSelect(3, glm::vec2(220, rand() % 250));
-	LevelSelect(2, glm::vec2(220 * 2, rand() % 250));
+	
 }
