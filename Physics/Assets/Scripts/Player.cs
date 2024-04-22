@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,6 +6,12 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [Header("Accessories")]
+    public GameObject headPos;
+    public List<GameObject> accessories;
+    public GameObject currentAccessory;
+
+    [Header("Player stats")]
     public int layerMask;
 
     private float jumpPowerMax;
@@ -27,8 +34,8 @@ public class Player : MonoBehaviour
     public float jumpTimer = 0;
 
     public Canvas canvas = null;
-    public Image bar = null;
-    float horizontal;
+    public Image bar = null; 
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -42,7 +49,6 @@ public class Player : MonoBehaviour
 
         jumpPower = 0;
         bar.fillAmount = 0;
-        horizontal = 0;
     }
 
     void Update()
@@ -81,12 +87,10 @@ public class Player : MonoBehaviour
 
     private void Controls()
     {
-        animator.SetBool("Pushing", Input.GetKey(KeyCode.Mouse0));
-
-
-        horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxis("Horizontal");
 
         animator.SetFloat("Speed", horizontal);
+        
 
         RaycastHit hit;
         Ray ray = new Ray(hips.position + Vector3.up, Vector3.down);
@@ -112,7 +116,6 @@ public class Player : MonoBehaviour
                 canvas.enabled = true;
 
             bar.fillAmount = jumpPower / jumpPowerMax;
-
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
@@ -125,8 +128,6 @@ public class Player : MonoBehaviour
 
             capCollider.enabled = !ragdolled;
             rb.isKinematic = ragdolled;
-
-            animator.SetBool("Fall", ragdolled);
 
             if (ragdolled)
             {
@@ -142,9 +143,10 @@ public class Player : MonoBehaviour
             }
 
             jumpPower = 0;
-            bar.fillAmount = 0;
-        }        
 
+        }
+
+        animator.SetBool("Fall", ragdolled);
     }
 
     public void ResetPos()
