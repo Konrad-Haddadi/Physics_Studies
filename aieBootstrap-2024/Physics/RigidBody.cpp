@@ -135,7 +135,7 @@ void RigidBody::ResolveCollision(RigidBody* _actor2, glm::vec2 _contact, glm::ve
 			ApplyContactForces(_actor2, normal, _pen);
 		
 		ApplyForce(-force, _contact - m_position);
-		_actor2->ApplyForce(force, _contact - _actor2->m_position);		
+		_actor2->ApplyForce(force * 1.1f, _contact - _actor2->m_position);		
 	}
 }
 

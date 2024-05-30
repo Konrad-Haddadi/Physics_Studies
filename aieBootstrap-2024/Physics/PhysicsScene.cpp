@@ -216,11 +216,11 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 	if (circle1 != nullptr && circle2 != nullptr)
 	{
 		glm::vec2 dist = circle1->GetPosition() - circle2->GetPosition();
-
+		bool val = false;
 		if (glm::length(dist) < circle1->GetRadius() + circle2->GetRadius())
 		{
 			circle1->ResolveCollision(circle2, 0.5f * (circle1->GetPosition() + circle2->GetPosition()));
-			return true;
+			val = true;
 		}
 
 		float penetration = circle1->GetRadius() + circle2->GetRadius() - glm::length(dist);
@@ -228,8 +228,10 @@ bool PhysicsScene::Circle2Circle(PhysicsObject* _lhs, PhysicsObject* _rhs)
 		if (penetration > 0)
 		{
 			circle1->ResolveCollision(circle2, (circle1->GetPosition() + circle2->GetPosition()) * 0.5f, nullptr, penetration);
-			return true;
+			val = true;
 		}
+
+		return val;
 	}
 
 	return false;
