@@ -102,7 +102,7 @@ public class MainMenu : MonoBehaviour
             quit.gameObject.SetActive(false);
 
         headAccessoryMenu.next.gameObject.SetActive(false);
-        headAccessoryMenu.nextMesh.gameObject.SetActive(false);
+        headAccessoryMenu.sliders.gameObject.SetActive(false);
 
         player.rb.isKinematic = false;
         player.transform.position = spawnPoint.transform.position;
@@ -124,7 +124,7 @@ public class MainMenu : MonoBehaviour
             quit.gameObject.SetActive(true);
 
         headAccessoryMenu.next.gameObject.SetActive(true);
-        headAccessoryMenu.nextMesh.gameObject.SetActive(true);
+        headAccessoryMenu.sliders.gameObject.SetActive(true);
 
         player.rb.isKinematic = true;       
 
